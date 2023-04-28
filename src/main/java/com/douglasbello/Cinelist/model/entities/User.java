@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -22,14 +23,14 @@ public class User {
     private String username;
     private String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     public User(){
     }
 
-    public User(long id, String email, String username, String password) {
-        this.id = id;
+    public User(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +19,19 @@ public class Comment {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    @ManyToOne
+    @JoinColumn(name = "tv_show_id")
+    private TVShow tvShow;
+
     private String content;
 
     public Comment() {
+    }
+
+    public Comment(User user, Movie movie, String content) {
+        this.user = user;
+        this.movie = movie;
+        this.content = content;
     }
 
     public long getId() {

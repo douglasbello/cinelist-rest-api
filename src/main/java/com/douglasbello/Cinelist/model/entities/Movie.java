@@ -1,30 +1,31 @@
 package com.douglasbello.Cinelist.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "movies")
 public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long id;
-    private String name;
+    private String title;
     private String overview;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<Comment> comments;
     private Double rating;
 
-    public Movie(){
+    public Movie() {
     }
 
-    public Movie(long id, String name, String overview, Double rating) {
-        this.id = id;
-        this.name = name;
+    public Movie(String title, String overview) {
+        this.title = title;
         this.overview = overview;
-        this.rating = rating;
     }
 
     public long getId() {
@@ -35,12 +36,12 @@ public class Movie {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getOverview() {
@@ -80,7 +81,7 @@ public class Movie {
     public String toString() {
         return "Movie{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + title + '\'' +
                 ", overview='" + overview + '\'' +
                 ", comments='" + comments + '\'' +
                 ", rating=" + rating +

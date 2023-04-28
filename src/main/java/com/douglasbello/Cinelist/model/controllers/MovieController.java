@@ -1,7 +1,7 @@
-package com.douglasbello.Cinelist.controllers;
+package com.douglasbello.Cinelist.model.controllers;
 
 import com.douglasbello.Cinelist.model.entities.Movie;
-import com.douglasbello.Cinelist.services.MovieService;
+import com.douglasbello.Cinelist.model.services.MovieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

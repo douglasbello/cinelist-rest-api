@@ -1,7 +1,7 @@
-package com.douglasbello.Cinelist.services;
+package com.douglasbello.Cinelist.model.services;
 
 import com.douglasbello.Cinelist.model.entities.User;
-import com.douglasbello.Cinelist.repositories.UserRepository;
+import com.douglasbello.Cinelist.model.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

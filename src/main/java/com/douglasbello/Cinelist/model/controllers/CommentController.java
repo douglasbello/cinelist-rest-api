@@ -1,8 +1,8 @@
-package com.douglasbello.Cinelist.controllers;
+package com.douglasbello.Cinelist.model.controllers;
 
 
 import com.douglasbello.Cinelist.model.entities.Comment;
-import com.douglasbello.Cinelist.services.CommentService;
+import com.douglasbello.Cinelist.model.services.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

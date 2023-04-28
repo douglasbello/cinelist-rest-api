@@ -1,7 +1,7 @@
-package com.douglasbello.Cinelist.controllers;
+package com.douglasbello.Cinelist.model.controllers;
 
 import com.douglasbello.Cinelist.model.entities.User;
-import com.douglasbello.Cinelist.services.UserService;
+import com.douglasbello.Cinelist.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

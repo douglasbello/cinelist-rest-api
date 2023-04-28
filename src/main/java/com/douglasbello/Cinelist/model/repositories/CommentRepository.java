@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.repositories;
+package com.douglasbello.Cinelist.model.repositories;
 
 import com.douglasbello.Cinelist.model.entities.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;

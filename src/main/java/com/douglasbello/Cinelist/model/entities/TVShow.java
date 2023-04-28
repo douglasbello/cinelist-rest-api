@@ -3,6 +3,8 @@ package com.douglasbello.Cinelist.model.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +12,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tv_shows")
-public class TVShow {
+public class TVShow implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

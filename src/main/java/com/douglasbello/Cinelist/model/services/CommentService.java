@@ -1,7 +1,7 @@
-package com.douglasbello.Cinelist.services;
+package com.douglasbello.Cinelist.model.services;
 
 import com.douglasbello.Cinelist.model.entities.Comment;
-import com.douglasbello.Cinelist.repositories.CommentRepository;
+import com.douglasbello.Cinelist.model.repositories.CommentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

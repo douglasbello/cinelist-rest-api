@@ -1,13 +1,13 @@
-package com.douglasbello.Cinelist.Test;
+package com.douglasbello.Cinelist.model.config;
 
 import com.douglasbello.Cinelist.model.entities.Comment;
 import com.douglasbello.Cinelist.model.entities.Movie;
 import com.douglasbello.Cinelist.model.entities.TVShow;
 import com.douglasbello.Cinelist.model.entities.User;
-import com.douglasbello.Cinelist.services.CommentService;
-import com.douglasbello.Cinelist.services.MovieService;
-import com.douglasbello.Cinelist.services.TVShowService;
-import com.douglasbello.Cinelist.services.UserService;
+import com.douglasbello.Cinelist.model.services.CommentService;
+import com.douglasbello.Cinelist.model.services.MovieService;
+import com.douglasbello.Cinelist.model.services.TVShowService;
+import com.douglasbello.Cinelist.model.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

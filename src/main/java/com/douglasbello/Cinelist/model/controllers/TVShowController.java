@@ -1,7 +1,7 @@
 package com.douglasbello.Cinelist.model.controllers;
 
-import com.douglasbello.Cinelist.model.entities.User;
-import com.douglasbello.Cinelist.model.services.UserService;
+import com.douglasbello.Cinelist.model.entities.TVShow;
+import com.douglasbello.Cinelist.model.services.TVShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,23 +12,23 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserController {
+@RequestMapping(value = "/tvshows")
+public class TVShowController {
     @Autowired
-    private UserService service;
+    private TVShowService service;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<TVShow>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable UUID id) {
+    public ResponseEntity<TVShow> findById(@PathVariable UUID id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<User> insert(@RequestBody User obj) {
+    @PostMapping(value = "/add")
+    public ResponseEntity<TVShow> insert(@RequestBody TVShow obj) {
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable UUID id, @RequestBody User obj) {
+    public ResponseEntity<TVShow> update(@PathVariable UUID id, @RequestBody TVShow obj) {
         obj = service.update(id,obj);
         return ResponseEntity.ok().body(obj);
     }

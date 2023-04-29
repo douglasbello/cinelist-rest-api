@@ -7,22 +7,21 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "movies")
 public class Movie implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     private String title;
     private String overview;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<Comment> comments;
-    private Double rating;
 
     public Movie() {
     }
@@ -32,11 +31,17 @@ public class Movie implements Serializable {
         this.overview = overview;
     }
 
-    public long getId() {
+    @PrePersist
+    public void generateUuid() {
+        if (this.id == null)
+            this.id = UUID.randomUUID();
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -60,14 +65,6 @@ public class Movie implements Serializable {
         return comments;
     }
 
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,7 +85,6 @@ public class Movie implements Serializable {
                 ", name='" + title + '\'' +
                 ", overview='" + overview + '\'' +
                 ", comments='" + comments + '\'' +
-                ", rating=" + rating +
                 '}';
     }
 }

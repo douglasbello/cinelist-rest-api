@@ -5,6 +5,8 @@ import com.douglasbello.Cinelist.model.repositories.TVShowRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TVShowService {
@@ -14,11 +16,31 @@ public class TVShowService {
         this.repository = repository;
     }
 
-    public void save(TVShow tvShow) {
-        repository.save(tvShow);
-    }
-
     public List<TVShow> findAll() {
         return repository.findAll();
+    }
+
+    public TVShow findById(UUID id) {
+        Optional<TVShow> tvShow = repository.findById(id);
+        return tvShow.orElseThrow(RuntimeException::new);
+    }
+
+    public TVShow insert(TVShow tvShow) {
+        return repository.save(tvShow);
+    }
+
+    public void delete(UUID id) {
+        repository.deleteById(id);
+    }
+
+    public TVShow update(UUID id, TVShow obj) {
+        TVShow entity = repository.getReferenceById(id);
+        updateData(entity,obj);
+        return repository.save(entity);
+    }
+
+    private void updateData(TVShow entity, TVShow obj) {
+        entity.setTitle(obj.getTitle());
+        entity.setOverview(obj.getOverview());
     }
 }

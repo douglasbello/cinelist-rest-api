@@ -6,15 +6,16 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 @Entity
 @Table(name = "admins")
 public class Admin implements Serializable {
     @Serial
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
     private String name;
     private String password;
     private String token;
@@ -29,11 +30,17 @@ public class Admin implements Serializable {
         this.password = password;
     }
 
-    public long getId() {
+    @PrePersist
+    public void generateUuid() {
+        if (this.id == null)
+            this.id = UUID.randomUUID();
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

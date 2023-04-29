@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "tv_shows")
@@ -16,24 +13,20 @@ public class TVShow implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     private String title;
     private String overview;
-
-    @JsonIgnore
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
     private List<Comment> comments;
-
+    private Integer seasons;
+    private Integer episodes;
     @ElementCollection
     @CollectionTable(name = "seasons_episodes", joinColumns = @JoinColumn(name = "tv_show_id"))
-    @MapKeyColumn(name = "seasons")
+    @MapKeyColumn(name = "season")
     @Column(name = "episodes")
     private Map<Integer,Integer> seasonsAndEpisodes = new HashMap<>();
 
-    private Integer seasons;
-
-    private Integer episodes;
 
     public TVShow() {
         setSeasons();
@@ -47,11 +40,17 @@ public class TVShow implements Serializable {
         this.overview = overview;
     }
 
-    public long getId() {
+    @PrePersist
+    public void generateUuid() {
+        if (this.id == null)
+            this.id = UUID.randomUUID();
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -95,6 +94,12 @@ public class TVShow implements Serializable {
         return seasonsAndEpisodes;
     }
 
+    public void putSeasonAndEpisodeAndUpdate(Integer season, Integer episodes) {
+        seasonsAndEpisodes.put(season,episodes);
+        setSeasons();
+        setEpisodes();
+    }
+
     public List<Comment> getComments() {
         return comments;
     }
@@ -119,9 +124,9 @@ public class TVShow implements Serializable {
                 ", title='" + title + '\'' +
                 ", overview='" + overview + '\'' +
                 ", comments=" + comments +
-                ", seasonsAndEpisodes=" + seasonsAndEpisodes +
                 ", seasons=" + seasons +
                 ", episodes=" + episodes +
+                ", seasonsAndEpisodes=" + seasonsAndEpisodes +
                 '}';
     }
 }

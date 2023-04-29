@@ -4,6 +4,8 @@ import com.douglasbello.Cinelist.model.entities.TVShow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface TVShowRepository extends JpaRepository<TVShow, Long> {
+public interface TVShowRepository extends JpaRepository<TVShow, UUID> {
 }

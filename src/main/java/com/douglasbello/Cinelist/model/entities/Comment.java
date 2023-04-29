@@ -1,48 +1,62 @@
 package com.douglasbello.Cinelist.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "comments")
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Comment implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tv_show_id")
     private TVShow tvShow;
-
-    private String content;
+    private String comment;
 
     public Comment() {
     }
 
-    public Comment(User user, Movie movie, String content) {
+    public Comment(User user, Movie movie, String comment) {
         this.user = user;
         this.movie = movie;
-        this.content = content;
+        this.comment = comment;
     }
 
-    public long getId() {
+    public Comment(User user, TVShow tvShow, String comment) {
+        this.user = user;
+        this.tvShow = tvShow;
+        this.comment = comment;
+    }
+
+    @PrePersist
+    public void generateUuid() {
+        if (this.id == null)
+            this.id = UUID.randomUUID();
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -62,12 +76,12 @@ public class Comment implements Serializable {
         this.movie = movie;
     }
 
-    public String getContent() {
-        return content;
+    public String getComment() {
+        return comment;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override
@@ -89,7 +103,7 @@ public class Comment implements Serializable {
                 "id=" + id +
                 ", user=" + user +
                 ", movie=" + movie +
-                ", content='" + content + '\'' +
+                ", comment='" + comment + '\'' +
                 '}';
     }
 }

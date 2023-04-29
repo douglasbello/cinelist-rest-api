@@ -5,6 +5,8 @@ import com.douglasbello.Cinelist.model.repositories.AdminRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AdminService {
@@ -14,11 +16,20 @@ public class AdminService {
         this.repository = repository;
     }
 
-    public void save(Admin admin) {
-        repository.save(admin);
-    }
-
     public List<Admin> findAll() {
         return repository.findAll();
+    }
+
+    public Admin findById(UUID id) {
+        Optional<Admin> obj = repository.findById(id);
+        return obj.orElseThrow(RuntimeException::new);
+    }
+
+    public Admin insert(Admin admin) {
+        return repository.save(admin);
+    }
+
+    public void delete(UUID id) {
+        repository.deleteById(id);
     }
 }

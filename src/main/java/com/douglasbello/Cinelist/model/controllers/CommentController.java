@@ -1,6 +1,7 @@
 package com.douglasbello.Cinelist.model.controllers;
 
 
+import com.douglasbello.Cinelist.model.dto.CommentDTO;
 import com.douglasbello.Cinelist.model.entities.Comment;
 import com.douglasbello.Cinelist.model.entities.Movie;
 import com.douglasbello.Cinelist.model.entities.TVShow;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -46,18 +48,32 @@ public class CommentController {
         return ResponseEntity.ok().body(commentService.findById(id));
     }
 
+    @GetMapping(value = "/movie/{id}")
+    public ResponseEntity<List<Comment>> findAllCommentsByMovie(@PathVariable UUID id) {
+        List<Comment> comments = commentService.findAllCommentsByMovie(id);
+        return ResponseEntity.ok().body(comments);
+    }
+
+    @GetMapping(value = "/tvshow/{id}")
+    public ResponseEntity<List<Comment>> findAllCommentsByTvShow(@PathVariable UUID id) {
+        List<Comment> comments = commentService.findAllCommentsByTvShow(id);
+        return ResponseEntity.ok().body(comments);
+    }
+
+
+    // preciso adicionar exceptions
     @PostMapping(value = "/comment")
-    public ResponseEntity<Comment> insert(@RequestBody UUID userId, UUID showOrMovieId, String comment) {
+    public ResponseEntity<Comment> insert(@RequestBody CommentDTO commentDTO) {
         Comment obj;
-        User user = userService.findById(userId);
-        Movie movie = movieService.findById(showOrMovieId);
+        User user = userService.findById(commentDTO.getUserId());
         TVShow tvShow;
-        if (movie == null) {
-            tvShow = tvShowService.findById(showOrMovieId);
-            obj = new Comment(user,tvShow,comment);
+        Movie movie = movieService.findById(commentDTO.getShowOrMovieId());
+        if (movie != null) {
+            obj = new Comment(user,movie,commentDTO.getComment());
             obj = commentService.insert(obj);
         } else {
-            obj = new Comment(user,movie,comment);
+            tvShow = tvShowService.findById(commentDTO.getShowOrMovieId());
+            obj = new Comment(user,tvShow,commentDTO.getComment());
             obj = commentService.insert(obj);
         }
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();

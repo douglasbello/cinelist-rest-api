@@ -22,7 +22,7 @@ public class TVShowService {
 
     public TVShow findById(UUID id) {
         Optional<TVShow> tvShow = repository.findById(id);
-        return tvShow.orElseThrow(RuntimeException::new);
+        return tvShow.orElse(null);
     }
 
     public TVShow insert(TVShow tvShow) {

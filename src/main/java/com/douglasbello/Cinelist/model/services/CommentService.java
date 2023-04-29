@@ -32,4 +32,12 @@ public class CommentService {
     public void delete(UUID id) {
         repository.deleteById(id);
     }
+
+    public List<Comment> findAllCommentsByMovie(UUID id) {
+        return repository.findAllCommentsByMovieId(id);
+    }
+
+    public List<Comment> findAllCommentsByTvShow(UUID id) {
+        return repository.findAllCommentsByTvShowId(id);
+    }
 }

@@ -22,7 +22,7 @@ public class MovieService {
 
     public Movie findById(UUID id) {
         Optional<Movie> obj = repository.findById(id);
-        return obj.orElseThrow(RuntimeException::new);
+        return obj.orElse(null);
     }
 
     public Movie insert(Movie movie) {

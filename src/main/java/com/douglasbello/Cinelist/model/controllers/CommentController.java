@@ -17,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -34,7 +33,6 @@ public class CommentController {
 
     @Autowired
     private TVShowService tvShowService;
-
 
 
     @GetMapping
@@ -70,7 +68,6 @@ public class CommentController {
         Movie movie = movieService.findById(commentDTO.getShowOrMovieId());
         if (movie != null) {
             obj = new Comment(user,movie,commentDTO.getComment());
-            obj = commentService.insert(obj);
         } else {
             tvShow = tvShowService.findById(commentDTO.getShowOrMovieId());
             obj = new Comment(user,tvShow,commentDTO.getComment());

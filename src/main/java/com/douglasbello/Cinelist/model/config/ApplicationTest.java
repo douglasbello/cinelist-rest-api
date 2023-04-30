@@ -18,16 +18,13 @@ public class ApplicationTest implements CommandLineRunner {
 
     private final TVShowService tvShowService;
 
-    private final AdminService adminService;
 
     public ApplicationTest(UserService userService, MovieService movieService,
-                           CommentService commentService, TVShowService tvShowService,
-                           AdminService adminService) {
+                           CommentService commentService, TVShowService tvShowService) {
         this.userService = userService;
         this.movieService = movieService;
         this.commentService = commentService;
         this.tvShowService = tvShowService;
-        this.adminService = adminService;
     }
 
     @Override
@@ -52,7 +49,5 @@ public class ApplicationTest implements CommandLineRunner {
         Comment comment2 = new Comment(user, tvShow,"Great show!");
         commentService.insert(comment2);
 
-        Admin admin = new Admin("admin01","admin01");
-        adminService.insert(admin);
     }
 }

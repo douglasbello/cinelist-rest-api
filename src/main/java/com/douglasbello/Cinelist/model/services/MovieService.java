@@ -2,6 +2,11 @@ package com.douglasbello.Cinelist.model.services;
 
 import com.douglasbello.Cinelist.model.entities.Movie;
 import com.douglasbello.Cinelist.model.repositories.MovieRepository;
+import com.douglasbello.Cinelist.model.services.exceptions.DatabaseException;
+import com.douglasbello.Cinelist.model.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,13 +35,23 @@ public class MovieService {
     }
 
     public void delete(UUID id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new DatabaseException(dataIntegrityViolationException.getMessage());
+        }
     }
 
-    public Movie update(UUID id, Movie obj) {
-        Movie entity = repository.getReferenceById(id);
-        updateData(entity,obj);
-        return repository.save(entity);
+    public Movie update(UUID id,Movie obj) {
+        try {
+            Movie entity = repository.getReferenceById(id);
+            updateData(entity,obj);
+            return repository.save(entity);
+        } catch (EntityNotFoundException exception) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(Movie entity, Movie obj) {

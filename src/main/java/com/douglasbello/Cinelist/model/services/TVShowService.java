@@ -1,7 +1,13 @@
 package com.douglasbello.Cinelist.model.services;
 
 import com.douglasbello.Cinelist.model.entities.TVShow;
+import com.douglasbello.Cinelist.model.entities.User;
 import com.douglasbello.Cinelist.model.repositories.TVShowRepository;
+import com.douglasbello.Cinelist.model.services.exceptions.DatabaseException;
+import com.douglasbello.Cinelist.model.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,13 +36,23 @@ public class TVShowService {
     }
 
     public void delete(UUID id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new DatabaseException(dataIntegrityViolationException.getMessage());
+        }
     }
 
     public TVShow update(UUID id, TVShow obj) {
-        TVShow entity = repository.getReferenceById(id);
-        updateData(entity,obj);
-        return repository.save(entity);
+        try {
+            TVShow entity = repository.getReferenceById(id);
+            updateData(entity,obj);
+            return repository.save(entity);
+        } catch (EntityNotFoundException exception) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(TVShow entity, TVShow obj) {

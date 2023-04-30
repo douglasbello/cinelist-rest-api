@@ -2,6 +2,7 @@ package com.douglasbello.Cinelist.model.services;
 
 import com.douglasbello.Cinelist.model.entities.Comment;
 import com.douglasbello.Cinelist.model.repositories.CommentRepository;
+import com.douglasbello.Cinelist.model.services.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class CommentService {
 
     public Comment findById(UUID id) {
         Optional<Comment> obj = repository.findById(id);
-        return obj.orElseThrow(RuntimeException::new);
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public Comment insert(Comment comment) {

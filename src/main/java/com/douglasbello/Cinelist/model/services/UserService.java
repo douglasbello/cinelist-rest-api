@@ -2,6 +2,11 @@ package com.douglasbello.Cinelist.model.services;
 
 import com.douglasbello.Cinelist.model.entities.User;
 import com.douglasbello.Cinelist.model.repositories.UserRepository;
+import com.douglasbello.Cinelist.model.services.exceptions.DatabaseException;
+import com.douglasbello.Cinelist.model.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +30,7 @@ public class UserService {
 
     public User findById(UUID id) {
         Optional<User> user = repository.findById(id);
-        return user.orElseThrow(RuntimeException::new);
+        return user.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public User insert(User user) {
@@ -35,18 +40,28 @@ public class UserService {
     }
 
     public void delete(UUID id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new DatabaseException(dataIntegrityViolationException.getMessage());
+        }
     }
 
     public User update(UUID id,User obj) {
-        User entity = repository.getReferenceById(id);
-        updateData(entity,obj);
-        return repository.save(entity);
+        try {
+            User entity = repository.getReferenceById(id);
+            updateData(entity,obj);
+            return repository.save(entity);
+        } catch (EntityNotFoundException exception) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User entity, User obj) {
         entity.setEmail(obj.getEmail());
         entity.setUsername(obj.getUsername());
     }
-    
+
 }

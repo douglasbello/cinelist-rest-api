@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -23,9 +24,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/movies/**" ,"/tvshows/**").permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/movies/**")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/tvshows/**")
+                .permitAll()
                 .anyRequest().authenticated().and().cors();
 
+        http.headers().frameOptions().disable();
         http.addFilterBefore(new Filter(adminService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

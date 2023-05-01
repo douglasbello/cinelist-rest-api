@@ -15,11 +15,9 @@ public class InternToken {
 
     private final AdminService adminService;
 
-
     public InternToken(AdminService adminService) {
         this.adminService = adminService;
     }
-
 
     public Authentication decodeToken(HttpServletRequest request) {
         if (adminService.count() != 0) {

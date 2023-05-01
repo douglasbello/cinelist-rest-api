@@ -47,4 +47,8 @@ public class AdminService {
             throw new DatabaseException(dataIntegrityViolationException.getMessage());
         }
     }
+
+    public long count() {
+        return repository.count();
+    }
 }

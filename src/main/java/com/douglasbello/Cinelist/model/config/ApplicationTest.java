@@ -18,17 +18,21 @@ public class ApplicationTest implements CommandLineRunner {
 
     private final TVShowService tvShowService;
 
+    private final AdminService adminService;
+
 
     public ApplicationTest(UserService userService, MovieService movieService,
-                           CommentService commentService, TVShowService tvShowService) {
+                           CommentService commentService, TVShowService tvShowService,
+                           AdminService adminService) {
         this.userService = userService;
         this.movieService = movieService;
         this.commentService = commentService;
         this.tvShowService = tvShowService;
+        this.adminService = adminService;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         User user = new User("user01@outlook.com","user01","user01");
         Movie movie = new Movie("Interstellar", "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.");
@@ -49,5 +53,8 @@ public class ApplicationTest implements CommandLineRunner {
         Comment comment2 = new Comment(user, tvShow,"Great show!");
         commentService.insert(comment2);
 
+        Admin admin = new Admin("admin01","admin01");
+        Admin obj = adminService.insert(admin);
+        System.out.println("Admin token: " + obj.getToken());
     }
 }

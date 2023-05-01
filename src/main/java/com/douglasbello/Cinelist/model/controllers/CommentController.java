@@ -59,7 +59,6 @@ public class CommentController {
     }
 
 
-    // preciso adicionar exceptions
     @PostMapping(value = "/comment")
     public ResponseEntity<Comment> insert(@RequestBody CommentDTO commentDTO) {
         Comment obj;

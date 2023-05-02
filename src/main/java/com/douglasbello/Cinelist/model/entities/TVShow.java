@@ -27,17 +27,24 @@ public class TVShow implements Serializable {
     @Column(name = "episodes")
     private Map<Integer,Integer> seasonsAndEpisodes = new HashMap<>();
 
+    @ElementCollection
+    private List<String> genre;
+
+    private String releaseYear;
+
 
     public TVShow() {
         setSeasons();
         setEpisodes();
     }
 
-    public TVShow(String title, String overview) {
+    public TVShow(String title, String overview, String releaseYear, List<String> genre) {
         setSeasons();
         setEpisodes();
         this.title = title;
         this.overview = overview;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
     }
 
     @PrePersist
@@ -102,6 +109,18 @@ public class TVShow implements Serializable {
 
     public List<Comment> getComments() {
         return comments;
+    }
+
+    public List<String> getGenre() {
+        return genre;
+    }
+
+    public String getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(String releaseYear) {
+        this.releaseYear = releaseYear;
     }
 
     @Override

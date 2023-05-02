@@ -20,15 +20,22 @@ public class Movie implements Serializable {
     private String title;
     private String overview;
 
+    @ElementCollection
+    private List<String> genre;
+
+    private String releaseYear;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public Movie() {
     }
 
-    public Movie(String title, String overview) {
+    public Movie(String title, String overview, String releaseYear, List<String> genre) {
         this.title = title;
         this.overview = overview;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
     }
 
     @PrePersist
@@ -63,6 +70,18 @@ public class Movie implements Serializable {
 
     public List<Comment> getComments() {
         return comments;
+    }
+
+    public String getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(String releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public List<String> getGenre() {
+        return genre;
     }
 
     @Override

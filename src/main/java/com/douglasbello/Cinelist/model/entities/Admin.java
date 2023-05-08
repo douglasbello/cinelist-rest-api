@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.UUID;
 
 @Entity
-@Table(name = "admins")
+@Table(name = "tb_admins")
 public class Admin implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

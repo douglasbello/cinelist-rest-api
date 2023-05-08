@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "comments")
+@Table(name = "tb_comments")
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Comment implements Serializable {
     @Serial

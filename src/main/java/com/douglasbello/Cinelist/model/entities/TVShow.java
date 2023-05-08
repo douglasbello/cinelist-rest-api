@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Entity
-@Table(name = "tv_shows")
+@Table(name = "tb_tvshows")
 public class TVShow implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

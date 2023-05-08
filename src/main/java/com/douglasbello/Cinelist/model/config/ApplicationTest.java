@@ -64,6 +64,5 @@ public class ApplicationTest implements CommandLineRunner {
         Admin admin = new Admin("admin01","admin01");
         Admin obj = adminService.insert(admin);
         System.out.println("Admin token: " + obj.getToken());
-
     }
 }

@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "movies")
+@Table(name = "tb_movies")
 public class Movie implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

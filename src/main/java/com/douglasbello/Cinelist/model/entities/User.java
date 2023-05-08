@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "tb_users")
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -20,6 +20,7 @@ public class User implements Serializable {
     private UUID id;
     private String email;
     private String username;
+    @JsonIgnore
     private String password;
 
     @JsonIgnore

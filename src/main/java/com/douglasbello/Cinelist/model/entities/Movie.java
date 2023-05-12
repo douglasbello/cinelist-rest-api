@@ -20,8 +20,8 @@ public class Movie implements Serializable {
     private String title;
     private String overview;
 
-    @ElementCollection
-    private List<String> genre;
+    @ManyToMany(mappedBy = "movie")
+    private List<Genres> genre;
 
     private String releaseYear;
 
@@ -31,11 +31,10 @@ public class Movie implements Serializable {
     public Movie() {
     }
 
-    public Movie(String title, String overview, String releaseYear, List<String> genre) {
+    public Movie(String title, String overview, String releaseYear) {
         this.title = title;
         this.overview = overview;
         this.releaseYear = releaseYear;
-        this.genre = genre;
     }
 
     @PrePersist
@@ -80,7 +79,7 @@ public class Movie implements Serializable {
         this.releaseYear = releaseYear;
     }
 
-    public List<String> getGenre() {
+    public List<Genres> getGenre() {
         return genre;
     }
 

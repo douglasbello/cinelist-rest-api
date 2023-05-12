@@ -39,9 +39,9 @@ public class ApplicationTest implements CommandLineRunner {
 
         User user = new User("user01@outlook.com","user01","user01");
         List<String> interstellarGenres = new ArrayList<>();
-        interstellarGenres.add("Science fiction");
-        interstellarGenres.add("Adventure");
-        Movie movie = new Movie("Interstellar", "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", "2014", interstellarGenres);
+//        interstellarGenres.add("Science fiction");
+//        interstellarGenres.add("Adventure");
+        Movie movie = new Movie("Interstellar", "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", "2014");
         userService.insert(user);
         movieService.insert(movie);
 
@@ -49,8 +49,8 @@ public class ApplicationTest implements CommandLineRunner {
         commentService.insert(comment);
 
         List<String> breakingBadGenres = new ArrayList<>();
-        breakingBadGenres.add("Crime");
-        TVShow tvShow = new TVShow("Breaking Bad","A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.", "2008", breakingBadGenres);
+//        breakingBadGenres.add("Crime");
+        TVShow tvShow = new TVShow("Breaking Bad","A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.", "2008");
         tvShow.putSeasonAndEpisodeAndUpdate(1,7);
         tvShow.putSeasonAndEpisodeAndUpdate(2,13);
         tvShow.putSeasonAndEpisodeAndUpdate(3,13);

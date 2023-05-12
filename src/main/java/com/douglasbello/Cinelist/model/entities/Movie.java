@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -22,8 +23,11 @@ public class Movie implements Serializable {
 
     private String director;
 
-    @ManyToMany(mappedBy = "movie")
-    private List<Genres> genre;
+    @ManyToMany
+    @JoinTable(name = "tb_movie_genre",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genres_id"))
+    private List<Genres> genre = new ArrayList<>();
 
     private String releaseYear;
 

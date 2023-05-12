@@ -15,7 +15,9 @@ public class TVShow implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     private String title;
+
     private String overview;
 
     private String director;
@@ -23,15 +25,20 @@ public class TVShow implements Serializable {
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
     private List<Comment> comments;
     private Integer seasons;
+
     private Integer episodes;
+
     @ElementCollection
     @CollectionTable(name = "seasons_episodes", joinColumns = @JoinColumn(name = "tv_show_id"))
     @MapKeyColumn(name = "season")
     @Column(name = "episodes")
     private Map<Integer,Integer> seasonsAndEpisodes = new HashMap<>();
 
-    @ManyToMany(mappedBy = "tvShow")
-    private List<Genres> genre;
+    @ManyToMany
+    @JoinTable(name = "tb_tvshow_genre",
+            joinColumns = @JoinColumn(name = "tvshow_id"),
+            inverseJoinColumns = @JoinColumn(name = "genres_id"))
+    private List<Genres> genre = new ArrayList<>();
 
     private String releaseYear;
 

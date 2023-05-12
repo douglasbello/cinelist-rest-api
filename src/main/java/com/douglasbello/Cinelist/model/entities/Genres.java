@@ -3,6 +3,7 @@ package com.douglasbello.Cinelist.model.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,18 +19,13 @@ public class Genres {
     private String genre;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "tb_movie_genre",
-            joinColumns = @JoinColumn(name = "genre_id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id"))
-    private List<Movie> movie;
+    @ManyToMany(mappedBy = "genre")
+    private List<Movie> movie = new ArrayList<>();
+
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "tb_tvshow_genre",
-            joinColumns = @JoinColumn(name = "genre_id"),
-            inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
-    private List<TVShow> tvShow;
+    @ManyToMany(mappedBy = "genre")
+    private List<TVShow> tvShow = new ArrayList<>();
 
     public Genres() {
     }

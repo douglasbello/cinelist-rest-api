@@ -17,6 +17,9 @@ public class TVShow implements Serializable {
     private UUID id;
     private String title;
     private String overview;
+
+    private String director;
+
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
     private List<Comment> comments;
     private Integer seasons;
@@ -38,11 +41,12 @@ public class TVShow implements Serializable {
         setEpisodes();
     }
 
-    public TVShow(String title, String overview, String releaseYear) {
+    public TVShow(String title, String overview, String director, String releaseYear) {
         setSeasons();
         setEpisodes();
         this.title = title;
         this.overview = overview;
+        this.director = director;
         this.releaseYear = releaseYear;
     }
 
@@ -74,6 +78,14 @@ public class TVShow implements Serializable {
 
     public void setOverview(String overview) {
         this.overview = overview;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
     }
 
     public Integer getSeasons() {

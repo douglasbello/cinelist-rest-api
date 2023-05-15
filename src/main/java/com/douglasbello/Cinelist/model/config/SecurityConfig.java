@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/tvshows/**")
                 .permitAll()
+                .requestMatchers(HttpMethod.GET, "/comments/**")
+                .permitAll()
                 .anyRequest().authenticated().and().cors();
 
         http.headers().frameOptions().disable();

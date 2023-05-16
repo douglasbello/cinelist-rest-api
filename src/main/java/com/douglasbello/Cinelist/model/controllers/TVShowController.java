@@ -2,7 +2,6 @@ package com.douglasbello.Cinelist.model.controllers;
 
 import com.douglasbello.Cinelist.model.entities.TVShow;
 import com.douglasbello.Cinelist.model.services.TVShowService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -14,8 +13,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/tvshows")
 public class TVShowController {
-    @Autowired
-    private TVShowService service;
+    private final TVShowService service;
+
+    public TVShowController(TVShowService service) {
+	this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<TVShow>> findAll() {

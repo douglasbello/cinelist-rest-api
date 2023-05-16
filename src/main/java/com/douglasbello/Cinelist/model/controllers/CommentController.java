@@ -22,18 +22,22 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/comments")
 public class CommentController {
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private MovieService movieService;
+    private final MovieService movieService;
 
-    @Autowired
-    private TVShowService tvShowService;
+    private final TVShowService tvShowService;
 
+    public CommentController(CommentService commentService, UserService userService,
+	    MovieService movieService, TVShowService tvShowService) {
+	this.commentService = commentService;
+	this.userService = userService;
+	this.movieService = movieService;
+	this.tvShowService = tvShowService;
+    }
+    
 
     @GetMapping
     public ResponseEntity<List<Comment>> findAll() {

@@ -2,7 +2,6 @@ package com.douglasbello.Cinelist.model.controllers;
 
 import com.douglasbello.Cinelist.model.entities.Movie;
 import com.douglasbello.Cinelist.model.services.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -14,9 +13,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/movies")
 public class MovieController {
-    @Autowired
-    private MovieService service;
+    private final MovieService service;
 
+    public MovieController(MovieService service) {
+	this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Movie>> findAll() {

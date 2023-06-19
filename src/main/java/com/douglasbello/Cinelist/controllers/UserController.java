@@ -1,7 +1,11 @@
 package com.douglasbello.Cinelist.controllers;
 
+import com.douglasbello.Cinelist.dto.RequestResponseDTO;
+import com.douglasbello.Cinelist.dto.UserDTO;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.services.UserService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +31,23 @@ public class UserController {
 		return ResponseEntity.ok().body(service.findById(id));
 	}
 
-	@PostMapping(value = "/sign-in")
-	public ResponseEntity<User> signIn(@RequestBody User obj) {
+	@PostMapping(value = "/signIn")
+	public ResponseEntity<?> signIn(@RequestBody UserDTO obj) {
 
+        if (obj.getUsername().length() < 4 || obj.getUsername().length() > 16) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Username cannot be less than 4 or bigger than 16."));
+        }
+
+        if (obj.getPassword().length() < 8 || obj.getPassword().length() > 100) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Password cannot be less than 8 or bigger than 100."));
+        }
+
+        if (service.checkIfTheUsernameIsAlreadyInUse(obj.getUsername())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(409, "Username is already in use."));
+        }
+
+        service.signIn(obj);
+        return ResponseEntity.ok().body(new RequestResponseDTO(200, "Account created successfully!"));
 	}
 
 	@DeleteMapping(value = "/{id}")

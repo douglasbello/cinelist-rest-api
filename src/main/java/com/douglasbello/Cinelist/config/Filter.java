@@ -1,6 +1,6 @@
 package com.douglasbello.Cinelist.config;
 
-import com.douglasbello.Cinelist.dto.RequestErrorDTO;
+import com.douglasbello.Cinelist.dto.RequestResponseDTO;
 import com.douglasbello.Cinelist.services.AdminService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -35,7 +35,7 @@ public class Filter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
             else {
-                RequestErrorDTO errorDTO = new RequestErrorDTO(401,"User not authorized for this system.");
+                RequestResponseDTO errorDTO = new RequestResponseDTO(401,"User not authorized for this system.");
                 response.setStatus(errorDTO.getStatus());
                 response.setContentType("application/json");
                 ObjectMapper mapper = new ObjectMapper();

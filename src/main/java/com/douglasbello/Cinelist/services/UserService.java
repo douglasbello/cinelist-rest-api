@@ -1,6 +1,7 @@
 package com.douglasbello.Cinelist.services;
 
 import com.douglasbello.Cinelist.entities.User;
+import com.douglasbello.Cinelist.dto.UserDTO;
 import com.douglasbello.Cinelist.repositories.UserRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,6 +41,28 @@ public class UserService {
         return repository.save(user);
     }
 
+    public User signIn(UserDTO dto) {
+        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.save(user);
+    }
+
+    public boolean login(String username, String password) {
+        try {
+            User entity = repository.findUserByUsername(username);
+
+            if (entity == null) {
+                return false;
+            }
+
+            return passwordEncoder.matches(password, entity.getPassword());
+
+        } catch (NoSuchElementException exception) {
+            return false;
+        }
+
+    }
+
     public void delete(UUID id) {
         try {
             repository.deleteById(id);
@@ -62,5 +86,12 @@ public class UserService {
     private void updateData(User entity, User obj) {
         entity.setEmail(obj.getEmail());
         entity.setUsername(obj.getUsername());
+    }
+
+    public boolean checkIfTheUsernameIsAlreadyInUse(String username) {
+        if (repository.findUserByUsername(username) == null) {
+            return false;
+        }
+        return true;
     }
 }

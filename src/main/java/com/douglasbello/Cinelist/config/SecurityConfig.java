@@ -32,6 +32,10 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/comments/**")
                 .permitAll()
+                .requestMatchers(HttpMethod.POST, "/users/signIn")
+                .permitAll()
+                .requestMatchers(HttpMethod.POST, "/users/login")
+                .permitAll()
                 .anyRequest().authenticated().and().cors();
 
         http.headers().frameOptions().disable();

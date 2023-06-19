@@ -4,9 +4,7 @@ import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,12 +27,9 @@ public class UserController {
 		return ResponseEntity.ok().body(service.findById(id));
 	}
 
-	@PostMapping(value = "/create")
-	public ResponseEntity<User> insert(@RequestBody User obj) {
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId())
-				.toUri();
-		return ResponseEntity.created(uri).body(obj);
+	@PostMapping(value = "/sign-in")
+	public ResponseEntity<User> signIn(@RequestBody User obj) {
+
 	}
 
 	@DeleteMapping(value = "/{id}")

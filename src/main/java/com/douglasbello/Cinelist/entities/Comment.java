@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.model.entities;
+package com.douglasbello.Cinelist.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

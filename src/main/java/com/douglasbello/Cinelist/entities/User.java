@@ -8,8 +8,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 @Entity
 @Table(name = "tb_users")
 public class User implements Serializable {
@@ -77,6 +78,11 @@ public class User implements Serializable {
 	public List<Comment> getComments() {
 		return comments;
 	}
+
+    public Set<UUID> getCommentsIds() {
+        Set<UUID> ids = comments.stream().map(Comment::getId).collect(Collectors.toSet());
+        return ids;
+    }
 
 	@Override
 	public boolean equals(Object o) {

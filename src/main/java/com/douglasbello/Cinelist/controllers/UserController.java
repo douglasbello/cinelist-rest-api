@@ -31,8 +31,8 @@ public class UserController {
 		return ResponseEntity.ok().body(service.findById(id));
 	}
 
-	@PostMapping(value = "/signIn")
-	public ResponseEntity<?> signIn(@RequestBody UserDTO obj) {
+	@PostMapping(value = "/sign-in")
+	public ResponseEntity<RequestResponseDTO> signIn(@RequestBody UserDTO obj) {
 
         if (obj.getUsername().length() < 4 || obj.getUsername().length() > 16) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Username cannot be less than 4 or bigger than 16."));
@@ -49,6 +49,14 @@ public class UserController {
         service.signIn(obj);
         return ResponseEntity.ok().body(new RequestResponseDTO(200, "Account created successfully!"));
 	}
+
+    @PostMapping(value = "/login")
+    public ResponseEntity<RequestResponseDTO> login(@RequestBody UserDTO obj) {
+        if (!service.login(obj.getEmail(), obj.getPassword())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(401, "Username or password incorrects"));
+        }
+        return ResponseEntity.ok().body(new RequestResponseDTO(200,"Login successfull."));
+    }
 
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable UUID id) {

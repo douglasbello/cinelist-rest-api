@@ -94,4 +94,11 @@ public class UserService {
         }
         return true;
     }
+
+    public boolean checkIfTheEmailIsAlreadyInUse(String email) {
+        if (repository.findUserByEmail(email) == null) {
+            return false;
+        }
+        return true;
+    }
 }

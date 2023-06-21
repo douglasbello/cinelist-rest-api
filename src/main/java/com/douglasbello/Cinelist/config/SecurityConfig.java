@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/comments/**")
                 .permitAll()
-                .requestMatchers(HttpMethod.POST, "/users/signIn")
+                .requestMatchers(HttpMethod.POST, "/users/sign-in")
                 .permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/login")
                 .permitAll()

@@ -32,36 +32,11 @@ public class CommentController {
 
     public CommentController(CommentService commentService, UserService userService,
 	    MovieService movieService, TVShowService tvShowService) {
-	this.commentService = commentService;
-	this.userService = userService;
-	this.movieService = movieService;
-	this.tvShowService = tvShowService;
+        this.commentService = commentService;
+        this.userService = userService;
+        this.movieService = movieService;
+        this.tvShowService = tvShowService;
     }
-    
-
-    @GetMapping
-    public ResponseEntity<List<Comment>> findAll() {
-        List<Comment> comments = commentService.findAll();
-        return ResponseEntity.ok().body(comments);
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Comment> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok().body(commentService.findById(id));
-    }
-
-    @GetMapping(value = "/movie/{id}")
-    public ResponseEntity<List<Comment>> findAllCommentsByMovie(@PathVariable UUID id) {
-        List<Comment> comments = commentService.findAllCommentsByMovie(id);
-        return ResponseEntity.ok().body(comments);
-    }
-
-    @GetMapping(value = "/tvshow/{id}")
-    public ResponseEntity<List<Comment>> findAllCommentsByTvShow(@PathVariable UUID id) {
-        List<Comment> comments = commentService.findAllCommentsByTvShow(id);
-        return ResponseEntity.ok().body(comments);
-    }
-
 
     @PostMapping(value = "/comment")
     public ResponseEntity<Comment> insert(@RequestBody CommentDTO commentDTO) {
@@ -78,11 +53,5 @@ public class CommentController {
         }
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        commentService.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }

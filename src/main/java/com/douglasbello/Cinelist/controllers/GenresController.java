@@ -20,25 +20,4 @@ public class GenresController {
     private GenresController(GenresService service) {
         this.service = service;
     }
-
-    @GetMapping
-    public ResponseEntity<List<GenresDTO>> findAll() {
-        List<GenresDTO> list = service.findAll();
-
-        return ResponseEntity.ok().body(list);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<GenresDTO> findById(@PathVariable UUID id) {
-        GenresDTO result = service.findById(id);
-
-        return ResponseEntity.ok().body(result);
-    }
-
-    @PostMapping("/insert")
-    public ResponseEntity<GenresDTO> insert(@RequestBody Genres genre) {
-        GenresDTO result = service.insert(genre);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(result.getId()).toUri();
-        return ResponseEntity.created(uri).body(result);
-    }
 }

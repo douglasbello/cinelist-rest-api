@@ -21,9 +21,7 @@ public class User implements Serializable {
 	private UUID id;
 	private String email;
 	private String username;
-
 	private String password;
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();

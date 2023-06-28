@@ -53,9 +53,9 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<RequestResponseDTO> login(@RequestBody UserDTO obj) {
         if (!service.login(obj.getEmail(), obj.getPassword())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(401, "Username or password incorrects"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(401, "Username or password incorrect"));
         }
-        return ResponseEntity.ok().body(new RequestResponseDTO(200,"Login successfull."));
+        return ResponseEntity.ok().body(new RequestResponseDTO(200,"Login successfully."));
     }
 
 	@DeleteMapping(value = "/{id}")

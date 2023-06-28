@@ -19,32 +19,4 @@ public class MovieController {
         this.service = service;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Movie>> findAll() {
-        return ResponseEntity.ok().body(service.findAll());
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Movie> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok().body(service.findById(id));
-    }
-
-    @PostMapping(value = "/add")
-    public ResponseEntity<Movie> insert(@RequestBody Movie obj) {
-        obj = service.insert(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body(obj);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Movie> update(@PathVariable UUID id, @RequestBody Movie obj) {
-        obj = service.update(id,obj);
-        return ResponseEntity.ok().body(obj);
-    }
 }

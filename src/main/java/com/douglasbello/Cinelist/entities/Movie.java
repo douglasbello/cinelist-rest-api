@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_movies")
@@ -19,26 +16,22 @@ public class Movie implements Serializable {
 	private UUID id;
 	private String title;
 	private String overview;
-
-	private String director;
-
+	private String releaseYear;
+	@ManyToMany(mappedBy = "movies")
+	private Set<Director> directors = new HashSet<>();
 	@ManyToMany
 	@JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
 	private List<Genres> genre = new ArrayList<>();
-
-	private String releaseYear;
-
 	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-	private List<Comment> comments;
+	private List<Comment> comments = new ArrayList<>();
 
 	public Movie() {
 	}
 
-	public Movie(String title, String overview, String director, String releaseYear) {
+	public Movie(String title, String overview, String releaseYear) {
 		this.title = title;
 		this.overview = overview;
 		this.releaseYear = releaseYear;
-		this.director = director;
 	}
 
 	@PrePersist
@@ -71,12 +64,8 @@ public class Movie implements Serializable {
 		this.overview = overview;
 	}
 
-	public String getDirector() {
-		return director;
-	}
-
-	public void setDirector(String director) {
-		this.director = director;
+	public Set<Director> getDirector() {
+		return directors;
 	}
 
 	public List<Comment> getComments() {
@@ -114,9 +103,12 @@ public class Movie implements Serializable {
 	public String toString() {
 		return "Movie{" +
 				"id=" + id +
-				", name='" + title + '\'' +
+				", title='" + title + '\'' +
 				", overview='" + overview + '\'' +
-				", comments='" + comments + '\'' +
+				", directors=" + directors +
+				", genre=" + genre +
+				", releaseYear='" + releaseYear + '\'' +
+				", comments=" + comments +
 				'}';
 	}
 }

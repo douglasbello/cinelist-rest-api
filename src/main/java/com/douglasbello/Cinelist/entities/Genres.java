@@ -15,14 +15,10 @@ public class Genres {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     private String genre;
-
     @JsonIgnore
     @ManyToMany(mappedBy = "genre")
     private List<Movie> movie = new ArrayList<>();
-
-
     @JsonIgnore
     @ManyToMany(mappedBy = "genre")
     private List<TVShow> tvShow = new ArrayList<>();

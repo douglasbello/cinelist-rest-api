@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/login")
                 .permitAll()
-                .requestMatchers(HttpMethod.POST, "/directors")
+                .requestMatchers(HttpMethod.GET, "/directors")
                 .permitAll()
                 .anyRequest().authenticated().and().cors();
 

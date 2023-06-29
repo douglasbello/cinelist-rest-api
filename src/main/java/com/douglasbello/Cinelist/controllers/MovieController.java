@@ -19,4 +19,8 @@ public class MovieController {
         this.service = service;
     }
 
+    @GetMapping
+    public List<Movie> getAll() {
+        return service.findAll();
+    }
 }

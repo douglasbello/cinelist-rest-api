@@ -42,7 +42,7 @@ public class UserService {
     }
 
     public User signIn(UserDTO dto) {
-        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword());
+        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getGender());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }

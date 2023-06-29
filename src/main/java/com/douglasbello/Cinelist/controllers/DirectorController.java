@@ -5,6 +5,8 @@ import com.douglasbello.Cinelist.services.DirectorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/directors")
 public class DirectorController {
@@ -12,6 +14,11 @@ public class DirectorController {
 
     public DirectorController(DirectorService directorService) {
         this.directorService = directorService;
+    }
+
+    @GetMapping
+    public List<Director> getAll() {
+        return directorService.getAll();
     }
 
     @PostMapping

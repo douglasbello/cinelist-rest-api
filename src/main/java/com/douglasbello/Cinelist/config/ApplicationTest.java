@@ -1,12 +1,15 @@
 package com.douglasbello.Cinelist.config;
 
 import com.douglasbello.Cinelist.entities.*;
+import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.douglasbello.Cinelist.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @Profile("test")
@@ -24,16 +27,19 @@ public class ApplicationTest implements CommandLineRunner {
 
     private final GenresService genresService;
 
+    private final DirectorService directorService;
+
 
     public ApplicationTest(UserService userService, MovieService movieService,
                            CommentService commentService, TVShowService tvShowService,
-                           AdminService adminService, GenresService genresService) {
+                           AdminService adminService, GenresService genresService, DirectorService directorService) {
         this.userService = userService;
         this.movieService = movieService;
         this.commentService = commentService;
         this.tvShowService = tvShowService;
         this.adminService = adminService;
         this.genresService = genresService;
+        this.directorService = directorService;
     }
 
     @Override
@@ -73,5 +79,20 @@ public class ApplicationTest implements CommandLineRunner {
 //        Admin admin = new Admin("admin01","admin01");
 //        Admin obj = adminService.insert(admin);
 //        System.out.println("Admin token: " + obj.getToken());
+
+        Movie movie = new Movie("Grêmio", "football", "porto-alegrense");
+        movieService.insert(movie);
+        Director director = new Director(null, "Chrstipoher", "1961");
+        director.setGender(Gender.MALE);
+        directorService.insert(director);
+        movie.getDirectors().add(director);
+        movieService.insert(movie);
+
+        Map<Integer, Integer> maps = new HashMap<>();
+        TVShow tv = new TVShow("the office", "bla bla bla", "2003", maps);
+        tv.putSeasonAndEpisodeAndUpdate(1,24);
+        tvShowService.insert(tv);
+        tv.getDirectors().add(director);
+        tvShowService.insert(tv);
     }
 }

@@ -5,11 +5,8 @@ import com.douglasbello.Cinelist.entities.Genres;
 import java.util.UUID;
 
 public class GenresDTO {
-
     private UUID id;
-
     private String genre;
-
     public GenresDTO() {
     }
 

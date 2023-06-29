@@ -1,5 +1,7 @@
 package com.douglasbello.Cinelist.entities;
 
+import com.douglasbello.Cinelist.entities.enums.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -19,11 +21,12 @@ public class Director implements Serializable {
     private UUID id;
     private String name;
     private String birthDate;
-    @ManyToMany
-    @JoinTable(name = "tb_director_movie", joinColumns = @JoinColumn(name = "director_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
+    private Gender gender;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "directors")
     private Set<Movie> movies = new HashSet<>();
-    @ManyToMany
-    @JoinTable(name = "tb_director_tvshow", joinColumns = @JoinColumn(name = "director_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
+    @JsonIgnore
+    @ManyToMany(mappedBy = "directors")
     private Set<TVShow> tvShows = new HashSet<>();
 
     public Director() {}
@@ -64,6 +67,14 @@ public class Director implements Serializable {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     @Override

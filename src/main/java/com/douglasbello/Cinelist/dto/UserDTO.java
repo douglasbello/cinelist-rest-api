@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.douglasbello.Cinelist.entities.User;
+import com.douglasbello.Cinelist.entities.enums.Gender;
 
 import java.util.HashSet;
 
@@ -17,6 +18,7 @@ public class UserDTO implements Serializable {
     private String email;
     private String username;
     private String password;
+    private Gender gender;
     private Set<UUID> comments = new HashSet<>();
 
     public UserDTO() {
@@ -27,6 +29,7 @@ public class UserDTO implements Serializable {
         this.email = entity.getEmail();
         this.username = entity.getUsername();
         this.password = entity.getPassword();
+        this.gender = entity.getGender();
         this.comments = entity.getCommentsIds();
     }
 
@@ -66,6 +69,14 @@ public class UserDTO implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     @Override

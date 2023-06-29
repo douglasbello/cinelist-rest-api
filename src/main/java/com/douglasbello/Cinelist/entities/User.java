@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.entities;
 
+import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -22,6 +23,7 @@ public class User implements Serializable {
 	private String email;
 	private String username;
 	private String password;
+	private Gender gender;
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
@@ -29,10 +31,11 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(String email, String username, String password) {
+	public User(String email, String username, String password, Gender gender) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
+		this.gender = gender;
 	}
 
 	@PrePersist
@@ -81,6 +84,14 @@ public class User implements Serializable {
         Set<UUID> ids = comments.stream().map(Comment::getId).collect(Collectors.toSet());
         return ids;
     }
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
 
 	@Override
 	public boolean equals(Object o) {

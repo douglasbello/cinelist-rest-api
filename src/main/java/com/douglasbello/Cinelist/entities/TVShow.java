@@ -14,43 +14,47 @@ public class TVShow implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
-
 	private String title;
-
 	private String overview;
-
-	private String director;
-
-	@OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
-	private List<Comment> comments;
 	private Integer seasons;
-
 	private Integer episodes;
-
+	private String releaseYear;
+	@ManyToMany
+	@JoinTable(name = "tb_director_tvshow", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
+	private Set<Director> directors = new HashSet<>();
+	@OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
+	private List<Comment> comments = new ArrayList<>();
 	@ElementCollection
 	@CollectionTable(name = "seasons_episodes", joinColumns = @JoinColumn(name = "tv_show_id"))
 	@MapKeyColumn(name = "season")
 	@Column(name = "episodes")
 	private Map<Integer, Integer> seasonsAndEpisodes = new HashMap<>();
-
 	@ManyToMany
 	@JoinTable(name = "tb_tvshow_genre", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
-	private List<Genres> genre = new ArrayList<>();
-
-	private String releaseYear;
+	private List<Genres> genres = new ArrayList<>();
 
 	public TVShow() {
 		setSeasons();
 		setEpisodes();
 	}
 
-	public TVShow(String title, String overview, String director, String releaseYear) {
-		setSeasons();
-		setEpisodes();
+	public TVShow(String title, String overview, String releaseYear, Map<Integer, Integer> seasonsAndEpisodes) {
 		this.title = title;
 		this.overview = overview;
-		this.director = director;
 		this.releaseYear = releaseYear;
+		this.seasonsAndEpisodes = seasonsAndEpisodes;
+		setSeasons();
+		setEpisodes();
+	}
+
+	public TVShow(String title, String overview, String releaseYear, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes) {
+		this.title = title;
+		this.overview = overview;
+		this.releaseYear = releaseYear;
+		this.directors = directors;
+		this.seasonsAndEpisodes = seasonsAndEpisodes;
+		setSeasons();
+		setEpisodes();
 	}
 
 	@PrePersist
@@ -83,12 +87,8 @@ public class TVShow implements Serializable {
 		this.overview = overview;
 	}
 
-	public String getDirector() {
-		return director;
-	}
-
-	public void setDirector(String director) {
-		this.director = director;
+	public Set<Director> getDirectors() {
+		return directors;
 	}
 
 	public Integer getSeasons() {
@@ -126,7 +126,7 @@ public class TVShow implements Serializable {
 	}
 
 	public List<Genres> getGenre() {
-		return genre;
+		return genres;
 	}
 
 	public String getReleaseYear() {
@@ -158,10 +158,13 @@ public class TVShow implements Serializable {
 				"id=" + id +
 				", title='" + title + '\'' +
 				", overview='" + overview + '\'' +
+				", director=" + directors +
 				", comments=" + comments +
 				", seasons=" + seasons +
 				", episodes=" + episodes +
 				", seasonsAndEpisodes=" + seasonsAndEpisodes +
+				", genre=" + genres +
+				", releaseYear='" + releaseYear + '\'' +
 				'}';
 	}
 }

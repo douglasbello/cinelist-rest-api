@@ -1,5 +1,4 @@
 package com.douglasbello.Cinelist.entities;
-
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -17,7 +16,8 @@ public class Movie implements Serializable {
 	private String title;
 	private String overview;
 	private String releaseYear;
-	@ManyToMany(mappedBy = "movies")
+	@ManyToMany
+	@JoinTable(name = "tb_director_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
 	private Set<Director> directors = new HashSet<>();
 	@ManyToMany
 	@JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
@@ -64,7 +64,7 @@ public class Movie implements Serializable {
 		this.overview = overview;
 	}
 
-	public Set<Director> getDirector() {
+	public Set<Director> getDirectors() {
 		return directors;
 	}
 

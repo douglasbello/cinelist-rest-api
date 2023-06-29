@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "tb_genres")
 public class Genres {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -20,7 +19,7 @@ public class Genres {
     @ManyToMany(mappedBy = "genre")
     private List<Movie> movie = new ArrayList<>();
     @JsonIgnore
-    @ManyToMany(mappedBy = "genre")
+    @ManyToMany(mappedBy = "genres")
     private List<TVShow> tvShow = new ArrayList<>();
 
     public Genres() {

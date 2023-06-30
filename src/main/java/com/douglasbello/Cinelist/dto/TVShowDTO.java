@@ -75,6 +75,10 @@ public class TVShowDTO {
         return directors;
     }
 
+    public List<GenresDTO> getGenres() {
+        return genres;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

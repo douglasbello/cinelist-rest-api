@@ -13,15 +13,24 @@ import java.util.HashSet;
 public class UserDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
     private UUID id;
     private String email;
     private String username;
     private String password;
-    private Gender gender;
+    /* here, the gender code is a string instead of an integer, but why?, because spring was increasing the number that I passed in post requests, for example, if I pass 1 in the
+    request, my controller would receive the number 2, so i changed this attribute to string
+     */
+    private String gender;
     private Set<UUID> comments = new HashSet<>();
 
     public UserDTO() {
+    }
+
+    public UserDTO(String email, String username, String password, String gender) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.gender = gender;
     }
 
     public UserDTO(User entity) {
@@ -29,14 +38,8 @@ public class UserDTO implements Serializable {
         this.email = entity.getEmail();
         this.username = entity.getUsername();
         this.password = entity.getPassword();
-        this.gender = entity.getGender();
+        this.gender = String.valueOf(entity.getGender());
         this.comments = entity.getCommentsIds();
-    }
-
-    public UserDTO(String email, String username, String password) {
-        this.email = email;
-        this.username = username;
-        this.password = password;
     }
 
     public UUID getId() {
@@ -71,12 +74,14 @@ public class UserDTO implements Serializable {
         this.password = password;
     }
 
-    public Gender getGender() {
-        return gender;
+    public Integer getGender() {
+        return Integer.parseInt(gender);
     }
 
     public void setGender(Gender gender) {
-        this.gender = gender;
+        if (gender != null) {
+            this.gender = String.valueOf(gender.getCode());
+        }
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.douglasbello.Cinelist.services;
 
+import com.douglasbello.Cinelist.dto.Mapper;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.dto.UserDTO;
+import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.douglasbello.Cinelist.repositories.UserRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
@@ -18,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService<T> {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -42,25 +44,34 @@ public class UserService {
     }
 
     public User signIn(UserDTO dto) {
-        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getGender());
+        User user = Mapper.userDtoToUser(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }
 
-    public boolean login(String username, String password) {
+    public UserDTO login(UserDTO obj) {
         try {
-            User entity = repository.findUserByUsername(username);
-
-            if (entity == null) {
-                return false;
+            User entity;
+            if (obj.getEmail() == null) {
+                entity = repository.findUserByUsername(obj.getUsername());
+            }
+            else {
+                entity = repository.findUserByEmail(obj.getEmail());
             }
 
-            return passwordEncoder.matches(password, entity.getPassword());
+            if (entity == null) {
+                return null;
+            }
+
+            if (passwordEncoder.matches(obj.getPassword(), entity.getPassword())) {
+                return new UserDTO(entity);
+            }
 
         } catch (NoSuchElementException exception) {
-            return false;
+            return null;
         }
 
+        return null;
     }
 
     public void delete(UUID id) {

@@ -23,7 +23,7 @@ public class User implements Serializable {
 	private String email;
 	private String username;
 	private String password;
-	private Gender gender;
+	private int gender;
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
@@ -32,6 +32,13 @@ public class User implements Serializable {
 	}
 
 	public User(String email, String username, String password, Gender gender) {
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		setGender(gender);
+	}
+
+	public User(String email, String username, String password, int gender) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
@@ -85,12 +92,14 @@ public class User implements Serializable {
         return ids;
     }
 
-	public Gender getGender() {
+	public int getGender() {
 		return gender;
 	}
 
 	public void setGender(Gender gender) {
-		this.gender = gender;
+		if (gender != null) {
+			this.gender = gender.getCode();
+		}
 	}
 
 	@Override

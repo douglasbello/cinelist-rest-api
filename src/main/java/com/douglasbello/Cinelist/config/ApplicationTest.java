@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.config;
 
+import com.douglasbello.Cinelist.dto.UserDTO;
 import com.douglasbello.Cinelist.entities.*;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.douglasbello.Cinelist.services.*;
@@ -94,5 +95,9 @@ public class ApplicationTest implements CommandLineRunner {
         tvShowService.insert(tv);
         tv.getDirectors().add(director);
         tvShowService.insert(tv);
+
+        User user = new User("douglasbelloalv1@outlook.com", "douglasbello", "douglasbello", Gender.MALE);
+        UserDTO dto = new UserDTO(user);
+        userService.signIn(dto);
     }
 }

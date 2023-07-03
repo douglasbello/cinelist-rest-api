@@ -10,10 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tb_comments")
-// @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Comment implements Serializable {
-	@Serial
-	private static final long serialVersionUID = 1L;
+public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
@@ -81,6 +78,10 @@ public class Comment implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public TVShow getTvShow() {
+		return tvShow;
 	}
 
 	@Override

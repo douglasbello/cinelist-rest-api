@@ -4,18 +4,14 @@ import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_DIRECTORS")
-public class Director implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+@Table(name = "tb_directors")
+public class Director {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

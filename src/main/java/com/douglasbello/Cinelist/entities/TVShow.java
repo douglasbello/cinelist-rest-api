@@ -8,9 +8,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "tb_tvshows")
-public class TVShow implements Serializable {
-	@Serial
-	private static final long serialVersionUID = 1L;
+public class TVShow {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;

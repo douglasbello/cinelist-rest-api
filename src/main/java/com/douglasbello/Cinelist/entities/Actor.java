@@ -12,10 +12,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_ACTORS")
-public class Actor implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+@Table(name = "tb_actors")
+public class Actor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

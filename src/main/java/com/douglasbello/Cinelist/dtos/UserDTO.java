@@ -10,16 +10,11 @@ import com.douglasbello.Cinelist.entities.enums.Gender;
 
 import java.util.HashSet;
 
-public class UserDTO implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class UserDTO {
     private UUID id;
     private String email;
     private String username;
     private String password;
-    /* here, the gender code is a string instead of an integer, but why?, because spring was increasing the number that I passed in post requests, for example, if I pass 1 in the
-    request, my controller would receive the number 2, so i changed this attribute to string
-     */
     private int gender;
 
     public UserDTO() {

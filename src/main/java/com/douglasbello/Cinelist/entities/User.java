@@ -14,9 +14,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 @Entity
 @Table(name = "tb_users")
-public class User implements Serializable {
-	@Serial
-	private static final long serialVersionUID = 1L;
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
@@ -24,7 +22,6 @@ public class User implements Serializable {
 	private String username;
 	private String password;
 	private int gender;
-	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 

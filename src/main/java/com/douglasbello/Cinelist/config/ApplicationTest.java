@@ -81,12 +81,14 @@ public class ApplicationTest implements CommandLineRunner {
 //        System.out.println("Admin token: " + obj.getToken());
 
         Movie movie = new Movie("Grêmio", "football", "porto-alegrense");
-        movieService.insert(movie);
+        movie = movieService.insert(movie);
         Director director = new Director(null, "Chrstipoher", "1961");
         director.setGender(Gender.FEMALE.getCode());
         directorService.insert(director);
         movie.getDirectors().add(director);
-        movieService.insert(movie);
+        movie = movieService.insert(movie);
+        Director director1 = new Director(null, "kdaskdask","1203");
+        director1 = directorService.insert(director);
 
         Map<Integer, Integer> maps = new HashMap<>();
         TVShow tv = new TVShow("The Office", "bla bla bla", "2003", maps);
@@ -100,6 +102,11 @@ public class ApplicationTest implements CommandLineRunner {
 
         User user = new User("douglasbelloalv1@outlook.com", "douglasbello", "douglasbello", Gender.MALE);
         UserDTO dto = new UserDTO(user);
-        userService.signIn(dto);
+        User obj = userService.signIn(dto);
+        Comment comment = new Comment(obj,movie, "grmerke");
+        commentService.insert(comment);
+        movie.getGenre().add(horror);
+        movie.getDirectors().add(director1);
+        movieService.insert(movie);
     }
 }

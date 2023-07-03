@@ -7,9 +7,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "tb_movies")
-public class Movie implements Serializable {
-	@Serial
-	private static final long serialVersionUID = 1L;
+public class Movie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
@@ -24,9 +22,9 @@ public class Movie implements Serializable {
 	private Set<Actor> actors = new HashSet<>();
 	@ManyToMany
 	@JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
-	private List<Genres> genre = new ArrayList<>();
+	private Set<Genres> genre = new HashSet<>();
 	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-	private List<Comment> comments = new ArrayList<>();
+	private Set<Comment> comments = new HashSet<>();
 
 	public Movie() {
 	}
@@ -71,7 +69,7 @@ public class Movie implements Serializable {
 		return directors;
 	}
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
@@ -83,7 +81,7 @@ public class Movie implements Serializable {
 		this.releaseYear = releaseYear;
 	}
 
-	public List<Genres> getGenre() {
+	public Set<Genres> getGenre() {
 		return genre;
 	}
 

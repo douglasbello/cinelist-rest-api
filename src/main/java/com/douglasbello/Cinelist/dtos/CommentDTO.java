@@ -1,5 +1,8 @@
 package com.douglasbello.Cinelist.dtos;
 
+import com.douglasbello.Cinelist.entities.Comment;
+
+import java.util.Objects;
 import java.util.UUID;
 
 public class CommentDTO {
@@ -16,6 +19,12 @@ public class CommentDTO {
         this.comment = comment;
     }
 
+    public CommentDTO(Comment comment) {
+        this.userId = comment.getUser().getId();
+        setShowOrMovieId(comment);
+        this.comment = comment.getComment();
+    }
+
     public UUID getUserId() {
         return userId;
     }
@@ -28,8 +37,13 @@ public class CommentDTO {
         return showOrMovieId;
     }
 
-    public void setShowOrMovieId(UUID showOrMovieId) {
-        this.showOrMovieId = showOrMovieId;
+    public void setShowOrMovieId(Comment comment) {
+        if (comment.getTvShow() == null) {
+            showOrMovieId = comment.getMovie().getId();
+        }
+        if (comment.getMovie() == null) {
+            showOrMovieId = comment.getTvShow().getId();
+        }
     }
 
     public String getComment() {
@@ -38,5 +52,18 @@ public class CommentDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommentDTO that = (CommentDTO) o;
+        return Objects.equals(userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 }

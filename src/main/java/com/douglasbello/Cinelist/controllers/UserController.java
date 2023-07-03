@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
@@ -52,7 +51,7 @@ public class UserController {
         }
 
         userService.signIn(obj);
-        return ResponseEntity.ok().body(new RequestResponseDTO(200, "Account created successfully!"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResponseDTO(201, "Account created successfully!"));
 	}
 
     @PostMapping(value = "/login")

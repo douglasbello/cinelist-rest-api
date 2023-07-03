@@ -22,6 +22,9 @@ public class TVShow implements Serializable {
 	@ManyToMany
 	@JoinTable(name = "tb_director_tvshow", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
 	private Set<Director> directors = new HashSet<>();
+	@ManyToMany
+	@JoinTable(name = "tb_actor_tvshow", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
+	private Set<Actor> actors = new HashSet<>();
 	@OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 	@ElementCollection
@@ -99,6 +102,26 @@ public class TVShow implements Serializable {
 		return episodes;
 	}
 
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public List<Genres> getGenre() {
+		return genres;
+	}
+
+	public String getReleaseYear() {
+		return releaseYear;
+	}
+
+	public void setReleaseYear(String releaseYear) {
+		this.releaseYear = releaseYear;
+	}
+
+	public Set<Actor> getActors() {
+		return actors;
+	}
+
 	public void setSeasons() {
 		seasons = seasonsAndEpisodes.size();
 	}
@@ -119,22 +142,6 @@ public class TVShow implements Serializable {
 		seasonsAndEpisodes.put(season, episodes);
 		setSeasons();
 		setEpisodes();
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public List<Genres> getGenre() {
-		return genres;
-	}
-
-	public String getReleaseYear() {
-		return releaseYear;
-	}
-
-	public void setReleaseYear(String releaseYear) {
-		this.releaseYear = releaseYear;
 	}
 
 	@Override

@@ -54,11 +54,11 @@ public class TVShowService {
         }
     }
 
-    public TVShow update(UUID id, TVShow obj) {
+    public TVShowDTO update(UUID id, TVShow obj) {
         try {
             TVShow entity = repository.getReferenceById(id);
             updateData(entity,obj);
-            return repository.save(entity);
+            return new TVShowDTO(repository.save(entity));
         } catch (EntityNotFoundException exception) {
             throw new ResourceNotFoundException(id);
         }

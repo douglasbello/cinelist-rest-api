@@ -20,6 +20,9 @@ public class Movie implements Serializable {
 	@JoinTable(name = "tb_director_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
 	private Set<Director> directors = new HashSet<>();
 	@ManyToMany
+	@JoinTable(name = "tb_actor_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
+	private Set<Actor> actors = new HashSet<>();
+	@ManyToMany
 	@JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
 	private List<Genres> genre = new ArrayList<>();
 	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
@@ -82,6 +85,10 @@ public class Movie implements Serializable {
 
 	public List<Genres> getGenre() {
 		return genre;
+	}
+
+	public Set<Actor> getActors() {
+		return actors;
 	}
 
 	@Override

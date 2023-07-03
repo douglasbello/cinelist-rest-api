@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_directors")
+@Table(name = "TB_DIRECTORS")
 public class Director implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

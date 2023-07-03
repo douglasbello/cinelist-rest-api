@@ -54,4 +54,15 @@ public class TVShowController {
         }
         return ResponseEntity.ok().body(tvShowService.insert(Mapper.dtoToTVShow(tvShowDTO)));
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteTvShow(@PathVariable UUID id) {
+        if (id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The id cannot be null."));
+        }
+        if (tvShowService.findById(id) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "TVShow doesn't exists."));
+        }
+        return ResponseEntity.ok().body(new RequestResponseDTO(204, "Show deleted."));
+    }
 }

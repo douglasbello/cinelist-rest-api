@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface TVShowRepository extends JpaRepository<TVShow, UUID> {
+    TVShow findByTitleContainingIgnoreCase(String title);
 }

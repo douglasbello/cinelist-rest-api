@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dto;
+package com.douglasbello.Cinelist.dtos;
 
 import java.util.UUID;
 

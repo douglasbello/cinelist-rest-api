@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dto;
+package com.douglasbello.Cinelist.dtos;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,13 +20,12 @@ public class UserDTO implements Serializable {
     /* here, the gender code is a string instead of an integer, but why?, because spring was increasing the number that I passed in post requests, for example, if I pass 1 in the
     request, my controller would receive the number 2, so i changed this attribute to string
      */
-    private String gender;
-    private Set<UUID> comments = new HashSet<>();
+    private int gender;
 
     public UserDTO() {
     }
 
-    public UserDTO(String email, String username, String password, String gender) {
+    public UserDTO(String email, String username, String password, int gender) {
         this.email = email;
         this.username = username;
         this.password = password;
@@ -38,8 +37,7 @@ public class UserDTO implements Serializable {
         this.email = entity.getEmail();
         this.username = entity.getUsername();
         this.password = entity.getPassword();
-        this.gender = String.valueOf(entity.getGender());
-        this.comments = entity.getCommentsIds();
+        this.gender = entity.getGender().getCode();
     }
 
     public UUID getId() {
@@ -74,15 +72,14 @@ public class UserDTO implements Serializable {
         this.password = password;
     }
 
-    public Integer getGender() {
-        return Integer.parseInt(gender);
+    public Gender getGender() {
+        return Gender.valueOf(gender);
     }
 
-    public void setGender(Gender gender) {
-        if (gender != null) {
-            this.gender = String.valueOf(gender.getCode());
-        }
+    public void setGender(int gender) {
+        this.gender = gender;
     }
+
 
     @Override
     public String toString() {
@@ -91,7 +88,6 @@ public class UserDTO implements Serializable {
                ", email='" + email + '\'' +
                ", username='" + username + '\'' +
                ", password='" + password + '\'' +
-               ", comments=" + comments +
                '}';
     }
 }

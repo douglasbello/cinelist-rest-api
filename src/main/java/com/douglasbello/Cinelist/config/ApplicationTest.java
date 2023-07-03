@@ -1,6 +1,6 @@
 package com.douglasbello.Cinelist.config;
 
-import com.douglasbello.Cinelist.dto.UserDTO;
+import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.entities.*;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.douglasbello.Cinelist.services.*;
@@ -8,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,16 +83,19 @@ public class ApplicationTest implements CommandLineRunner {
         Movie movie = new Movie("Grêmio", "football", "porto-alegrense");
         movieService.insert(movie);
         Director director = new Director(null, "Chrstipoher", "1961");
-        director.setGender(Gender.MALE);
+        director.setGender(Gender.FEMALE.getCode());
         directorService.insert(director);
         movie.getDirectors().add(director);
         movieService.insert(movie);
 
         Map<Integer, Integer> maps = new HashMap<>();
-        TVShow tv = new TVShow("the office", "bla bla bla", "2003", maps);
+        TVShow tv = new TVShow("The Office", "bla bla bla", "2003", maps);
         tv.putSeasonAndEpisodeAndUpdate(1,24);
         tvShowService.insert(tv);
         tv.getDirectors().add(director);
+        Genres horror = new Genres(null, "Horror");
+        genresService.insert(horror);
+        tv.getGenre().add(horror);
         tvShowService.insert(tv);
 
         User user = new User("douglasbelloalv1@outlook.com", "douglasbello", "douglasbello", Gender.MALE);

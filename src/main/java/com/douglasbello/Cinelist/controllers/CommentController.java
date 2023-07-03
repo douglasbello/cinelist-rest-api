@@ -1,7 +1,7 @@
 package com.douglasbello.Cinelist.controllers;
 
 
-import com.douglasbello.Cinelist.dto.CommentDTO;
+import com.douglasbello.Cinelist.dtos.CommentDTO;
 import com.douglasbello.Cinelist.entities.Comment;
 import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.TVShow;
@@ -10,14 +10,11 @@ import com.douglasbello.Cinelist.services.CommentService;
 import com.douglasbello.Cinelist.services.MovieService;
 import com.douglasbello.Cinelist.services.TVShowService;
 import com.douglasbello.Cinelist.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/comments")

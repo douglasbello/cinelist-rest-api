@@ -21,7 +21,7 @@ public class Director implements Serializable {
     private UUID id;
     private String name;
     private String birthDate;
-    private Gender gender;
+    private int gender;
     @JsonIgnore
     @ManyToMany(mappedBy = "directors")
     private Set<Movie> movies = new HashSet<>();
@@ -35,6 +35,25 @@ public class Director implements Serializable {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
+    }
+
+    public Director(UUID id, String name, String birthDate, int gender) {
+        this.id = id;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.gender = gender;
+    }
+
+    public Director(UUID id, String name, String birthDate, Gender gender) {
+        this.id = id;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.gender = gender.getCode();
+    }
+    @PrePersist
+    public void generateUuid() {
+        if (this.id == null)
+            this.id = UUID.randomUUID();
     }
 
     public UUID getId() {
@@ -70,10 +89,10 @@ public class Director implements Serializable {
     }
 
     public Gender getGender() {
-        return gender;
+        return Gender.valueOf(gender);
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 

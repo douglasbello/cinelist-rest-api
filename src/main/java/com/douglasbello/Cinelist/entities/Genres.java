@@ -30,6 +30,12 @@ public class Genres {
         this.genre = genre;
     }
 
+    @PrePersist
+    public void generateUuid() {
+        if (this.id == null)
+            this.id = UUID.randomUUID();
+    }
+
     public UUID getId() {
         return id;
     }

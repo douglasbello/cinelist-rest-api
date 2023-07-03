@@ -1,6 +1,6 @@
 package com.douglasbello.Cinelist.config;
 
-import com.douglasbello.Cinelist.dto.RequestResponseDTO;
+import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.services.AdminService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

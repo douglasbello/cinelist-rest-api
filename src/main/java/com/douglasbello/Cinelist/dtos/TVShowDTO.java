@@ -1,7 +1,8 @@
-package com.douglasbello.Cinelist.dto;
+package com.douglasbello.Cinelist.dtos;
 
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Genres;
+import com.douglasbello.Cinelist.entities.TVShow;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,6 +34,16 @@ public class TVShowDTO {
         this.genres = genres.stream().map(GenresDTO::new).collect(Collectors.toList());
         this.directors = directors;
         this.seasonsAndEpisodes = seasonsAndEpisodes;
+    }
+
+    public TVShowDTO(TVShow obj) {
+        this.id = obj.getId();
+        this.title = obj.getTitle();
+        this.overview = obj.getOverview();
+        this.releaseYear = obj.getReleaseYear();
+        this.genres = obj.getGenre().stream().map(GenresDTO::new).collect(Collectors.toList());
+        this.directors = obj.getDirectors();
+        this.seasonsAndEpisodes = obj.getSeasonsAndEpisodes();
     }
 
     public UUID getId() {

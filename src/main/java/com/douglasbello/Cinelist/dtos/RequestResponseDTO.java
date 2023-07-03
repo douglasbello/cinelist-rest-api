@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dto;
+package com.douglasbello.Cinelist.dtos;
 
 public class RequestResponseDTO {
     private int status;

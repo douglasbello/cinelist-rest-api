@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.services;
 
+import com.douglasbello.Cinelist.dtos.TVShowDTO;
 import com.douglasbello.Cinelist.entities.TVShow;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.TVShowRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TVShowService {
@@ -22,8 +24,9 @@ public class TVShowService {
         this.repository = repository;
     }
 
-    public List<TVShow> findAll() {
-        return repository.findAll();
+    public List<TVShowDTO> findAll() {
+        List<TVShow> shows = repository.findAll();
+        return shows.stream().map(TVShowDTO::new).collect(Collectors.toList());
     }
 
     public TVShow findById(UUID id) {
@@ -31,8 +34,14 @@ public class TVShowService {
         return tvShow.orElse(null);
     }
 
-    public TVShow insert(TVShow tvShow) {
-        return repository.save(tvShow);
+    public TVShowDTO findByTitle(String title) {
+        title = title.replace("-", " ");
+        TVShowDTO dto = new TVShowDTO(repository.findByTitleContainingIgnoreCase(title));
+        return dto;
+    }
+
+    public TVShowDTO insert(TVShow tvShow) {
+        return new TVShowDTO(repository.save(tvShow));
     }
 
     public void delete(UUID id) {

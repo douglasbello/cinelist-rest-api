@@ -35,7 +35,7 @@ public class User implements Serializable {
 		this.email = email;
 		this.username = username;
 		this.password = password;
-		setGender(gender);
+		setGender(gender.getCode());
 	}
 
 	public User(String email, String username, String password, int gender) {
@@ -92,14 +92,12 @@ public class User implements Serializable {
         return ids;
     }
 
-	public int getGender() {
-		return gender;
+	public Gender getGender() {
+		return Gender.valueOf(gender);
 	}
 
-	public void setGender(Gender gender) {
-		if (gender != null) {
-			this.gender = gender.getCode();
-		}
+	public void setGender(int gender) {
+		this.gender = gender;
 	}
 
 	@Override

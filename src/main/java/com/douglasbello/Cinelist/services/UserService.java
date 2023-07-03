@@ -1,9 +1,8 @@
 package com.douglasbello.Cinelist.services;
 
-import com.douglasbello.Cinelist.dto.Mapper;
+import com.douglasbello.Cinelist.dtos.Mapper;
 import com.douglasbello.Cinelist.entities.User;
-import com.douglasbello.Cinelist.dto.UserDTO;
-import com.douglasbello.Cinelist.entities.enums.Gender;
+import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.repositories.UserRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
@@ -18,9 +17,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService<T> {
+public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -28,8 +28,9 @@ public class UserService<T> {
         this.repository = repository;
     }
 
-    public List<User> findAll() {
-        return repository.findAll();
+    public List<UserDTO> findAll() {
+        List<UserDTO> dtos = repository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
+        return dtos;
     }
 
     public User findById(UUID id) {
@@ -44,7 +45,7 @@ public class UserService<T> {
     }
 
     public User signIn(UserDTO dto) {
-        User user = Mapper.userDtoToUser(dto);
+        User user = Mapper.dtoToUser(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }

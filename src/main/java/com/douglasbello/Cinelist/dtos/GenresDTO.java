@@ -10,6 +10,10 @@ public class GenresDTO {
     public GenresDTO() {
     }
 
+    public GenresDTO(UUID id) {
+        this.id = id;
+    }
+
     public GenresDTO(Genres genre) {
         this.id = genre.getId();
         this.genre = genre.getGenre();

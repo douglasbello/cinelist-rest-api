@@ -58,6 +58,19 @@ public class TVShow {
 		setEpisodes();
 	}
 
+	public TVShow(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes, List<Genres> genres) {
+		this.id = id;
+		this.title = title;
+		this.overview = overview;
+		this.releaseYear = releaseYear;
+		this.directors = directors;
+		this.seasonsAndEpisodes = seasonsAndEpisodes;
+		this.genres = genres;
+		setSeasons();
+		setEpisodes();
+	}
+
+
 	@PrePersist
 	public void generateUuid() {
 		if (this.id == null)

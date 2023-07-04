@@ -9,4 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, UUID> {
+    Movie findMovieByTitleContainingIgnoreCase(String title);
 }

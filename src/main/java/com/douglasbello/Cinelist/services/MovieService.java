@@ -3,7 +3,6 @@ package com.douglasbello.Cinelist.services;
 import com.douglasbello.Cinelist.dtos.MovieDTO;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Movie;
-import com.douglasbello.Cinelist.repositories.DirectorRepository;
 import com.douglasbello.Cinelist.repositories.MovieRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
@@ -12,10 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,10 +33,21 @@ public class MovieService {
         return obj.orElse(null);
     }
 
-    public Set<Movie> findMoviesByDirectorId(UUID id) {
+    public Set<MovieDTO> findMoviesByDirectorId(UUID id) {
+        if (directorService.findById(id) == null) {
+            return Collections.emptySet();
+        }
         Director director = directorService.findById(id);
         if (director != null) {
-            return director.getMovies();
+            return director.getMovies().stream().map(MovieDTO::new).collect(Collectors.toSet());
+        }
+        return null;
+    }
+
+    public MovieDTO findMovieByTitle(String title) {
+        title = title.replace("-", " ");
+        if (repository.findMovieByTitleContainingIgnoreCase(title) != null) {
+            return new MovieDTO(repository.findMovieByTitleContainingIgnoreCase(title));
         }
         return null;
     }

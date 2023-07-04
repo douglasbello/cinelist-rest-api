@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.config;
 
+import com.douglasbello.Cinelist.dtos.ActorDTO;
 import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.entities.*;
 import com.douglasbello.Cinelist.entities.enums.Gender;
@@ -23,7 +24,7 @@ public class ApplicationTest implements CommandLineRunner {
 
     private final TVShowService tvShowService;
 
-    private final AdminService adminService;
+    private final ActorService actorService;
 
     private final GenresService genresService;
 
@@ -32,12 +33,12 @@ public class ApplicationTest implements CommandLineRunner {
 
     public ApplicationTest(UserService userService, MovieService movieService,
                            CommentService commentService, TVShowService tvShowService,
-                           AdminService adminService, GenresService genresService, DirectorService directorService) {
+                           ActorService actorService, GenresService genresService, DirectorService directorService) {
         this.userService = userService;
         this.movieService = movieService;
         this.commentService = commentService;
         this.tvShowService = tvShowService;
-        this.adminService = adminService;
+        this.actorService = actorService;
         this.genresService = genresService;
         this.directorService = directorService;
     }
@@ -80,10 +81,10 @@ public class ApplicationTest implements CommandLineRunner {
 //        Admin obj = adminService.insert(admin);
 //        System.out.println("Admin token: " + obj.getToken());
 
-        Movie movie = new Movie("Grêmio", "football", "porto-alegrense");
+        Movie movie = new Movie("Titanic", "football", "porto-alegrense");
         movie = movieService.insert(movie);
-        Director director = new Director(null, "Chrstipoher", "1961");
-        director.setGender(Gender.FEMALE.getCode());
+        Director director = new Director(null, "Quentin Tarantino", "1963");
+        director.setGender(Gender.MALE.getCode());
         directorService.insert(director);
         movie.getDirectors().add(director);
         movie = movieService.insert(movie);
@@ -108,5 +109,8 @@ public class ApplicationTest implements CommandLineRunner {
         movie.getGenre().add(horror);
         movie.getDirectors().add(director1);
         movieService.insert(movie);
+
+        Actor actor = new Actor(null, "Keanu Reeves",  "1964", Gender.MALE);
+        actorService.insert(new ActorDTO(actor));
     }
 }

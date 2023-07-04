@@ -1,11 +1,8 @@
 package com.douglasbello.Cinelist.entities;
 
 import com.douglasbello.Cinelist.entities.enums.Gender;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

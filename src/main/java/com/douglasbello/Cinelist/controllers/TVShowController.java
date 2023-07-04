@@ -1,9 +1,6 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.Mapper;
-import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
-import com.douglasbello.Cinelist.dtos.TVShowDTO;
-import com.douglasbello.Cinelist.entities.TVShow;
+import com.douglasbello.Cinelist.dtos.*;
 import com.douglasbello.Cinelist.services.TVShowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,28 +20,29 @@ public class TVShowController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TVShowDTO>> getAll() {
+    public ResponseEntity<List<TVShowDTO>> findAll() {
         List<TVShowDTO> shows = tvShowService.findAll();
         return ResponseEntity.ok().body(shows);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> findById(@PathVariable UUID id) {
         if (tvShowService.findById(id) != null) {
             TVShowDTO dto = new TVShowDTO(tvShowService.findById(id));
-            return ResponseEntity.ok().body(dto);
+            TVShowDTOResponse response = new TVShowDTOResponse(dto);
+            return ResponseEntity.ok().body(response);
         }
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "TVShow not found."));
     }
 
     @GetMapping(value = "/title/{title}")
     public ResponseEntity<?> findTvShowByTitle(@PathVariable String title) {
-        if (tvShowService.findByTitle(title) != null) {
-            return ResponseEntity.ok().body(tvShowService.findByTitle(title));
+        if (tvShowService.findByTitle(title) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "TVShow not found."));
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "TVShow not found."));
+        List<TVShowDTOResponse> response = tvShowService.findByTitle(title).stream().map(TVShowDTOResponse::new).collect(Collectors.toList());
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping
@@ -52,7 +50,16 @@ public class TVShowController {
         if (tvShowDTO == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The show cannot be null."));
         }
-        return ResponseEntity.ok().body(tvShowService.insert(Mapper.dtoToTVShow(tvShowDTO)));
+        if (tvShowDTO.getTitle().length() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The title of the show cannot be null."));
+        }
+        if (tvShowDTO.getOverview().length() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The overview of the show cannot be null."));
+        }
+        tvShowDTO = tvShowService.getDirectorsAndGenres(tvShowDTO);
+        tvShowDTO = tvShowService.insert(Mapper.dtoToTVShow(tvShowDTO));
+        TVShowDTOResponse response = new TVShowDTOResponse(tvShowDTO);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -63,6 +70,7 @@ public class TVShowController {
         if (tvShowService.findById(id) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "TVShow doesn't exists."));
         }
-        return ResponseEntity.ok().body(new RequestResponseDTO(204, "Show deleted."));
+        tvShowService.delete(id);
+        return ResponseEntity.ok().body(new RequestResponseDTO(200, "Show deleted."));
     }
 }

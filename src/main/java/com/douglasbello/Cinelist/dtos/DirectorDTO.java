@@ -18,6 +18,10 @@ public class DirectorDTO {
 
     public DirectorDTO() {}
 
+    public DirectorDTO(UUID id) {
+        this.id = id;
+    }
+
     public DirectorDTO(UUID id, String name, String birthDate, int gender) {
         this.id = id;
         this.name = name;
@@ -65,6 +69,10 @@ public class DirectorDTO {
 
     public Gender getGender() {
         return Gender.valueOf(gender);
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 
     @Override

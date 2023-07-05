@@ -1,9 +1,6 @@
 package com.douglasbello.Cinelist.dtos;
 
-import com.douglasbello.Cinelist.entities.Comment;
-import com.douglasbello.Cinelist.entities.Director;
-import com.douglasbello.Cinelist.entities.Genres;
-import com.douglasbello.Cinelist.entities.Movie;
+import com.douglasbello.Cinelist.entities.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -18,7 +15,7 @@ public class MovieDTOResponse {
     private String releaseYear;
     private Set<Genres> genres = new HashSet<>();
     private Set<Director> directors = new HashSet<>();
-    private Set<Comment> comments = new HashSet<>();
+    private Set<Actor> actors = new HashSet<>();
 
     public MovieDTOResponse() {}
 
@@ -29,7 +26,7 @@ public class MovieDTOResponse {
         this.releaseYear = movie.getReleaseYear();
         this.directors = movie.getDirectors();
         this.genres = movie.getGenre();
-        this.comments = movie.getComments();
+        this.actors = movie.getActors();
     }
 
     public MovieDTOResponse(MovieDTO dto) {
@@ -39,7 +36,7 @@ public class MovieDTOResponse {
         this.releaseYear = dto.getReleaseYear();
         this.directors = dto.getDirectors();
         this.genres = dto.getGenres();
-        this.comments = dto.getComments().stream().map(Mapper::dtoToComment).collect(Collectors.toSet());
+        this.actors = dto.getActors();
     }
 
     public UUID getId() {
@@ -82,8 +79,8 @@ public class MovieDTOResponse {
         return genres;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
+    public Set<Actor> getActors() {
+        return actors;
     }
 
     @Override

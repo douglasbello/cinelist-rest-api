@@ -29,8 +29,7 @@ public class Mapper {
     }
 
     public static Movie dtoToMovie(MovieDTO dto) {
-        Set<Comment> comments = dto.getComments().stream().map(Mapper::dtoToComment).collect(Collectors.toSet());
-        Movie movie = new Movie(dto.getId(),dto.getTitle(),dto.getOverview(),dto.getReleaseYear(),dto.getDirectors(),dto.getGenres(),comments);
+        Movie movie = new Movie(dto.getId(),dto.getTitle(),dto.getOverview(),dto.getReleaseYear(),dto.getDirectors(),dto.getGenres());
         return movie;
     }
 

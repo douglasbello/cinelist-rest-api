@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.dtos;
 
+import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Genres;
 import com.douglasbello.Cinelist.entities.Movie;
@@ -19,17 +20,19 @@ public class MovieDTO {
     private Set<UUID> directorsIds = new HashSet<>();
     private Set<Genres> genres = new HashSet<>();
     private Set<Director> directors = new HashSet<>();
-    private Set<CommentDTO> comments = new HashSet<>();
+    private Set<UUID> actorsIds = new HashSet<>();
+    private Set<Actor> actors = new HashSet<>();
 
     public MovieDTO() {}
 
-    public MovieDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> genresIds, Set<UUID> directorsIds) {
+    public MovieDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> genresIds, Set<UUID> directorsIds, Set<UUID> actorsIds) {
         this.id = id;
         this.title = title;
         this.overview = overview;
         this.releaseYear = releaseYear;
         this.genresIds = genresIds;
         this.directorsIds = directorsIds;
+        this.actorsIds = actorsIds;
     }
 
 
@@ -40,7 +43,7 @@ public class MovieDTO {
         this.releaseYear = movie.getReleaseYear();
         this.directors = movie.getDirectors();
         this.genres = movie.getGenre();
-        this.comments = movie.getComments().stream().map(CommentDTO::new).collect(Collectors.toSet());
+        this.actors = movie.getActors();
     }
 
     public UUID getId() {
@@ -83,16 +86,20 @@ public class MovieDTO {
         return genres;
     }
 
-    public Set<CommentDTO> getComments() {
-        return comments;
-    }
-
     public Set<UUID> getGenresIds() {
         return genresIds;
     }
 
     public Set<UUID> getDirectorsIds() {
         return directorsIds;
+    }
+
+    public Set<UUID> getActorsIds() {
+        return actorsIds;
+    }
+
+    public Set<Actor> getActors() {
+        return actors;
     }
 
     @Override

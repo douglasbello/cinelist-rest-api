@@ -21,7 +21,7 @@ public class CommentDTO {
 
     public CommentDTO(Comment comment) {
         this.userId = comment.getUser().getId();
-        setShowOrMovieId(comment);
+        setShowOrMovieIdFromObj(comment);
         this.comment = comment.getComment();
     }
 
@@ -37,7 +37,7 @@ public class CommentDTO {
         return showOrMovieId;
     }
 
-    public void setShowOrMovieId(Comment comment) {
+    public void setShowOrMovieIdFromObj(Comment comment) {
         if (comment.getTvShow() == null) {
             showOrMovieId = comment.getMovie().getId();
         }
@@ -46,11 +46,15 @@ public class CommentDTO {
         }
     }
 
+    public void setShowOrMovieId(UUID showOrMovieId) {
+        this.showOrMovieId = showOrMovieId;
+    }
+
     public String getComment() {
         return comment;
     }
 
-    public void setComment(String comment) {
+    public void setCommentText(String comment) {
         this.comment = comment;
     }
 

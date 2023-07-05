@@ -33,6 +33,13 @@ public class DirectorService {
         return user.orElse(null);
     }
 
+    public Director findByName(String name) {
+        if (directorRepository.findByNameContainingIgnoreCase(name) == null) {
+            return null;
+        }
+        return directorRepository.findByNameContainingIgnoreCase(name);
+    }
+
     public Director insert(Director director) {
         Director obj = directorRepository.save(director);
         return obj;

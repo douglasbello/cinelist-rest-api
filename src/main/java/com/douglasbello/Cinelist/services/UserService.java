@@ -35,7 +35,7 @@ public class UserService {
 
     public User findById(UUID id) {
         Optional<User> user = repository.findById(id);
-        return user.orElseThrow(() -> new ResourceNotFoundException(id));
+        return user.orElse(null);
     }
 
     public User insert(User user) {

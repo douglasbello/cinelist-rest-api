@@ -1,4 +1,5 @@
 package com.douglasbello.Cinelist.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -23,7 +24,8 @@ public class Movie {
 	@ManyToMany
 	@JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
 	private Set<Genres> genre = new HashSet<>();
-	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "movie")
 	private Set<Comment> comments = new HashSet<>();
 
 	public Movie() {
@@ -33,6 +35,16 @@ public class Movie {
 		this.title = title;
 		this.overview = overview;
 		this.releaseYear = releaseYear;
+	}
+
+	public Movie(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Set<Genres> genre, Set<Comment> comments) {
+		this.id = id;
+		this.title = title;
+		this.overview = overview;
+		this.releaseYear = releaseYear;
+		this.directors = directors;
+		this.genre = genre;
+		this.comments = comments;
 	}
 
 	@PrePersist

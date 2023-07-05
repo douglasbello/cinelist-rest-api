@@ -1,16 +1,37 @@
 package com.douglasbello.Cinelist.dtos;
 
 import com.douglasbello.Cinelist.entities.*;
+import com.douglasbello.Cinelist.services.MovieService;
+import com.douglasbello.Cinelist.services.TVShowService;
+import com.douglasbello.Cinelist.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@Component
 public class Mapper {
+
+    @Autowired
+    private static MovieService movieService;
+
+    @Autowired
+    private static TVShowService tvShowService;
+
+    @Autowired
+    private static UserService userService;
 
     public static TVShow dtoToTVShow(TVShowDTO dto) {
         TVShow tvShow = new TVShow(dto.getId(),dto.getTitle(),dto.getOverview(),dto.getReleaseYear(),dto.getDirectors(),
                 dto.getSeasonsAndEpisodes(),dto.getGenres());
         return tvShow;
+    }
+
+    public static Movie dtoToMovie(MovieDTO dto) {
+        Set<Comment> comments = dto.getComments().stream().map(Mapper::dtoToComment).collect(Collectors.toSet());
+        Movie movie = new Movie(dto.getId(),dto.getTitle(),dto.getOverview(),dto.getReleaseYear(),dto.getDirectors(),dto.getGenres(),comments);
+        return movie;
     }
 
     public static User dtoToUser(UserDTO dto) {
@@ -31,5 +52,19 @@ public class Mapper {
     public static Genres dtoToGenres(GenresDTO dto) {
         Genres genres = new Genres(dto.getId(), dto.getGenre());
         return genres;
+    }
+
+    public static Comment dtoToComment(CommentDTO dto) {
+        if (movieService.findById(dto.getShowOrMovieId()) != null && userService.findById(dto.getUserId()) != null) {
+            User user = userService.findById(dto.getUserId());
+            Movie movie = movieService.findById(dto.getShowOrMovieId());
+            return new Comment(user,movie,dto.getComment());
+        }
+        if (tvShowService.findById(dto.getShowOrMovieId()) != null && userService.findById(dto.getUserId()) != null) {
+            User user = userService.findById(dto.getUserId());
+            TVShow tvShow = tvShowService.findById(dto.getShowOrMovieId());
+            return new Comment(user,tvShow,dto.getComment());
+        }
+        return null;
     }
 }

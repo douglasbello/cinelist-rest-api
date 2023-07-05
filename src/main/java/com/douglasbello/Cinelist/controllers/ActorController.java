@@ -48,7 +48,6 @@ public class ActorController {
         }
         ActorDTO dto = actorService.findByName(name);
         return ResponseEntity.ok().body(dto);
-
     }
 
     @PostMapping

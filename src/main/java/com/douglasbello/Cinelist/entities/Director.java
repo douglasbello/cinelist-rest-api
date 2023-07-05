@@ -18,11 +18,11 @@ public class Director {
     private String name;
     private String birthDate;
     private int gender;
-    @JsonIgnore
     @ManyToMany(mappedBy = "directors")
+    @JsonIgnore
     private Set<Movie> movies = new HashSet<>();
-    @JsonIgnore
     @ManyToMany(mappedBy = "directors")
+    @JsonIgnore
     private Set<TVShow> tvShows = new HashSet<>();
 
     public Director() {}

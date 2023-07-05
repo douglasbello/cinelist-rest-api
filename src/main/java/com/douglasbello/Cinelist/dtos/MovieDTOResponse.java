@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.dtos;
 
+import com.douglasbello.Cinelist.entities.Comment;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Genres;
 import com.douglasbello.Cinelist.entities.Movie;
@@ -10,37 +11,35 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class MovieDTO {
+public class MovieDTOResponse {
     private UUID id;
     private String title;
     private String overview;
     private String releaseYear;
-    private Set<UUID> genresIds = new HashSet<>();
-    private Set<UUID> directorsIds = new HashSet<>();
     private Set<Genres> genres = new HashSet<>();
     private Set<Director> directors = new HashSet<>();
-    private Set<CommentDTO> comments = new HashSet<>();
+    private Set<Comment> comments = new HashSet<>();
 
-    public MovieDTO() {}
+    public MovieDTOResponse() {}
 
-    public MovieDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> genresIds, Set<UUID> directorsIds) {
-        this.id = id;
-        this.title = title;
-        this.overview = overview;
-        this.releaseYear = releaseYear;
-        this.genresIds = genresIds;
-        this.directorsIds = directorsIds;
-    }
-
-
-    public MovieDTO(Movie movie) {
+    public MovieDTOResponse(Movie movie) {
         this.id = movie.getId();
         this.title = movie.getTitle();
         this.overview = movie.getOverview();
         this.releaseYear = movie.getReleaseYear();
         this.directors = movie.getDirectors();
         this.genres = movie.getGenre();
-        this.comments = movie.getComments().stream().map(CommentDTO::new).collect(Collectors.toSet());
+        this.comments = movie.getComments();
+    }
+
+    public MovieDTOResponse(MovieDTO dto) {
+        this.id = dto.getId();
+        this.title = dto.getTitle();
+        this.overview = dto.getOverview();
+        this.releaseYear = dto.getReleaseYear();
+        this.directors = dto.getDirectors();
+        this.genres = dto.getGenres();
+        this.comments = dto.getComments().stream().map(Mapper::dtoToComment).collect(Collectors.toSet());
     }
 
     public UUID getId() {
@@ -83,23 +82,15 @@ public class MovieDTO {
         return genres;
     }
 
-    public Set<CommentDTO> getComments() {
+    public Set<Comment> getComments() {
         return comments;
-    }
-
-    public Set<UUID> getGenresIds() {
-        return genresIds;
-    }
-
-    public Set<UUID> getDirectorsIds() {
-        return directorsIds;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MovieDTO movieDTO = (MovieDTO) o;
+        MovieDTOResponse movieDTO = (MovieDTOResponse) o;
         return Objects.equals(id, movieDTO.id);
     }
 

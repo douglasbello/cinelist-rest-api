@@ -20,11 +20,11 @@ public class Actor {
     private String name;
     private String birthDate;
     private int gender;
-    @JsonIgnore
     @ManyToMany(mappedBy = "actors")
+    @JsonIgnore
     private Set<Movie> movies = new HashSet<>();
-    @JsonIgnore
     @ManyToMany(mappedBy = "actors")
+    @JsonIgnore
     private Set<TVShow> tvShows = new HashSet<>();
 
     public Actor() {}

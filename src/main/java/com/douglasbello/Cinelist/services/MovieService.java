@@ -1,6 +1,8 @@
 package com.douglasbello.Cinelist.services;
 
 import com.douglasbello.Cinelist.dtos.MovieDTO;
+import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.repositories.MovieRepository;
@@ -9,6 +11,8 @@ import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,14 +22,16 @@ import java.util.stream.Collectors;
 public class MovieService {
     private final MovieRepository repository;
     private final DirectorService directorService;
+    private final GenresService genresService;
 
-    public MovieService(MovieRepository repository, DirectorService directorService) {
+    public MovieService(MovieRepository repository, DirectorService directorService, GenresService genresService) {
         this.repository = repository;
         this.directorService = directorService;
+        this.genresService = genresService;
     }
 
-    public Set<MovieDTO> findAll() {
-        return repository.findAll().stream().map(MovieDTO::new).collect(Collectors.toSet());
+    public Set<MovieDTOResponse> findAll() {
+        return repository.findAll().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
     }
 
     public Movie findById(UUID id) {
@@ -33,21 +39,26 @@ public class MovieService {
         return obj.orElse(null);
     }
 
-    public Set<MovieDTO> findMoviesByDirectorId(UUID id) {
+    public Set<MovieDTOResponse> findMoviesByDirectorId(UUID id) {
         if (directorService.findById(id) == null) {
             return Collections.emptySet();
         }
         Director director = directorService.findById(id);
-        if (director != null) {
-            return director.getMovies().stream().map(MovieDTO::new).collect(Collectors.toSet());
-        }
-        return null;
+        return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
     }
 
-    public MovieDTO findMovieByTitle(String title) {
+    public Set<MovieDTOResponse> findMoviesByDirectorName(String name) {
+        if (directorService.findByName(name) == null) {
+            return Collections.emptySet();
+        }
+        Director director = directorService.findByName(name);
+        return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public MovieDTOResponse findMovieByTitle(String title) {
         title = title.replace("-", " ");
         if (repository.findMovieByTitleContainingIgnoreCase(title) != null) {
-            return new MovieDTO(repository.findMovieByTitleContainingIgnoreCase(title));
+            return new MovieDTOResponse(repository.findMovieByTitleContainingIgnoreCase(title));
         }
         return null;
     }
@@ -79,5 +90,24 @@ public class MovieService {
     private void updateData(Movie entity, Movie obj) {
         entity.setTitle(obj.getTitle());
         entity.setOverview(obj.getOverview());
+    }
+
+    public MovieDTO getDirectorsAndGenres(MovieDTO movieDTO) {
+        // this if is verifying if both the directorIds and genresIds will return empty collections, if so, the method just return the dto
+        if (movieDTO.getDirectorsIds().stream().map(directorService::findById).collect(Collectors.toSet()).size() == 0 ||
+                movieDTO.getGenresIds().stream().map(genresService::findById).collect(Collectors.toList()).size() == 0) {
+            return movieDTO;
+        }
+        for (UUID directorIds : movieDTO.getDirectorsIds()) {
+            if (directorService.findById(directorIds) != null) {
+                movieDTO.getDirectors().add(directorService.findById(directorIds));
+            }
+        }
+        for (UUID genresIds : movieDTO.getGenresIds()) {
+            if (genresService.findById(genresIds) != null) {
+                movieDTO.getGenres().add(genresService.findById(genresIds));
+            }
+        }
+        return movieDTO;
     }
 }

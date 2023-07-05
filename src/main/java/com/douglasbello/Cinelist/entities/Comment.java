@@ -3,8 +3,6 @@ package com.douglasbello.Cinelist.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,13 +15,13 @@ public class Comment {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "movie_id")
-	private Movie movie;
 	@JsonIgnore
+	private Movie movie;
 	@ManyToOne
 	@JoinColumn(name = "tv_show_id")
+	@JsonIgnore
 	private TVShow tvShow;
 	private String comment;
 
@@ -31,6 +29,13 @@ public class Comment {
 	}
 
 	public Comment(User user, Movie movie, String comment) {
+		this.user = user;
+		this.movie = movie;
+		this.comment = comment;
+	}
+
+	public Comment(UUID id,User user, Movie movie, String comment) {
+		this.id = id;
 		this.user = user;
 		this.movie = movie;
 		this.comment = comment;
@@ -82,6 +87,10 @@ public class Comment {
 
 	public TVShow getTvShow() {
 		return tvShow;
+	}
+
+	public void setTvShow(TVShow tvShow) {
+		this.tvShow = tvShow;
 	}
 
 	@Override

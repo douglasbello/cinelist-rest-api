@@ -94,7 +94,7 @@ public class MovieService {
 
     public MovieDTO getDirectorsAndGenres(MovieDTO movieDTO) {
         // this if is verifying if both the directorIds and genresIds will return empty collections, if so, the method just return the dto
-        if (movieDTO.getDirectorsIds().stream().map(directorService::findById).collect(Collectors.toSet()).size() == 0 ||
+        if (movieDTO.getDirectorsIds().stream().map(directorService::findById).collect(Collectors.toSet()).size() == 0 &&
                 movieDTO.getGenresIds().stream().map(genresService::findById).collect(Collectors.toList()).size() == 0) {
             return movieDTO;
         }

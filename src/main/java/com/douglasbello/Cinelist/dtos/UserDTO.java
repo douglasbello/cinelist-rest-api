@@ -1,10 +1,9 @@
 package com.douglasbello.Cinelist.dtos;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
+import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 
@@ -74,7 +73,6 @@ public class UserDTO {
     public void setGender(int gender) {
         this.gender = gender;
     }
-
 
     @Override
     public String toString() {

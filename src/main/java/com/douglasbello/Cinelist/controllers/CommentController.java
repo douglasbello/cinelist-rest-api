@@ -79,10 +79,10 @@ public class CommentController {
     @GetMapping(value = "/tvshow={tvshowId}")
     public ResponseEntity<?> findAllCommentsOfTvShow(@PathVariable UUID tvshowId) {
         if (tvshowId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The movie id cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie id cannot be null."));
         }
         if (tvShowService.findById(tvshowId) == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The movie doesn't exists."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie doesn't exists."));
         }
 
         List<CommentDTO> comments = tvShowService.findById(tvshowId).getComments().stream().map(CommentDTO::new).collect(Collectors.toList());
@@ -92,19 +92,19 @@ public class CommentController {
     @PostMapping(value = "/tvshow")
     public ResponseEntity<?> addCommentToTvShow(@RequestBody CommentDTO commentDTO) {
         if (commentDTO == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Comment cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Comment cannot be null."));
         }
         if (commentDTO.getUserId() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "User id cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "User id cannot be null."));
         }
         if (userService.findById(commentDTO.getUserId()) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "User doesn't exists."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
         }
         if (commentDTO.getShowOrMovieId() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Show id cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Show id cannot be null."));
         }
         if (movieService.findById(commentDTO.getShowOrMovieId()) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "Show doesn't exists."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show doesn't exists."));
         }
 
         User user = userService.findById(commentDTO.getUserId());
@@ -118,10 +118,10 @@ public class CommentController {
     @GetMapping(value = "/user={userId}")
     public ResponseEntity<?> findAllCommentsOfUser(@PathVariable UUID userId) {
         if (userId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The movie id cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie id cannot be null."));
         }
         if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The movie doesn't exists."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie doesn't exists."));
         }
 
         List<CommentDTO> comments = userService.findById(userId).getComments().stream().map(CommentDTO::new).collect(Collectors.toList());

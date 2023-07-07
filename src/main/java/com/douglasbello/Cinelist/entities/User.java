@@ -3,11 +3,7 @@ package com.douglasbello.Cinelist.entities;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 @Entity
 @Table(name = "tb_users")
@@ -21,6 +17,9 @@ public class User {
 	private int gender;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "tb_user_watched_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
+	private Set<Movie> watchedMovies = new HashSet<>();
 
 	public User() {
 	}
@@ -92,6 +91,10 @@ public class User {
 
 	public void setGender(int gender) {
 		this.gender = gender;
+	}
+
+	public Set<Movie> getWatchedMovies() {
+		return watchedMovies;
 	}
 
 	@Override

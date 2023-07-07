@@ -58,7 +58,7 @@ public class TVShow {
 		setEpisodes();
 	}
 
-	public TVShow(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes, List<Genres> genres) {
+	public TVShow(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes, List<Genres> genres, Set<Actor> actors) {
 		this.id = id;
 		this.title = title;
 		this.overview = overview;
@@ -66,6 +66,7 @@ public class TVShow {
 		this.directors = directors;
 		this.seasonsAndEpisodes = seasonsAndEpisodes;
 		this.genres = genres;
+		this.actors = actors;
 		setSeasons();
 		setEpisodes();
 	}

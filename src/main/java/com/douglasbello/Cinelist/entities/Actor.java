@@ -71,8 +71,8 @@ public class Actor {
         this.birthDate = birthDate;
     }
 
-    public int getGender() {
-        return gender;
+    public Gender getGender() {
+        return Gender.valueOf(gender);
     }
 
     public void setGender(int gender) {

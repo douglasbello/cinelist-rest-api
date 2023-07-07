@@ -1,14 +1,12 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.mapper;
 
+import com.douglasbello.Cinelist.dtos.*;
 import com.douglasbello.Cinelist.entities.*;
 import com.douglasbello.Cinelist.services.MovieService;
 import com.douglasbello.Cinelist.services.TVShowService;
 import com.douglasbello.Cinelist.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class Mapper {
@@ -24,7 +22,7 @@ public class Mapper {
 
     public static TVShow dtoToTVShow(TVShowDTO dto) {
         TVShow tvShow = new TVShow(dto.getId(),dto.getTitle(),dto.getOverview(),dto.getReleaseYear(),dto.getDirectors(),
-                dto.getSeasonsAndEpisodes(),dto.getGenres());
+                dto.getSeasonsAndEpisodes(),dto.getGenres(), dto.getActors());
         return tvShow;
     }
 

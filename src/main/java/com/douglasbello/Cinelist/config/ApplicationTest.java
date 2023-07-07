@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,19 +47,31 @@ public class ApplicationTest implements CommandLineRunner {
     @Override
     public void run(String... args) {
 //
-//        User user = new User("user01@outlook.com","user01","user01");
-//        userService.insert(user);
-//
-//        Genres genre1 = new Genres(null,"Science fiction");
-//        Genres genre2 = new Genres(null,"Adventure");
-//        Genres genre3 = new Genres(null,"Crime");
-//        genresService.insertAll(Arrays.asList(genre1,genre2,genre3));
-//
-//        Movie movie = new Movie("Interstellar", "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.","Cristopher Nolan", "2014");
-//        movieService.insert(movie);
-//        movie.getGenre().add(genre1);
-//        movie.getGenre().add(genre2);
-//        movieService.insert(movie);
+        User user = new User("user01@outlook.com","user01","user01", Gender.MALE);
+        userService.insert(user);
+
+        Genres scienceFiction = new Genres(null,"Science fiction");
+        Genres adventure = new Genres(null,"Adventure");
+        Genres crime = new Genres(null,"Crime");
+        genresService.insertAll(Arrays.asList(scienceFiction,adventure,crime));
+
+        Director christopherNolan = new Director(null,"Christopher Nolan","1970",Gender.MALE);
+        christopherNolan = directorService.insert(christopherNolan);
+
+        Actor matthew = new Actor(null,"Matthew McConaughey","1969",Gender.MALE);
+        matthew = actorService.insert(new ActorDTO(matthew));
+        Actor jessica = new Actor(null, "Jessica Chastain", "1977", Gender.FEMALE);
+        jessica = actorService.insert(new ActorDTO(jessica));
+        Actor anne = new Actor(null, "Anne Hathaway", "1982", Gender.FEMALE);
+        anne = actorService.insert(new ActorDTO(anne));
+
+        Movie movie = new Movie("Interstellar", "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", "2014");
+        movie = movieService.insert(movie);
+        movie.getGenre().add(scienceFiction);
+        movie.getGenre().add(adventure);
+        movie.getDirectors().add(christopherNolan);
+        movie.getActors().addAll(Arrays.asList(matthew,jessica,anne));
+        movie = movieService.insert(movie);
 //
 //
 //        Comment comment = new Comment(user,movie, "Great movie!");
@@ -80,37 +93,38 @@ public class ApplicationTest implements CommandLineRunner {
 //        Admin admin = new Admin("admin01","admin01");
 //        Admin obj = adminService.insert(admin);
 //        System.out.println("Admin token: " + obj.getToken());
-
-        Movie movie = new Movie("Titanic", "football", "porto-alegrense");
-        movie = movieService.insert(movie);
-        Director director = new Director(null, "Quentin Tarantino", "1963");
-        director.setGender(Gender.MALE.getCode());
-        directorService.insert(director);
-        movie.getDirectors().add(director);
-        movie = movieService.insert(movie);
-        Director director1 = new Director(null, "kdaskdask","1203");
-        director1 = directorService.insert(director);
-
+//
+//        movie = movieService.insert(movie);
+//        Director director = new Director(null, "Quentin Tarantino", "1963");
+//        director.setGender(Gender.MALE.getCode());
+//        director = directorService.insert(director);
+//        Actor actor = new Actor(null, "Keanu Reeves",  "1964", Gender.MALE.getCode());
+//        actor = actorService.insert(new ActorDTO(actor));
+//        movie.getDirectors().add(director);
+//        Director director1 = new Director(null, "kdaskdask","1203");
+//        director1.setGender(Gender.MALE.getCode());
+//        director1 = directorService.insert(director1);
+        Genres horror = new Genres(null, "Horror");
+        genresService.insert(horror);
+//        movie.getGenre().add(horror);
+//        movie.getDirectors().add(director1);
+//        movie.getActors().add(actor);
+//        movieService.insert(movie);
+//
         Map<Integer, Integer> maps = new HashMap<>();
         TVShow tv = new TVShow("The Office", "bla bla bla", "2003", maps);
         tv.putSeasonAndEpisodeAndUpdate(1,24);
         tvShowService.insert(tv);
-        tv.getDirectors().add(director);
-        Genres horror = new Genres(null, "Horror");
-        genresService.insert(horror);
+        tv.getDirectors().add(christopherNolan);
+
         tv.getGenre().add(horror);
+        tv.getActors().add(anne);
         tvShowService.insert(tv);
 
-        User user = new User("douglasbelloalv1@outlook.com", "douglasbello", "douglasbello", Gender.MALE);
-        UserDTO dto = new UserDTO(user);
+        User user2 = new User("douglasbelloalv1@outlook.com", "douglasbello", "douglasbello", Gender.MALE);
+        UserDTO dto = new UserDTO(user2);
         User obj = userService.signIn(dto);
         Comment comment = new Comment(obj,movie, "grmerke");
         commentService.insert(comment);
-        movie.getGenre().add(horror);
-        movie.getDirectors().add(director1);
-        movieService.insert(movie);
-
-        Actor actor = new Actor(null, "Keanu Reeves",  "1964", Gender.MALE);
-        actorService.insert(new ActorDTO(actor));
     }
 }

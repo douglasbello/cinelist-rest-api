@@ -1,18 +1,18 @@
 package com.douglasbello.Cinelist.dtos;
 
+import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Genres;
 import com.douglasbello.Cinelist.entities.TVShow;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TVShowDTOResponse {
     private UUID id;
     private String title;
     private String overview;
     private String releaseYear;
+    private Set<Actor> actors = new HashSet<>();
     private List<Genres> genres = new ArrayList<>();
     private Set<Director> directors = new HashSet<>();
     private Map<Integer, Integer> seasonsAndEpisodes = new HashMap<>();
@@ -22,8 +22,9 @@ public class TVShowDTOResponse {
     public TVShowDTOResponse(TVShow tvShow) {
         this.id = tvShow.getId();
         this.title = tvShow.getTitle();
-        this.overview = tvShow.getTitle();
+        this.overview = tvShow.getOverview();
         this.releaseYear = tvShow.getReleaseYear();
+        this.actors = tvShow.getActors();
         this.genres = tvShow.getGenre();
         this.directors = tvShow.getDirectors();
         this.seasonsAndEpisodes = tvShow.getSeasonsAndEpisodes();
@@ -32,8 +33,9 @@ public class TVShowDTOResponse {
     public TVShowDTOResponse(TVShowDTO tvShowDTO) {
         this.id = tvShowDTO.getId();
         this.title = tvShowDTO.getTitle();
-        this.overview = tvShowDTO.getTitle();
+        this.overview = tvShowDTO.getOverview();
         this.releaseYear = tvShowDTO.getReleaseYear();
+        this.actors = tvShowDTO.getActors();
         this.genres = tvShowDTO.getGenres();
         this.directors = tvShowDTO.getDirectors();
         this.seasonsAndEpisodes = tvShowDTO.getSeasonsAndEpisodes();
@@ -81,6 +83,10 @@ public class TVShowDTOResponse {
 
     public List<Genres> getGenres() {
         return genres;
+    }
+
+    public Set<Actor> getActors() {
+        return actors;
     }
 
     @Override

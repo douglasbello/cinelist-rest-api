@@ -25,7 +25,7 @@ public class ActorDTO {
         this.id = actor.getId();
         this.name = actor.getName();
         this.birthDate = actor.getBirthDate();
-        this.gender = actor.getGender();
+        this.gender = actor.getGender().getCode();
     }
 
     public UUID getId() {

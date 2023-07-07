@@ -1,6 +1,9 @@
 package com.douglasbello.Cinelist.services;
 
-import com.douglasbello.Cinelist.dtos.Mapper;
+import com.douglasbello.Cinelist.dtos.MovieDTO;
+import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.repositories.UserRepository;
@@ -13,19 +16,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private final UserRepository repository;
+    private final MovieService movieService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, MovieService movieService) {
         this.repository = repository;
+        this.movieService = movieService;
     }
 
     public List<UserDTO> findAll() {
@@ -36,6 +38,29 @@ public class UserService {
     public User findById(UUID id) {
         Optional<User> user = repository.findById(id);
         return user.orElse(null);
+    }
+
+    public User addWatchedMovies(User user, Set<UUID> moviesId) {
+        if (moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0) {
+            return null;
+        }
+        for (UUID movieId : moviesId) {
+            if (movieService.findById(movieId) != null) {
+                user.getWatchedMovies().add(movieService.findById(movieId));
+            }
+        }
+        return user;
+    }
+
+    public Set<MovieDTOResponse> getUserWatchedMoviesList(User user) {
+        Set<MovieDTOResponse> response = new HashSet<>();
+        if (user.getWatchedMovies().size() == 0) {
+            return Collections.emptySet();
+        }
+        for (Movie movie : user.getWatchedMovies()) {
+            response.add(new MovieDTOResponse(movie));
+        }
+        return response;
     }
 
     public User insert(User user) {

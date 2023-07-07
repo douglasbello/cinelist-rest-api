@@ -1,14 +1,12 @@
 package com.douglasbello.Cinelist.services;
 
 import com.douglasbello.Cinelist.dtos.ActorDTO;
-import com.douglasbello.Cinelist.dtos.Mapper;
+import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Actor;
-import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.ActorRepository;
-import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -22,8 +20,12 @@ public class ActorService {
         this.actorRepository = actorRepository;
     }
 
-    public ActorDTO insert(ActorDTO dto) {
-        return new ActorDTO(actorRepository.save(Mapper.dtoToActor(dto)));
+    public Actor insert(ActorDTO dto) {
+        return actorRepository.save(Mapper.dtoToActor(dto));
+    }
+
+    public List<Actor> insertAll(List<Actor> actors) {
+        return actorRepository.saveAll(actors);
     }
 
     public Set<ActorDTO> findAll() {
@@ -32,7 +34,7 @@ public class ActorService {
 
     public Actor findById(UUID id) {
         Optional<Actor> actor = actorRepository.findById(id);
-        return actor.orElseThrow(() -> new ResourceNotFoundException(id));
+        return actor.orElse(null);
     }
 
     public ActorDTO findByName(String name) {

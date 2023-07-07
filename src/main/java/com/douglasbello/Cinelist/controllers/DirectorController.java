@@ -1,7 +1,7 @@
 package com.douglasbello.Cinelist.controllers;
 
 import com.douglasbello.Cinelist.dtos.DirectorDTO;
-import com.douglasbello.Cinelist.dtos.Mapper;
+import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.services.DirectorService;
 import org.springframework.http.HttpStatus;
@@ -36,13 +36,13 @@ public class DirectorController {
     @PostMapping
     public ResponseEntity<?> insert(@RequestBody DirectorDTO obj) {
         if (obj == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Director cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director cannot be null."));
         }
         if (obj.getName() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Director name cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director name cannot be null."));
         }
         if (obj.getBirthDate() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Director birth date cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director birth date cannot be null."));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(directorService.insert(Mapper.dtoToDirector(obj)));
     }
@@ -50,10 +50,10 @@ public class DirectorController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable UUID id) {
         if (id == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "Id cannot be null."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Id cannot be null."));
         }
         if (directorService.findById(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "Director not found."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director not found."));
         }
         directorService.delete(id);
         return ResponseEntity.ok().body(new RequestResponseDTO(200, "Director deleted."));

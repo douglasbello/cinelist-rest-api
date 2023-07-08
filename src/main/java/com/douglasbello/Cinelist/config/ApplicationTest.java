@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,11 +59,14 @@ public class ApplicationTest implements CommandLineRunner {
         Director christopherNolan = new Director(null,"Christopher Nolan","1970",Gender.MALE);
         christopherNolan = directorService.insert(christopherNolan);
 
-        Actor matthew = new Actor(null,"Matthew McConaughey","1969",Gender.MALE);
+        LocalDate matthewBirthDate = LocalDate.of(1969,11,4);
+        Actor matthew = new Actor(null,"Matthew McConaughey",matthewBirthDate,Gender.MALE);
         matthew = actorService.insert(new ActorDTO(matthew));
-        Actor jessica = new Actor(null, "Jessica Chastain", "1977", Gender.FEMALE);
+        LocalDate jessicaBirthDate = LocalDate.of(1977,3,24);
+        Actor jessica = new Actor(null, "Jessica Chastain", jessicaBirthDate, Gender.FEMALE);
         jessica = actorService.insert(new ActorDTO(jessica));
-        Actor anne = new Actor(null, "Anne Hathaway", "1982", Gender.FEMALE);
+        LocalDate anneBirthDate = LocalDate.of(1982,11,12);
+        Actor anne = new Actor(null, "Anne Hathaway", anneBirthDate, Gender.FEMALE);
         anne = actorService.insert(new ActorDTO(anne));
 
         Movie movie = new Movie("Interstellar", "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", "2014");

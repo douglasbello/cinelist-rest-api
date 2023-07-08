@@ -3,6 +3,7 @@ package com.douglasbello.Cinelist.dtos;
 import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ public class ActorDTO {
     private UUID id;
     private String name;
     private String birthDate;
+    private int age;
     private int gender;
 
     public ActorDTO() {}
@@ -22,9 +24,11 @@ public class ActorDTO {
     }
 
     public ActorDTO(Actor actor) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         this.id = actor.getId();
         this.name = actor.getName();
-        this.birthDate = actor.getBirthDate();
+        this.birthDate = actor.getBirthDate().format(formatter);
+        this.age = actor.getAge();
         this.gender = actor.getGender().getCode();
     }
 
@@ -58,6 +62,14 @@ public class ActorDTO {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     @Override

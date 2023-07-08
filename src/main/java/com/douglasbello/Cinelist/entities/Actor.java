@@ -4,6 +4,10 @@ import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -16,8 +20,9 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
-    private String birthDate;
+    private LocalDate birthDate;
     private int gender;
+    private int age;
     @ManyToMany(mappedBy = "actors")
     @JsonIgnore
     private Set<Movie> movies = new HashSet<>();
@@ -27,17 +32,25 @@ public class Actor {
 
     public Actor() {}
 
-    public Actor(UUID id, String name, String birthDate, int gender) {
+    public Actor(UUID id, String name, LocalDate birthDate, int gender) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
         this.gender = gender;
+        setAge(this.birthDate);
     }
 
-    public Actor(UUID id, String name, String birthDate, Gender gender) {
+    public Actor(UUID id, String name, LocalDate birthDate, Gender gender) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
+        this.gender = gender.getCode();
+        setAge(this.birthDate);
+    }
+
+    public Actor(UUID id, String name, Gender gender) {
+        this.id = id;
+        this.name = name;
         this.gender = gender.getCode();
     }
 
@@ -63,12 +76,33 @@ public class Actor {
         this.name = name;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    /* this set returns a boolean because is used in the controller to verify if the birthDate provided is in the correct format. */
+    public boolean setBirthDate(String birthDate) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            this.birthDate = LocalDate.parse(birthDate, formatter);
+            setAge(this.birthDate);
+            return true;
+        } catch (DateTimeParseException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public void setAge(LocalDate birthDate) {
+        LocalDate currentDate = LocalDate.now();
+
+        Period period = Period.between(birthDate, currentDate);
+        this.age = period.getYears();
+    }
+
+    public int getAge() {
+        return age;
     }
 
     public Gender getGender() {

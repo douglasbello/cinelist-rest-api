@@ -2,6 +2,7 @@ package com.douglasbello.Cinelist.controllers;
 
 import com.douglasbello.Cinelist.dtos.ActorDTO;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.services.ActorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,11 @@ public class ActorController {
         if (actorDTO.getBirthDate() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Actor birth date cannot be null"));
         }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ActorDTO(actorService.insert(actorDTO)));
+        Actor actor = new Actor();
+        if (!actor.setBirthDate(actorDTO.getBirthDate())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The provided date must be in the format dd/MM/yyyy."));
+        }
+        ActorDTO dto = new ActorDTO(actorService.insert(actorDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 }

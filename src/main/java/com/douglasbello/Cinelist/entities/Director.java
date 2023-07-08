@@ -4,6 +4,10 @@ import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -16,7 +20,8 @@ public class Director {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
-    private String birthDate;
+    private LocalDate birthDate;
+    private int age;
     private int gender;
     @ManyToMany(mappedBy = "directors")
     @JsonIgnore
@@ -27,24 +32,25 @@ public class Director {
 
     public Director() {}
 
-    public Director(UUID id, String name, String birthDate) {
+    public Director(UUID id, String name, LocalDate birthDate) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
+        setAge(this.birthDate);
     }
 
-    public Director(UUID id, String name, String birthDate, int gender) {
+    public Director(UUID id, String name, int gender) {
         this.id = id;
         this.name = name;
-        this.birthDate = birthDate;
         this.gender = gender;
     }
 
-    public Director(UUID id, String name, String birthDate, Gender gender) {
+    public Director(UUID id, String name, LocalDate birthDate, Gender gender) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
         this.gender = gender.getCode();
+        setAge(this.birthDate);
     }
     @PrePersist
     public void generateUuid() {
@@ -60,7 +66,7 @@ public class Director {
         return name;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
@@ -80,8 +86,29 @@ public class Director {
         this.name = name;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    /* this set returns a boolean because is used in the controller to verify if the birthDate provided is in the correct format. */
+    public boolean setBirthDate(String birthDate) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            this.birthDate = LocalDate.parse(birthDate, formatter);
+            setAge(this.birthDate);
+            return true;
+        } catch (DateTimeParseException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public void setAge(LocalDate birthDate) {
+        LocalDate currentDate = LocalDate.now();
+
+        Period period = Period.between(birthDate, currentDate);
+        this.age = period.getYears();
+    }
+
+    public int getAge() {
+        return age;
     }
 
     public Gender getGender() {

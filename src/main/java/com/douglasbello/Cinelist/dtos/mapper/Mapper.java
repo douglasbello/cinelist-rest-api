@@ -37,12 +37,14 @@ public class Mapper {
     }
 
     public static Actor dtoToActor(ActorDTO dto) {
-        Actor actor = new Actor(dto.getId(),dto.getName(),dto.getBirthDate(),dto.getGender());
+        Actor actor = new Actor(dto.getId(),dto.getName(),dto.getGender());
+        actor.setBirthDate(dto.getBirthDate());
         return actor;
     }
 
     public static Director dtoToDirector(DirectorDTO dto) {
-        Director director = new Director(dto.getId(), dto.getName(), dto.getBirthDate(), dto.getGender().getCode());
+        Director director = new Director(dto.getId(), dto.getName(),dto.getGender().getCode());
+        director.setBirthDate(dto.getBirthDate());
         return director;
     }
 

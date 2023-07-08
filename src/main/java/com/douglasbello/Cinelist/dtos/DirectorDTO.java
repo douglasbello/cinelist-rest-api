@@ -5,6 +5,7 @@ import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.TVShow;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,6 +15,7 @@ public class DirectorDTO {
     private UUID id;
     private String name;
     private String birthDate;
+    private int age;
     private int gender;
 
     public DirectorDTO() {}
@@ -37,9 +39,11 @@ public class DirectorDTO {
     }
 
     public DirectorDTO(Director director) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         this.id = director.getId();
         this.name = director.getName();
-        this.birthDate = director.getBirthDate();
+        this.birthDate = director.getBirthDate().format(formatter);
+        this.age = director.getAge();
         this.gender = director.getGender().getCode();
     }
 
@@ -73,6 +77,14 @@ public class DirectorDTO {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     @Override

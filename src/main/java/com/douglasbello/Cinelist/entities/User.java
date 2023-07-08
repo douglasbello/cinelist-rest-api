@@ -20,6 +20,9 @@ public class User {
 	@ManyToMany
 	@JoinTable(name = "tb_user_watched_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
 	private Set<Movie> watchedMovies = new HashSet<>();
+	@ManyToMany
+	@JoinTable(name = "tb_user_watched_shows", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
+	private Set<TVShow> watchedTvShows = new HashSet<>();
 
 	public User() {
 	}
@@ -95,6 +98,10 @@ public class User {
 
 	public Set<Movie> getWatchedMovies() {
 		return watchedMovies;
+	}
+
+	public Set<TVShow> getWatchedTvShows() {
+		return watchedTvShows;
 	}
 
 	@Override

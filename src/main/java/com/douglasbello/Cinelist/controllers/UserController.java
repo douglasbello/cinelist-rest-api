@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/{userId}/movies/add")
-    public ResponseEntity<?> addMovieToWatchedList(@PathVariable UUID userId ,@RequestBody Set<UUID> moviesId) {
+    public ResponseEntity<?> addMoviesToWatchedList(@PathVariable UUID userId ,@RequestBody Set<UUID> moviesId) {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
         }
@@ -101,4 +101,28 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(user));
     }
 
+    @PostMapping(value = "/{userId}/shows/add")
+    public ResponseEntity<?> addTvShowsToWatchedList(@PathVariable UUID userId, @RequestBody Set<UUID> tvShowsIds) {
+        if (userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
+        }
+        if (tvShowsIds.size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one show id."));
+        }
+        if (userService.addWatchedTvShows(userService.findById(userId), tvShowsIds) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Shows not found."));
+        }
+        User user = userService.findById(userId);
+        user = userService.addWatchedTvShows(user,tvShowsIds);
+        user = userService.update(user.getId(),user);
+        return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(user));
+    }
+
+    @GetMapping(value = "/{userId}/shows")
+    public ResponseEntity<?> getUserWatchedShows(@PathVariable UUID userId) {
+        if (userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
+        }
+        return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(userService.findById(userId)));
+    }
 }

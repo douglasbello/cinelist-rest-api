@@ -2,8 +2,10 @@ package com.douglasbello.Cinelist.services;
 
 import com.douglasbello.Cinelist.dtos.MovieDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Movie;
+import com.douglasbello.Cinelist.entities.TVShow;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.repositories.UserRepository;
@@ -23,11 +25,13 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository repository;
     private final MovieService movieService;
+    private final TVShowService tvShowService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserService(UserRepository repository, MovieService movieService) {
+    public UserService(UserRepository repository, MovieService movieService, TVShowService tvShowService) {
         this.repository = repository;
         this.movieService = movieService;
+        this.tvShowService = tvShowService;
     }
 
     public List<UserDTO> findAll() {
@@ -59,6 +63,27 @@ public class UserService {
         }
         for (Movie movie : user.getWatchedMovies()) {
             response.add(new MovieDTOResponse(movie));
+        }
+        return response;
+    }
+
+    public User addWatchedTvShows(User user, Set<UUID> tvShowsIds) {
+        if (tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0) {
+            return null;
+        }
+        for (UUID showId : tvShowsIds) {
+            user.getWatchedTvShows().add(tvShowService.findById(showId));
+        }
+        return user;
+    }
+
+    public Set<TVShowDTOResponse> getUserWatchedTvShowsList(User user) {
+        Set<TVShowDTOResponse> response = new HashSet<>();
+        if (user.getWatchedTvShows().size() == 0) {
+            return Collections.emptySet();
+        }
+        for (TVShow tvShow : user.getWatchedTvShows()) {
+            response.add(new TVShowDTOResponse(tvShow));
         }
         return response;
     }

@@ -1,9 +1,8 @@
 package com.douglasbello.Cinelist.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.*;
 
 @Entity
@@ -33,6 +32,9 @@ public class TVShow {
 	@ManyToMany
 	@JoinTable(name = "tb_tvshow_genre", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
 	private List<Genres> genres = new ArrayList<>();
+	@ManyToMany(mappedBy = "watchedTvShows")
+	@JsonIgnore
+	private Set<User> users = new HashSet<>();
 
 	public TVShow() {
 		setSeasons();
@@ -154,6 +156,14 @@ public class TVShow {
 		seasonsAndEpisodes.put(season, episodes);
 		setSeasons();
 		setEpisodes();
+	}
+
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public List<Genres> getGenres() {
+		return genres;
 	}
 
 	@Override

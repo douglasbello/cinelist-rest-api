@@ -56,7 +56,8 @@ public class ApplicationTest implements CommandLineRunner {
         Genres crime = new Genres(null,"Crime");
         genresService.insertAll(Arrays.asList(scienceFiction,adventure,crime));
 
-        Director christopherNolan = new Director(null,"Christopher Nolan","1970",Gender.MALE);
+        LocalDate christopherBirthDate = LocalDate.of(1970,07,30);
+        Director christopherNolan = new Director(null,"Christopher Nolan",christopherBirthDate,Gender.MALE);
         christopherNolan = directorService.insert(christopherNolan);
 
         LocalDate matthewBirthDate = LocalDate.of(1969,11,4);
@@ -125,10 +126,10 @@ public class ApplicationTest implements CommandLineRunner {
         tv.getActors().add(anne);
         tvShowService.insert(tv);
 
-        User user2 = new User("douglasbelloalv1@outlook.com", "douglasbello", "douglasbello", Gender.MALE);
+        User user2 = new User("user02", "user02", "user02", Gender.FEMALE);
         UserDTO dto = new UserDTO(user2);
         User obj = userService.signIn(dto);
-        Comment comment = new Comment(obj,movie, "grmerke");
+        Comment comment = new Comment(obj,movie, "didn't understand shit.");
         commentService.insert(comment);
     }
 }

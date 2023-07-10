@@ -3,6 +3,8 @@ package com.douglasbello.Cinelist.controllers;
 import com.douglasbello.Cinelist.dtos.DirectorDTO;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.entities.Actor;
+import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.services.DirectorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +46,12 @@ public class DirectorController {
         if (obj.getBirthDate() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director birth date cannot be null."));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(directorService.insert(Mapper.dtoToDirector(obj)));
+        Director director = new Director();
+        if (!director.setBirthDate(obj.getBirthDate())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The provided date must be in the format dd/MM/yyyy."));
+        }
+        DirectorDTO dto = new DirectorDTO(directorService.insert(Mapper.dtoToDirector(obj)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @DeleteMapping(value = "/{id}")

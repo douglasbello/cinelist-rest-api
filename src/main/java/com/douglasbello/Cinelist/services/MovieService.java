@@ -1,8 +1,9 @@
 package com.douglasbello.Cinelist.services;
 
+import com.douglasbello.Cinelist.dtos.ActorDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
-import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.repositories.MovieRepository;
@@ -11,8 +12,6 @@ import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,11 +22,13 @@ public class MovieService {
     private final MovieRepository repository;
     private final DirectorService directorService;
     private final GenresService genresService;
+    private final ActorService actorService;
 
-    public MovieService(MovieRepository repository, DirectorService directorService, GenresService genresService) {
+    public MovieService(MovieRepository repository, DirectorService directorService, GenresService genresService, ActorService actorService) {
         this.repository = repository;
         this.directorService = directorService;
         this.genresService = genresService;
+        this.actorService = actorService;
     }
 
     public Set<MovieDTOResponse> findAll() {
@@ -63,6 +64,27 @@ public class MovieService {
         return null;
     }
 
+    public Set<ActorDTO> getMovieActors(Movie movie) {
+        Set<ActorDTO> response = new HashSet<>();
+        if (movie.getActors().size() == 0) {
+            return Collections.emptySet();
+        }
+        for (Actor actor : movie.getActors()) {
+            response.add(new ActorDTO(actor));
+        }
+        return response;
+    }
+
+    public Movie addActorsToMovie(Movie movie, Set<UUID> actorsIds) {
+        if (actorsIds.stream().map(actorService::findById).collect(Collectors.toSet()).size() == 0) {
+            return null;
+        }
+        for (UUID showId : actorsIds) {
+            movie.getActors().add(actorService.findById(showId));
+        }
+        return movie;
+    }
+
     public Movie insert(Movie movie) {
         return repository.save(movie);
     }
@@ -92,10 +114,11 @@ public class MovieService {
         entity.setOverview(obj.getOverview());
     }
 
-    public MovieDTO getDirectorsAndGenres(MovieDTO movieDTO) {
-        // this if is verifying if both the directorIds and genresIds will return empty collections, if so, the method just return the dto
+    public MovieDTO getRelatedEntities(MovieDTO movieDTO) {
+        // this if is verifying if the directorIds, genresIds and actorsIds will return empty collections, if all three return empty collections the method just return the dto
         if (movieDTO.getDirectorsIds().stream().map(directorService::findById).collect(Collectors.toSet()).size() == 0 &&
-                movieDTO.getGenresIds().stream().map(genresService::findById).collect(Collectors.toList()).size() == 0) {
+            movieDTO.getGenresIds().stream().map(genresService::findById).toList().size() == 0 &&
+            movieDTO.getActors().stream().map(a -> actorService.findById(a.getId())).collect(Collectors.toSet()).size() == 0) {
             return movieDTO;
         }
         for (UUID directorIds : movieDTO.getDirectorsIds()) {

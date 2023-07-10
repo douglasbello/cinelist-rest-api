@@ -2,6 +2,7 @@ package com.douglasbello.Cinelist.controllers;
 
 import com.douglasbello.Cinelist.dtos.*;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.services.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director doesn't exists or doesn't have any movie registered yet."));
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping()
     public ResponseEntity<?> addMovie(@RequestBody MovieDTO dto) {
         if (dto == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie cannot be null."));
@@ -60,14 +61,39 @@ public class MovieController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie overview cannot be null."));
         }
 
-        dto = movieService.getDirectorsAndGenres(dto);
+        dto = movieService.getRelatedEntities(dto);
         if (dto.getGenres().size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You have to pass at least one genre that is registered."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one genre that is registered."));
         }
         if (dto.getDirectors().size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You have to pass at least one director that is registered.."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one director that is registered.."));
         }
         MovieDTOResponse response = new MovieDTOResponse(movieService.insert(Mapper.dtoToMovie(dto)));
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping(value = "/{movieId}/actors")
+    public ResponseEntity<?> addActorsToMovie(@PathVariable UUID movieId, @RequestBody Set<UUID> actorsIds) {
+        if (movieService.findById(movieId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie not found."));
+        }
+        if (actorsIds.size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one actor id."));
+        }
+        if (movieService.addActorsToMovie(movieService.findById(movieId), actorsIds) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actors not found."));
+        }
+        Movie movie = movieService.findById(movieId);
+        movie = movieService.addActorsToMovie(movie, actorsIds);
+        movie = movieService.update(movie.getId(), movie);
+        return ResponseEntity.ok().body(movieService.getMovieActors(movie));
+    }
+
+    @GetMapping(value = "/{movieId}/actors")
+    public ResponseEntity<?> getMovieActors(@PathVariable UUID movieId) {
+        if (movieService.findById(movieId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists"));
+        }
+        return ResponseEntity.ok().body(movieService.getMovieActors(movieService.findById(movieId)));
     }
 }

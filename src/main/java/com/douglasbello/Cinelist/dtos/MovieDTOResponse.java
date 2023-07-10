@@ -14,8 +14,6 @@ public class MovieDTOResponse {
     private String overview;
     private String releaseYear;
     private Set<Genres> genres = new HashSet<>();
-    private Set<Director> directors = new HashSet<>();
-    private Set<Actor> actors = new HashSet<>();
 
     public MovieDTOResponse() {}
 
@@ -24,9 +22,7 @@ public class MovieDTOResponse {
         this.title = movie.getTitle();
         this.overview = movie.getOverview();
         this.releaseYear = movie.getReleaseYear();
-        this.directors = movie.getDirectors();
         this.genres = movie.getGenre();
-        this.actors = movie.getActors();
     }
 
     public MovieDTOResponse(MovieDTO dto) {
@@ -34,9 +30,7 @@ public class MovieDTOResponse {
         this.title = dto.getTitle();
         this.overview = dto.getOverview();
         this.releaseYear = dto.getReleaseYear();
-        this.directors = dto.getDirectors();
         this.genres = dto.getGenres();
-        this.actors = dto.getActors();
     }
 
     public UUID getId() {
@@ -71,16 +65,8 @@ public class MovieDTOResponse {
         this.releaseYear = releaseYear;
     }
 
-    public Set<Director> getDirectors() {
-        return directors;
-    }
-
     public Set<Genres> getGenres() {
         return genres;
-    }
-
-    public Set<Actor> getActors() {
-        return actors;
     }
 
     @Override

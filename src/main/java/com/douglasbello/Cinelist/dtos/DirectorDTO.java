@@ -1,14 +1,10 @@
 package com.douglasbello.Cinelist.dtos;
 
 import com.douglasbello.Cinelist.entities.Director;
-import com.douglasbello.Cinelist.entities.Movie;
-import com.douglasbello.Cinelist.entities.TVShow;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 public class DirectorDTO {

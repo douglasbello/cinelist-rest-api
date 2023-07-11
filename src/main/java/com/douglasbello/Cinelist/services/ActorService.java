@@ -37,10 +37,10 @@ public class ActorService {
         return actor.orElse(null);
     }
 
-    public ActorDTO findByName(String name) {
+    public Actor findByName(String name) {
         name = name.replace("-", " ");
         if (actorRepository.findByNameContainingIgnoreCase(name) != null) {
-            return new ActorDTO(actorRepository.findByNameContainingIgnoreCase(name));
+            return actorRepository.findByNameContainingIgnoreCase(name);
         }
         return null;
     }

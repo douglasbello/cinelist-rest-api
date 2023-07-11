@@ -25,7 +25,7 @@ public class MovieController {
         return ResponseEntity.ok().body(movieService.findAll());
     }
 
-    @GetMapping(value = "={id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
         if (movieService.findById(id) != null) {
             return ResponseEntity.ok().body(movieService.findById(id));
@@ -33,20 +33,12 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "Movie with this id not found."));
     }
 
-    @GetMapping(value = "/title={title}")
+    @GetMapping(value = "/title/{title}")
     public ResponseEntity<?> findByTitle(@PathVariable String title) {
         if (movieService.findMovieByTitle(title) != null)  {
             return ResponseEntity.ok().body(movieService.findMovieByTitle(title));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie with this title not found."));
-    }
-
-    @GetMapping(value = "/director={directorId}")
-    public ResponseEntity<?> findMoviesByDirectorId(@PathVariable UUID directorId) {
-        if (!movieService.findMoviesByDirectorId(directorId).isEmpty()) {
-            return ResponseEntity.ok().body(movieService.findMoviesByDirectorId(directorId));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director doesn't exists or doesn't have any movie registered yet."));
     }
 
     @PostMapping()
@@ -72,6 +64,22 @@ public class MovieController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping(value = "/directors/id/{directorId}")
+    public ResponseEntity<?> findMoviesByDirectorId(@PathVariable UUID directorId) {
+        if (movieService.findMoviesByDirectorId(directorId).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director doesn't exists or doesn't have any movie registered yet."));
+        }
+        return ResponseEntity.ok().body(movieService.findMoviesByDirectorId(directorId));
+    }
+
+    @GetMapping(value = "/directors/name/{directorName}")
+    public ResponseEntity<?> findMoviesByDirectorName(@PathVariable String directorName) {
+        if (movieService.findMoviesByDirectorName(directorName) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director doesn't exists."));
+        }
+        return ResponseEntity.ok().body(movieService.findMoviesByDirectorName(directorName));
+    }
+
     @PostMapping(value = "/{movieId}/actors")
     public ResponseEntity<?> addActorsToMovie(@PathVariable UUID movieId, @RequestBody Set<UUID> actorsIds) {
         if (movieService.findById(movieId) == null) {
@@ -92,8 +100,24 @@ public class MovieController {
     @GetMapping(value = "/{movieId}/actors")
     public ResponseEntity<?> getMovieActors(@PathVariable UUID movieId) {
         if (movieService.findById(movieId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie doesn't exists"));
         }
         return ResponseEntity.ok().body(movieService.getMovieActors(movieService.findById(movieId)));
+    }
+
+    @GetMapping(value = "/actors/id/{actorId}")
+    public ResponseEntity<?> findMoviesByActorId(@PathVariable UUID actorId) {
+        if (movieService.findMoviesByActorId(actorId).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor doesn't exists or don't have any movie registered."));
+        }
+        return ResponseEntity.ok().body(movieService.findMoviesByActorId(actorId));
+    }
+
+    @GetMapping(value = "/actors/name/{actorName}")
+    public ResponseEntity<?> findMoviesByActorName(@PathVariable String actorName) {
+        if (movieService.findMoviesByActorName(actorName).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor doesn't exists or don't have any movie registered."));
+        }
+        return ResponseEntity.ok().body(findMoviesByActorName(actorName));
     }
 }

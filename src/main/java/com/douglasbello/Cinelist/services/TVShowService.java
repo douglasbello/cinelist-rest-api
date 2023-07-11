@@ -55,6 +55,24 @@ public class TVShowService {
         return Collections.emptySet();
     }
 
+    public Set<TVShowDTOResponse> findTvShowsByDirectorName(String name) {
+        name = name.replace("-", " ");
+        if (directorService.findByName(name) == null) {
+            return Collections.emptySet();
+        }
+        Director director = directorService.findByName(name);
+        return director.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public Set<TVShowDTOResponse> findTvShowsByActorName(String name) {
+        name = name.replace("-", " ");
+        if (actorService.findByName(name) == null) {
+            return Collections.emptySet();
+        }
+        Actor actor = actorService.findByName(name);
+        return actor.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
+    }
+
     public Set<TVShowDTOResponse> findTvShowsByActorId(UUID id) {
         if (actorService.findById(id) != null) {
             Actor actor = actorService.findById(id);

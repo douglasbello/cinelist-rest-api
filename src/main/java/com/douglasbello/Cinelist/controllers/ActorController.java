@@ -45,7 +45,8 @@ public class ActorController {
         if (actorService.findByName(name) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor not found."));
         }
-        ActorDTO dto = actorService.findByName(name);
+        Actor obj = actorService.findByName(name);
+        ActorDTO dto = new ActorDTO(obj);
         return ResponseEntity.ok().body(dto);
     }
 

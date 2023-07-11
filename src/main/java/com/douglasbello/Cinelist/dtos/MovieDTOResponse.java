@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class MovieDTOResponse {
     private UUID id;
@@ -14,6 +13,9 @@ public class MovieDTOResponse {
     private String overview;
     private String releaseYear;
     private Set<Genres> genres = new HashSet<>();
+
+    private Set<Actor> actors = new HashSet<>();
+    private Set<Director> directors = new HashSet<>();
 
     public MovieDTOResponse() {}
 
@@ -23,6 +25,8 @@ public class MovieDTOResponse {
         this.overview = movie.getOverview();
         this.releaseYear = movie.getReleaseYear();
         this.genres = movie.getGenre();
+        this.actors = movie.getActors();
+        this.directors = movie.getDirectors();
     }
 
     public MovieDTOResponse(MovieDTO dto) {
@@ -31,6 +35,8 @@ public class MovieDTOResponse {
         this.overview = dto.getOverview();
         this.releaseYear = dto.getReleaseYear();
         this.genres = dto.getGenres();
+        this.actors = dto.getActors();
+        this.directors = dto.getDirectors();
     }
 
     public UUID getId() {
@@ -67,6 +73,14 @@ public class MovieDTOResponse {
 
     public Set<Genres> getGenres() {
         return genres;
+    }
+
+    public Set<Director> getDirectors() {
+        return directors;
+    }
+
+    public Set<Actor> getActors() {
+        return actors;
     }
 
     @Override

@@ -40,6 +40,35 @@ public class MovieService {
         return obj.orElse(null);
     }
 
+    public Movie insert(Movie movie) {
+        return repository.save(movie);
+    }
+
+    public void delete(UUID id) {
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new DatabaseException(dataIntegrityViolationException.getMessage());
+        }
+    }
+
+    public Movie update(UUID id,Movie obj) {
+        try {
+            Movie entity = repository.getReferenceById(id);
+            updateData(entity,obj);
+            return repository.save(entity);
+        } catch (EntityNotFoundException exception) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    private void updateData(Movie entity, Movie obj) {
+        entity.setTitle(obj.getTitle());
+        entity.setOverview(obj.getOverview());
+    }
+
     public Set<MovieDTOResponse> findMoviesByDirectorId(UUID id) {
         if (directorService.findById(id) == null) {
             return Collections.emptySet();
@@ -49,6 +78,7 @@ public class MovieService {
     }
 
     public Set<MovieDTOResponse> findMoviesByDirectorName(String name) {
+        name = name.replace("-", " ");
         if (directorService.findByName(name) == null) {
             return Collections.emptySet();
         }
@@ -85,33 +115,20 @@ public class MovieService {
         return movie;
     }
 
-    public Movie insert(Movie movie) {
-        return repository.save(movie);
-    }
-
-    public void delete(UUID id) {
-        try {
-            repository.deleteById(id);
-        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-            throw new ResourceNotFoundException(id);
-        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
-            throw new DatabaseException(dataIntegrityViolationException.getMessage());
+    public Set<MovieDTOResponse> findMoviesByActorId(UUID id) {
+        if (actorService.findById(id) == null) {
+            return Collections.emptySet();
         }
+        Actor actor = actorService.findById(id);
+        return actor.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
     }
 
-    public Movie update(UUID id,Movie obj) {
-        try {
-            Movie entity = repository.getReferenceById(id);
-            updateData(entity,obj);
-            return repository.save(entity);
-        } catch (EntityNotFoundException exception) {
-            throw new ResourceNotFoundException(id);
+    public Set<MovieDTOResponse> findMoviesByActorName(String name) {
+        if (actorService.findByName(name) == null) {
+            return Collections.emptySet();
         }
-    }
-
-    private void updateData(Movie entity, Movie obj) {
-        entity.setTitle(obj.getTitle());
-        entity.setOverview(obj.getOverview());
+        Actor actor = actorService.findByName(name);
+        return actor.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
     }
 
     public MovieDTO getRelatedEntities(MovieDTO movieDTO) {

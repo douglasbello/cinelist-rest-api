@@ -1,6 +1,8 @@
 package com.douglasbello.Cinelist.services;
 
 import com.douglasbello.Cinelist.dtos.DirectorDTO;
+import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.DirectorRepository;
@@ -10,10 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +33,7 @@ public class DirectorService {
     }
 
     public Director findByName(String name) {
+        name = name.replace("-", " ");
         if (directorRepository.findByNameContainingIgnoreCase(name) == null) {
             return null;
         }
@@ -53,5 +53,37 @@ public class DirectorService {
         } catch (DataIntegrityViolationException dataIntegrityViolationException) {
             throw new DatabaseException(dataIntegrityViolationException.getMessage());
         }
+    }
+
+    public Set<MovieDTOResponse> findMoviesByDirectorId(UUID id) {
+        if (findById(id) == null) {
+            return Collections.emptySet();
+        }
+        Director director = findById(id);
+        return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public Set<MovieDTOResponse> findMoviesByDirectorName(String name) {
+        if (findByName(name) == null) {
+            return Collections.emptySet();
+        }
+        Director director = findByName(name);
+        return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public Set<TVShowDTOResponse> findShowsByDirectorId(UUID id) {
+        if (findById(id) == null) {
+            return Collections.emptySet();
+        }
+        Director director = findById(id);
+        return director.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public Set<TVShowDTOResponse> findShowsByDirectorName(String name) {
+        if (findByName(name) == null) {
+            return Collections.emptySet();
+        }
+        Director director = findByName(name);
+        return director.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
     }
 }

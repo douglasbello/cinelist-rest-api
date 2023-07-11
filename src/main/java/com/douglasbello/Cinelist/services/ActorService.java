@@ -1,15 +1,16 @@
 package com.douglasbello.Cinelist.services;
 
 import com.douglasbello.Cinelist.dtos.ActorDTO;
+import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.TVShowDTO;
+import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Actor;
+import com.douglasbello.Cinelist.entities.TVShow;
 import com.douglasbello.Cinelist.repositories.ActorRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,5 +44,37 @@ public class ActorService {
             return actorRepository.findByNameContainingIgnoreCase(name);
         }
         return null;
+    }
+
+    public Set<MovieDTOResponse> findMoviesByActorId(UUID id) {
+        if (findById(id) == null) {
+            return Collections.emptySet();
+        }
+        Actor actor = findById(id);
+        return actor.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public Set<MovieDTOResponse> findMoviesByActorName(String name) {
+        if (findByName(name) == null) {
+            return Collections.emptySet();
+        }
+        Actor actor = findByName(name);
+        return actor.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public Set<TVShowDTOResponse> findShowsByActorId(UUID id) {
+        if (findById(id) == null) {
+            return Collections.emptySet();
+        }
+        Actor actor = findById(id);
+        return actor.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
+    }
+
+    public Set<TVShowDTOResponse> findShowsByActorName(String name) {
+        if (findByName(name) == null) {
+            return Collections.emptySet();
+        }
+        Actor actor = findByName(name);
+        return actor.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
     }
 }

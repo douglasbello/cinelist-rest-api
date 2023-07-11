@@ -69,34 +69,17 @@ public class MovieService {
         entity.setOverview(obj.getOverview());
     }
 
-    public Set<MovieDTOResponse> findMoviesByDirectorId(UUID id) {
-        if (directorService.findById(id) == null) {
-            return Collections.emptySet();
-        }
-        Director director = directorService.findById(id);
-        return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
-    }
-
-    public Set<MovieDTOResponse> findMoviesByDirectorName(String name) {
-        name = name.replace("-", " ");
-        if (directorService.findByName(name) == null) {
-            return Collections.emptySet();
-        }
-        Director director = directorService.findByName(name);
-        return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
-    }
-
-    public MovieDTOResponse findMovieByTitle(String title) {
+    public Set<MovieDTOResponse> findMovieByTitle(String title) {
         title = title.replace("-", " ");
-        if (repository.findMovieByTitleContainingIgnoreCase(title) != null) {
-            return new MovieDTOResponse(repository.findMovieByTitleContainingIgnoreCase(title));
+        if (!repository.findMovieByTitleContainingIgnoreCase(title).isEmpty()) {
+            return repository.findMovieByTitleContainingIgnoreCase(title).stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
         }
         return null;
     }
 
     public Set<ActorDTO> getMovieActors(Movie movie) {
         Set<ActorDTO> response = new HashSet<>();
-        if (movie.getActors().size() == 0) {
+        if (movie.getActors().isEmpty()) {
             return Collections.emptySet();
         }
         for (Actor actor : movie.getActors()) {
@@ -106,29 +89,13 @@ public class MovieService {
     }
 
     public Movie addActorsToMovie(Movie movie, Set<UUID> actorsIds) {
-        if (actorsIds.stream().map(actorService::findById).collect(Collectors.toSet()).size() == 0) {
+        if (actorsIds.stream().map(actorService::findById).collect(Collectors.toSet()).isEmpty()) {
             return null;
         }
         for (UUID showId : actorsIds) {
             movie.getActors().add(actorService.findById(showId));
         }
         return movie;
-    }
-
-    public Set<MovieDTOResponse> findMoviesByActorId(UUID id) {
-        if (actorService.findById(id) == null) {
-            return Collections.emptySet();
-        }
-        Actor actor = actorService.findById(id);
-        return actor.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
-    }
-
-    public Set<MovieDTOResponse> findMoviesByActorName(String name) {
-        if (actorService.findByName(name) == null) {
-            return Collections.emptySet();
-        }
-        Actor actor = actorService.findByName(name);
-        return actor.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
     }
 
     public MovieDTO getRelatedEntities(MovieDTO movieDTO) {
@@ -138,14 +105,19 @@ public class MovieService {
             movieDTO.getActors().stream().map(a -> actorService.findById(a.getId())).collect(Collectors.toSet()).size() == 0) {
             return movieDTO;
         }
-        for (UUID directorIds : movieDTO.getDirectorsIds()) {
-            if (directorService.findById(directorIds) != null) {
-                movieDTO.getDirectors().add(directorService.findById(directorIds));
+        for (UUID directorId : movieDTO.getDirectorsIds()) {
+            if (directorService.findById(directorId) != null) {
+                movieDTO.getDirectors().add(directorService.findById(directorId));
             }
         }
-        for (UUID genresIds : movieDTO.getGenresIds()) {
-            if (genresService.findById(genresIds) != null) {
-                movieDTO.getGenres().add(genresService.findById(genresIds));
+        for (UUID genresId : movieDTO.getGenresIds()) {
+            if (genresService.findById(genresId) != null) {
+                movieDTO.getGenres().add(genresService.findById(genresId));
+            }
+        }
+        for (UUID actorId : movieDTO.getActorsIds()) {
+            if (actorService.findById(actorId) != null) {
+                movieDTO.getActors().add(actorService.findById(actorId));
             }
         }
         return movieDTO;

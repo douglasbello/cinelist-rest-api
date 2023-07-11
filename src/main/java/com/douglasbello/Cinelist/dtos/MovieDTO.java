@@ -35,7 +35,6 @@ public class MovieDTO {
         this.actorsIds = actorsIds;
     }
 
-
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
         this.title = movie.getTitle();

@@ -3,6 +3,9 @@ package com.douglasbello.Cinelist.controllers;
 import com.douglasbello.Cinelist.dtos.*;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Movie;
+import com.douglasbello.Cinelist.services.ActorService;
+import com.douglasbello.Cinelist.services.DirectorService;
+import com.douglasbello.Cinelist.services.GenresService;
 import com.douglasbello.Cinelist.services.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +18,15 @@ import java.util.UUID;
 @RequestMapping(value = "/movies")
 public class MovieController {
     private final MovieService movieService;
+    private final ActorService actorService;
+    private final DirectorService directorService;
+    private final GenresService genresService;
 
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService, ActorService actorService, DirectorService directorService, GenresService genresService) {
         this.movieService = movieService;
+        this.actorService = actorService;
+        this.directorService = directorService;
+        this.genresService = genresService;
     }
 
     @GetMapping
@@ -54,10 +63,10 @@ public class MovieController {
         }
 
         dto = movieService.getRelatedEntities(dto);
-        if (dto.getGenres().size() == 0) {
+        if (dto.getGenres().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one genre that is registered."));
         }
-        if (dto.getDirectors().size() == 0) {
+        if (dto.getDirectors().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one director that is registered.."));
         }
         MovieDTOResponse response = new MovieDTOResponse(movieService.insert(Mapper.dtoToMovie(dto)));
@@ -66,18 +75,18 @@ public class MovieController {
 
     @GetMapping(value = "/directors/id/{directorId}")
     public ResponseEntity<?> findMoviesByDirectorId(@PathVariable UUID directorId) {
-        if (movieService.findMoviesByDirectorId(directorId).isEmpty()) {
+        if (directorService.findMoviesByDirectorId(directorId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director doesn't exists or doesn't have any movie registered yet."));
         }
-        return ResponseEntity.ok().body(movieService.findMoviesByDirectorId(directorId));
+        return ResponseEntity.ok().body(directorService.findMoviesByDirectorId(directorId));
     }
 
     @GetMapping(value = "/directors/name/{directorName}")
     public ResponseEntity<?> findMoviesByDirectorName(@PathVariable String directorName) {
-        if (movieService.findMoviesByDirectorName(directorName) == null) {
+        if (directorService.findMoviesByDirectorName(directorName) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director doesn't exists."));
         }
-        return ResponseEntity.ok().body(movieService.findMoviesByDirectorName(directorName));
+        return ResponseEntity.ok().body(directorService.findMoviesByDirectorName(directorName));
     }
 
     @PostMapping(value = "/{movieId}/actors")
@@ -107,17 +116,33 @@ public class MovieController {
 
     @GetMapping(value = "/actors/id/{actorId}")
     public ResponseEntity<?> findMoviesByActorId(@PathVariable UUID actorId) {
-        if (movieService.findMoviesByActorId(actorId).isEmpty()) {
+        if (actorService.findMoviesByActorId(actorId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor doesn't exists or don't have any movie registered."));
         }
-        return ResponseEntity.ok().body(movieService.findMoviesByActorId(actorId));
+        return ResponseEntity.ok().body(actorService.findMoviesByActorId(actorId));
     }
 
     @GetMapping(value = "/actors/name/{actorName}")
     public ResponseEntity<?> findMoviesByActorName(@PathVariable String actorName) {
-        if (movieService.findMoviesByActorName(actorName).isEmpty()) {
+        if (actorService.findMoviesByActorName(actorName).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor doesn't exists or don't have any movie registered."));
         }
-        return ResponseEntity.ok().body(findMoviesByActorName(actorName));
+        return ResponseEntity.ok().body(actorService.findMoviesByActorName(actorName));
+    }
+
+    @GetMapping(value = "/genres/id/{genreId}")
+    public ResponseEntity<?> findMoviesByGenreId(@PathVariable UUID genreId) {
+        if (genresService.findMoviesByGenreId(genreId).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Genre doesn't exists or don't have any movie registered."));
+        }
+        return ResponseEntity.ok().body(genresService.findMoviesByGenreId(genreId));
+    }
+
+    @GetMapping(value = "/genres/name/{genreName}")
+    public ResponseEntity<?> findMoviesByGenreName(@PathVariable String genreName) {
+        if (genresService.findMoviesByGenreName(genreName).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Genre doesn't exists or don't have any movie registered."));
+        }
+        return ResponseEntity.ok().body(genresService.findMoviesByGenreName(genreName));
     }
 }

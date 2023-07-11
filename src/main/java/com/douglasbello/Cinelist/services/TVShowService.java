@@ -1,5 +1,6 @@
 package com.douglasbello.Cinelist.services;
 
+import com.douglasbello.Cinelist.dtos.ActorDTO;
 import com.douglasbello.Cinelist.dtos.TVShowDTO;
 import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.entities.*;
@@ -28,6 +29,35 @@ public class TVShowService {
         this.actorService = actorService;
     }
 
+    public TVShowDTOResponse insert(TVShow tvShow) {
+        return new TVShowDTOResponse(repository.save(tvShow));
+    }
+
+    public void delete(UUID id) {
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new DatabaseException(dataIntegrityViolationException.getMessage());
+        }
+    }
+
+    public TVShowDTOResponse update(UUID id, TVShow obj) {
+        try {
+            TVShow entity = repository.getReferenceById(id);
+            updateData(entity,obj);
+            return new TVShowDTOResponse(repository.save(entity));
+        } catch (EntityNotFoundException exception) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    private void updateData(TVShow entity, TVShow obj) {
+        entity.setTitle(obj.getTitle());
+        entity.setOverview(obj.getOverview());
+    }
+
     public List<TVShowDTOResponse> findAll() {
         List<TVShowDTOResponse> shows = repository.findAll().stream().map(TVShowDTOResponse::new).collect(Collectors.toList());
         return shows;
@@ -40,7 +70,7 @@ public class TVShowService {
 
     public Set<TVShowDTOResponse> findByTitle(String title) {
         title = title.replace("-", " ");
-        if (repository.findByTitleContainingIgnoreCase(title)  != null) {
+        if (!repository.findByTitleContainingIgnoreCase(title).isEmpty()) {
             Set<TVShowDTOResponse> dto = repository.findByTitleContainingIgnoreCase(title).stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
             return dto;
         }
@@ -81,55 +111,37 @@ public class TVShowService {
         return Collections.emptySet();
     }
 
-    public TVShowDTOResponse insert(TVShow tvShow) {
-        return new TVShowDTOResponse(repository.save(tvShow));
-    }
-
-    public void delete(UUID id) {
-        try {
-            repository.deleteById(id);
-        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-            throw new ResourceNotFoundException(id);
-        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
-            throw new DatabaseException(dataIntegrityViolationException.getMessage());
+    public Set<ActorDTO> getShowActors(TVShow tvShow) {
+        Set<ActorDTO> response = new HashSet<>();
+        if (tvShow.getActors().isEmpty()) {
+            return Collections.emptySet();
         }
-    }
-
-    public TVShowDTOResponse update(UUID id, TVShow obj) {
-        try {
-            TVShow entity = repository.getReferenceById(id);
-            updateData(entity,obj);
-            return new TVShowDTOResponse(repository.save(entity));
-        } catch (EntityNotFoundException exception) {
-            throw new ResourceNotFoundException(id);
+        for (Actor actor : tvShow.getActors()) {
+            response.add(new ActorDTO(actor));
         }
+        return response;
     }
 
-    private void updateData(TVShow entity, TVShow obj) {
-        entity.setTitle(obj.getTitle());
-        entity.setOverview(obj.getOverview());
-    }
-
-    public TVShowDTO getDirectorsAndGenresAndActors(TVShowDTO tvShowDTO) {
-        // this if is verifying if the directorIds, genresIds and actorsIds will return empty collections, if so, the method just return the dto
+    public TVShowDTO getRelatedEntities(TVShowDTO tvShowDTO) {
+        // this if is verifying if the directorIds, genresIds and actorsIds will return empty collections, if all three return empty collections the method just return the dto
         if (tvShowDTO.getDirectorsIds().stream().map(directorService::findById).collect(Collectors.toSet()).size() == 0 &&
                 tvShowDTO.getGenresIds().stream().map(genresService::findById).collect(Collectors.toList()).size() == 0 &&
                 tvShowDTO.getActorsIds().stream().map(actorService::findById).collect(Collectors.toSet()).size() == 0) {
             return tvShowDTO;
         }
-        for (UUID directorIds : tvShowDTO.getDirectorsIds()) {
-            if (directorService.findById(directorIds) != null) {
-                tvShowDTO.getDirectors().add(directorService.findById(directorIds));
+        for (UUID directorId : tvShowDTO.getDirectorsIds()) {
+            if (directorService.findById(directorId) != null) {
+                tvShowDTO.getDirectors().add(directorService.findById(directorId));
             }
         }
-        for (UUID genresIds : tvShowDTO.getGenresIds()) {
-            if (genresService.findById(genresIds) != null) {
-                tvShowDTO.getGenres().add(genresService.findById(genresIds));
+        for (UUID genreId : tvShowDTO.getGenresIds()) {
+            if (genresService.findById(genreId) != null) {
+                tvShowDTO.getGenres().add(genresService.findById(genreId));
             }
         }
-        for (UUID actorsIds : tvShowDTO.getActorsIds()) {
-            if (actorService.findById(actorsIds) != null) {
-                tvShowDTO.getActors().add(actorService.findById(actorsIds));
+        for (UUID actorId : tvShowDTO.getActorsIds()) {
+            if (actorService.findById(actorId) != null) {
+                tvShowDTO.getActors().add(actorService.findById(actorId));
             }
         }
         return tvShowDTO;

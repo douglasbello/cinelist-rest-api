@@ -119,6 +119,7 @@ public class UserService {
             }
 
         } catch (NoSuchElementException exception) {
+            exception.printStackTrace();
             return null;
         }
 

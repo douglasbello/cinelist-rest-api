@@ -29,30 +29,24 @@ public class UserController {
 
 	@PostMapping(value = "/sign-in")
 	public ResponseEntity<?> signIn(@RequestBody UserDTO obj) {
-        if (obj.getEmail() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Email cannot be blank."));
+        if (obj.getEmail().length() < 15) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Email cannot be shorter than 15 characters."));
         }
-
         if (userService.checkIfTheEmailIsAlreadyInUse(obj.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(HttpStatus.CONFLICT.value(), "Email is already in use."));
         }
-
         if (obj.getUsername().contains(" ")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The username cannot contain spaces."));
         }
-
         if (obj.getUsername().length() < 4 || obj.getUsername().length() > 16) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Username cannot be less than 4 or bigger than 16."));
         }
-
         if (userService.checkIfTheUsernameIsAlreadyInUse(obj.getUsername())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(HttpStatus.CONFLICT.value(), "Username is already in use."));
         }
-
         if (obj.getPassword().length() < 8 || obj.getPassword().length() > 100) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Password cannot be less than 8 or bigger than 100."));
         }
-
         if (obj.getGender().getCode() < 1 || obj.getGender().getCode() > 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Gender code cannot be bigger than 3 or less than 1."));
         }
@@ -67,7 +61,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You have to pass the email or the username."));
         }
         if (obj.getEmail() != null && obj.getUsername() != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(),"You can only pass the email or username for login, not the two."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(),"You can only pass the email or username for login, not both."));
         }
         if (userService.login(obj) == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "Username or password incorrect"));

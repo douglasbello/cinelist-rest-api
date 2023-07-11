@@ -76,7 +76,7 @@ public class CommentController {
         return ResponseEntity.ok().body(commentDTO);
     }
 
-    @GetMapping(value = "/tvshow={tvshowId}")
+    @GetMapping(value = "/tvshow/{tvshowId}")
     public ResponseEntity<?> findAllCommentsOfTvShow(@PathVariable UUID tvshowId) {
         if (tvshowId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie id cannot be null."));
@@ -115,7 +115,7 @@ public class CommentController {
         return ResponseEntity.ok().body(commentDTO);
     }
 
-    @GetMapping(value = "/user={userId}")
+    @GetMapping(value = "/user/{userId}")
     public ResponseEntity<?> findAllCommentsOfUser(@PathVariable UUID userId) {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie id cannot be null."));

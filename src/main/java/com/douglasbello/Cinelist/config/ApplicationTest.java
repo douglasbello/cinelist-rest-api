@@ -47,7 +47,6 @@ public class ApplicationTest implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-//
         User user = new User("user01@outlook.com","user01","user01", Gender.MALE);
         userService.insert(user);
 
@@ -77,51 +76,15 @@ public class ApplicationTest implements CommandLineRunner {
         movie.getDirectors().add(christopherNolan);
         movie.getActors().addAll(Arrays.asList(matthew,jessica,anne));
         movie = movieService.insert(movie);
-//
-//
-//        Comment comment = new Comment(user,movie, "Great movie!");
-//        commentService.insert(comment);
-//
-//        TVShow tvShow = new TVShow("Breaking Bad","A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.","Vince Gilligan", "2008");
-//        tvShow.putSeasonAndEpisodeAndUpdate(1,7);
-//        tvShow.putSeasonAndEpisodeAndUpdate(2,13);
-//        tvShow.putSeasonAndEpisodeAndUpdate(3,13);
-//        tvShow.putSeasonAndEpisodeAndUpdate(4,13);
-//        tvShow.putSeasonAndEpisodeAndUpdate(5,16);
-//        tvShowService.insert(tvShow);
-//        tvShow.getGenre().add(genre3);
-//        tvShowService.insert(tvShow);
-//
-//        Comment comment2 = new Comment(user, tvShow,"Great show!");
-//        commentService.insert(comment2);
-//
-//        Admin admin = new Admin("admin01","admin01");
-//        Admin obj = adminService.insert(admin);
-//        System.out.println("Admin token: " + obj.getToken());
-//
-//        movie = movieService.insert(movie);
-//        Director director = new Director(null, "Quentin Tarantino", "1963");
-//        director.setGender(Gender.MALE.getCode());
-//        director = directorService.insert(director);
-//        Actor actor = new Actor(null, "Keanu Reeves",  "1964", Gender.MALE.getCode());
-//        actor = actorService.insert(new ActorDTO(actor));
-//        movie.getDirectors().add(director);
-//        Director director1 = new Director(null, "kdaskdask","1203");
-//        director1.setGender(Gender.MALE.getCode());
-//        director1 = directorService.insert(director1);
+
         Genres horror = new Genres(null, "Horror");
         genresService.insert(horror);
-//        movie.getGenre().add(horror);
-//        movie.getDirectors().add(director1);
-//        movie.getActors().add(actor);
-//        movieService.insert(movie);
-//
+        
         Map<Integer, Integer> maps = new HashMap<>();
         TVShow tv = new TVShow("The Office", "bla bla bla", "2003", maps);
         tv.putSeasonAndEpisodeAndUpdate(1,24);
         tvShowService.insert(tv);
         tv.getDirectors().add(christopherNolan);
-
         tv.getGenre().add(horror);
         tv.getActors().add(anne);
         tvShowService.insert(tv);
@@ -129,6 +92,7 @@ public class ApplicationTest implements CommandLineRunner {
         User user2 = new User("user02", "user02", "user02", Gender.FEMALE);
         UserDTO dto = new UserDTO(user2);
         User obj = userService.signIn(dto);
+        
         Comment comment = new Comment(obj,movie, "didn't understand shit.");
         commentService.insert(comment);
     }

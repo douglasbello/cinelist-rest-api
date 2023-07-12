@@ -22,7 +22,6 @@ public class GenresService {
         this.repository = repository;
     }
 
-    @Transactional(readOnly = true)
     public List<GenresDTO> findAll() {
         List<Genres> result = repository.findAll();
         return result.stream().map(GenresDTO::new).toList();

@@ -37,11 +37,8 @@ public class CommentController {
         this.tvShowService = tvShowService;
     }
 
-    @GetMapping(value = "/movie={movieId}")
+    @GetMapping(value = "/movie/{movieId}")
     public ResponseEntity<?> findAllCommentsOfMovie(@PathVariable UUID movieId) {
-        if (movieId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The movie id cannot be null."));
-        }
         if (movieService.findById(movieId) == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The movie doesn't exists."));
         }
@@ -78,9 +75,6 @@ public class CommentController {
 
     @GetMapping(value = "/tvshow/{tvshowId}")
     public ResponseEntity<?> findAllCommentsOfTvShow(@PathVariable UUID tvshowId) {
-        if (tvshowId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie id cannot be null."));
-        }
         if (tvShowService.findById(tvshowId) == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie doesn't exists."));
         }
@@ -117,9 +111,6 @@ public class CommentController {
 
     @GetMapping(value = "/user/{userId}")
     public ResponseEntity<?> findAllCommentsOfUser(@PathVariable UUID userId) {
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie id cannot be null."));
-        }
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie doesn't exists."));
         }

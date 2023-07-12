@@ -80,7 +80,7 @@ public class TVShowController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show doesn't exists."));
         }
         tvShowService.delete(id);
-        return ResponseEntity.ok().body(new RequestResponseDTO(200, "Show deleted."));
+        return ResponseEntity.ok().body(new RequestResponseDTO(HttpStatus.OK.value(), "Show deleted."));
     }
 
     @PutMapping(value = "/{id}")

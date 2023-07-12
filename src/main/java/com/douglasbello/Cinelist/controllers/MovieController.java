@@ -39,7 +39,7 @@ public class MovieController {
         if (movieService.findById(id) != null) {
             return ResponseEntity.ok().body(movieService.findById(id));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "Movie with this id not found."));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie with this id not found."));
     }
 
     @GetMapping(value = "/title/{title}")

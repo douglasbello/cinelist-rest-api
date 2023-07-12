@@ -42,13 +42,13 @@ public class TVShowController {
             TVShowDTOResponse response = new TVShowDTOResponse(dto);
             return ResponseEntity.ok().body(response);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "TVShow not found."));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show not found."));
     }
 
     @GetMapping(value = "/title/{title}")
     public ResponseEntity<?> findTvShowsByTitle(@PathVariable String title) {
         if (tvShowService.findByTitle(title).size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "TVShow not found."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show not found."));
         }
 
         Set<TVShowDTOResponse> response = tvShowService.findByTitle(title);
@@ -77,7 +77,7 @@ public class TVShowController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The id cannot be null."));
         }
         if (tvShowService.findById(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "TVShow doesn't exists."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show doesn't exists."));
         }
         tvShowService.delete(id);
         return ResponseEntity.ok().body(new RequestResponseDTO(200, "Show deleted."));
@@ -121,7 +121,7 @@ public class TVShowController {
     @GetMapping(value = "/actors/name/{directorName}")
     public ResponseEntity<?> findTvShowsByDirectorName(@PathVariable String directorName) {
         if (directorService.findShowsByDirectorName(directorName).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director not found."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director not found or has no shows registered."));
         }
         return ResponseEntity.ok().body(tvShowService.findTvShowsByActorName(directorName));
     }
@@ -140,6 +140,22 @@ public class TVShowController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor doesn't exists or has no shows registered."));
         }
         return ResponseEntity.ok().body(tvShowService.findTvShowsByActorName(actorName));
+    }
+
+    @GetMapping(value = "/genres/id/{genreId}")
+    public ResponseEntity<?> findTvShowsByGenreId(@PathVariable UUID genreId) {
+        if (genresService.findShowsByGenreId(genreId).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Genre doesn't exists or has no shows registered."));
+        }
+        return ResponseEntity.ok().body(genresService.findShowsByGenreId(genreId));
+    }
+
+    @GetMapping(value = "/genres/id/{genreName}")
+    public ResponseEntity<?> findTvShowsByGenreName(@PathVariable String genreName) {
+        if (genresService.findShowsByGenreName(genreName).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Genre doesn't exists or has no shows registered."));
+        }
+        return ResponseEntity.ok().body(genresService.findShowsByGenreName(genreName));
     }
 
 }

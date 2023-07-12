@@ -50,7 +50,7 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie with this title not found."));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> addMovie(@RequestBody MovieDTO dto) {
         if (dto == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie cannot be null."));

@@ -1,8 +1,6 @@
 package com.douglasbello.Cinelist.services;
 
-import com.douglasbello.Cinelist.dtos.MovieDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
-import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Movie;
@@ -16,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,56 +43,7 @@ public class UserService {
         Optional<User> user = repository.findById(id);
         return user.orElse(null);
     }
-
-    public User addWatchedMovies(User user, Set<UUID> moviesId) {
-        if (moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0) {
-            return null;
-        }
-        for (UUID movieId : moviesId) {
-            if (movieService.findById(movieId) != null) {
-                user.getWatchedMovies().add(movieService.findById(movieId));
-            }
-        }
-        return user;
-    }
-
-    public Set<MovieDTOResponse> getUserWatchedMoviesList(User user) {
-        Set<MovieDTOResponse> response = new HashSet<>();
-        if (user.getWatchedMovies().size() == 0) {
-            return Collections.emptySet();
-        }
-        for (Movie movie : user.getWatchedMovies()) {
-            response.add(new MovieDTOResponse(movie));
-        }
-        return response;
-    }
-
-    public User addWatchedTvShows(User user, Set<UUID> tvShowsIds) {
-        if (tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0) {
-            return null;
-        }
-        for (UUID showId : tvShowsIds) {
-            user.getWatchedTvShows().add(tvShowService.findById(showId));
-        }
-        return user;
-    }
-
-    public Set<TVShowDTOResponse> getUserWatchedTvShowsList(User user) {
-        Set<TVShowDTOResponse> response = new HashSet<>();
-        if (user.getWatchedTvShows().size() == 0) {
-            return Collections.emptySet();
-        }
-        for (TVShow tvShow : user.getWatchedTvShows()) {
-            response.add(new TVShowDTOResponse(tvShow));
-        }
-        return response;
-    }
-
-    public User insert(User user) {
-        String password = passwordEncoder.encode(user.getPassword());
-        user.setPassword(password);
-        return repository.save(user);
-    }
+    
 
     public User signIn(UserDTO dto) {
         User user = Mapper.dtoToUser(dto);
@@ -152,6 +100,56 @@ public class UserService {
     private void updateData(User entity, User obj) {
         entity.setEmail(obj.getEmail());
         entity.setUsername(obj.getUsername());
+    }
+
+    public User addWatchedMovies(User user, Set<UUID> moviesId) {
+        if (moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0) {
+            return null;
+        }
+        for (UUID movieId : moviesId) {
+            if (movieService.findById(movieId) != null) {
+                user.getWatchedMovies().add(movieService.findById(movieId));
+            }
+        }
+        return user;
+    }
+
+    public Set<MovieDTOResponse> getUserWatchedMoviesList(User user) {
+        Set<MovieDTOResponse> response = new HashSet<>();
+        if (user.getWatchedMovies().size() == 0) {
+            return Collections.emptySet();
+        }
+        for (Movie movie : user.getWatchedMovies()) {
+            response.add(new MovieDTOResponse(movie));
+        }
+        return response;
+    }
+
+    public User addWatchedTvShows(User user, Set<UUID> tvShowsIds) {
+        if (tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0) {
+            return null;
+        }
+        for (UUID showId : tvShowsIds) {
+            user.getWatchedTvShows().add(tvShowService.findById(showId));
+        }
+        return user;
+    }
+
+    public Set<TVShowDTOResponse> getUserWatchedTvShowsList(User user) {
+        Set<TVShowDTOResponse> response = new HashSet<>();
+        if (user.getWatchedTvShows().size() == 0) {
+            return Collections.emptySet();
+        }
+        for (TVShow tvShow : user.getWatchedTvShows()) {
+            response.add(new TVShowDTOResponse(tvShow));
+        }
+        return response;
+    }
+
+    public User insert(User user) {
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+        return repository.save(user);
     }
 
     public boolean checkIfTheUsernameIsAlreadyInUse(String username) {

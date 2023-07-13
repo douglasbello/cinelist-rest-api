@@ -57,6 +57,9 @@ public class ActorDTO {
     }
 
     public Gender getGender() {
+    	if (gender < 1 || gender > 3) {
+    		return Gender.MALE;
+    	}
         return Gender.valueOf(gender);
     }
 

@@ -40,11 +40,8 @@ public class DirectorController {
         if (obj == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director cannot be null."));
         }
-        if (obj.getName() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director name cannot be null."));
-        }
-        if (obj.getBirthDate() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director birth date cannot be null."));
+        if (obj.getName().length() < 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Director name cannot shorter than 3."));
         }
         Director director = new Director();
         if (!director.setBirthDate(obj.getBirthDate())) {
@@ -63,6 +60,6 @@ public class DirectorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director not found."));
         }
         directorService.delete(id);
-        return ResponseEntity.ok().body(new RequestResponseDTO(200, "Director deleted."));
+        return ResponseEntity.ok().body(new RequestResponseDTO(HttpStatus.OK.value(), "Director deleted."));
     }
 }

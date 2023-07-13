@@ -2,6 +2,7 @@ package com.douglasbello.Cinelist.services;
 
 import com.douglasbello.Cinelist.dtos.MovieDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Movie;
@@ -14,6 +15,8 @@ import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -163,5 +166,46 @@ public class UserService {
             return false;
         }
         return true;
+    }
+    
+    public Object[] validateUserDto(UserDTO obj) {
+    	Object[] errors = new Object[2];
+        if (obj.getUsername().contains(" ")) {
+        	errors[0] = HttpStatus.BAD_REQUEST.value();
+        	errors[1] = "The username cannot contain spaces.";
+        	return errors;
+        }
+        if (obj.getEmail().length() < 15) {
+        	errors[0] = HttpStatus.BAD_REQUEST.value();
+        	errors[1] = "Email cannot be shorter than 15 characters.";
+        	return errors;
+        }
+        if (checkIfTheEmailIsAlreadyInUse(obj.getEmail())) {
+        	errors[0] = HttpStatus.BAD_REQUEST.value();
+        	errors[1] = "Email is already in use.";
+        	return errors;
+        }
+        if (obj.getUsername().length() < 4 || obj.getUsername().length() > 16) {
+        	errors[0] = HttpStatus.BAD_REQUEST.value();
+        	errors[1] = "Username cannot be shorter than 4 characters or bigger than 16.";
+        	return errors;
+        }
+        if (checkIfTheUsernameIsAlreadyInUse(obj.getUsername())) {
+        	errors[0] = HttpStatus.CONFLICT.value();
+        	errors[1] = "Username is already in use.";
+        	return errors;
+        }
+        if (obj.getPassword().length() < 8 || obj.getPassword().length() > 100) {
+        	errors[0] = HttpStatus.BAD_REQUEST.value();
+        	errors[1] = "Password cannot be less than 8 or bigger than 100.";
+        	return errors;
+        }
+        if (obj.getGender().getCode() < 1 || obj.getGender().getCode() > 3) {
+        	errors[0] = HttpStatus.BAD_REQUEST.value();
+        	errors[1] = "Gender code cannot be bigger than 3 or less than 1.";
+        	return errors;
+        }
+        errors[0] = HttpStatus.OK.value();
+        return errors;
     }
 }

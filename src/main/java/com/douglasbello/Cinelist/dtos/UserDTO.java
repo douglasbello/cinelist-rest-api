@@ -7,6 +7,10 @@ import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+
 import java.util.HashSet;
 
 public class UserDTO {
@@ -67,6 +71,9 @@ public class UserDTO {
     }
 
     public Gender getGender() {
+    	if (gender < 1 || gender > 3) {
+    		return Gender.OTHER;
+    	}
         return Gender.valueOf(gender);
     }
 

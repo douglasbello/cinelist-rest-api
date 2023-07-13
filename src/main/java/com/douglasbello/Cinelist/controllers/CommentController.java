@@ -22,11 +22,8 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/comments")
 public class CommentController {
     private final CommentService commentService;
-
     private final UserService userService;
-
     private final MovieService movieService;
-
     private final TVShowService tvShowService;
 
     public CommentController(CommentService commentService, UserService userService,

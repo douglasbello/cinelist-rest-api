@@ -57,25 +57,22 @@ public class TVShowController {
 
     @PostMapping
     public ResponseEntity<?> addTvShow(@RequestBody TVShowDTO tvShowDTO) {
-        if (tvShowDTO == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The show cannot be null."));
-        }
-        if (tvShowDTO.getTitle().length() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The title of the show cannot be null."));
-        }
-        if (tvShowDTO.getOverview().length() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The overview of the show cannot be null."));
-        }
+    	Object[] fields = {tvShowDTO.getTitle(), tvShowDTO.getOverview(), tvShowDTO.getReleaseYear()};
+    	for (Object field : fields) {
+    		if (field.toString().length() == 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The fields title, overview and release year cannot be blank."));
+    		}
+    	}
         tvShowDTO = tvShowService.getRelatedEntities(tvShowDTO);
+        if (tvShowDTO.getActors().isEmpty() || tvShowDTO.getGenres().isEmpty() || tvShowDTO.getDirectors().isEmpty()) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one actor, one genre and one director that are registered."));
+        }
         TVShowDTOResponse response = tvShowService.insert(Mapper.dtoToTVShow(tvShowDTO));
         return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteTvShow(@PathVariable UUID id) {
-        if (id == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The id cannot be null."));
-        }
         if (tvShowService.findById(id) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show doesn't exists."));
         }
@@ -85,19 +82,19 @@ public class TVShowController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateTvShow(@PathVariable UUID id, @RequestBody TVShowDTO dto) {
-        if (dto == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The show cannot be null."));
-        }
-        if (dto.getTitle().length() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The title of the show cannot be null."));
-        }
-        if (dto.getOverview().length() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The overview of the show cannot be null."));
-        }
+    	Object[] fields = {dto.getTitle(), dto.getOverview(), dto.getReleaseYear()};
+    	for (Object field : fields) {
+    		if (field.toString().length() == 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The fields title, overview and release year cannot be blank."));
+    		}
+    	}
         if (tvShowService.findById(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Show not found."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show not found."));
         }
         dto = tvShowService.getRelatedEntities(dto);
+        if (dto.getActors().isEmpty() || dto.getGenres().isEmpty() || dto.getDirectors().isEmpty()) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one actor, one genre and one director that are registered."));
+        }
         TVShowDTOResponse response = tvShowService.update(id, Mapper.dtoToTVShow(dto));
         return ResponseEntity.ok().body(response);
     }

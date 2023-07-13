@@ -52,22 +52,15 @@ public class MovieController {
 
     @PostMapping
     public ResponseEntity<?> addMovie(@RequestBody MovieDTO dto) {
-        if (dto == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie cannot be null."));
-        }
-        if (dto.getTitle().length() < 1) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie title cannot be null."));
-        }
-        if (dto.getOverview().length() < 1) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie overview cannot be null."));
-        }
-
+    	Object[] fields = {dto.getTitle(), dto.getOverview(), dto.getReleaseYear()};
+    	for (Object field : fields) {
+    		if (field.toString().length() == 0) {
+    			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The fields title, overview and release year cannot be blank."));
+    		}
+    	}
         dto = movieService.getRelatedEntities(dto);
-        if (dto.getGenres().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one genre that is registered."));
-        }
-        if (dto.getDirectors().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one director that is registered.."));
+        if (dto.getGenres().isEmpty() || dto.getDirectors().isEmpty() || dto.getActors().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one genre, one director and one actor that are registered."));
         }
         MovieDTOResponse response = new MovieDTOResponse(movieService.insert(Mapper.dtoToMovie(dto)));
         return ResponseEntity.ok().body(response);

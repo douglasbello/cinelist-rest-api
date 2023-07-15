@@ -53,6 +53,16 @@ public class Movie {
 		this.directors = directors;
 		this.genre = genre;
 	}
+	
+	public Movie(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Set<Genres> genre, Set<Actor> actors) {
+		this.id = id;
+		this.title = title;
+		this.overview = overview;
+		this.releaseYear = releaseYear;
+		this.directors = directors;
+		this.genre = genre;
+		this.actors = actors;
+	}
 
 	@PrePersist
 	public void generateUuid() {

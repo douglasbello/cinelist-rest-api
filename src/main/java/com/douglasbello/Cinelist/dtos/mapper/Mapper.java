@@ -27,7 +27,7 @@ public class Mapper {
     }
 
     public static Movie dtoToMovie(MovieDTO dto) {
-        Movie movie = new Movie(dto.getId(),dto.getTitle(),dto.getOverview(),dto.getReleaseYear(),dto.getDirectors(),dto.getGenres());
+        Movie movie = new Movie(dto.getId(),dto.getTitle(),dto.getOverview(),dto.getReleaseYear(),dto.getDirectors(),dto.getGenres(),dto.getActors());
         return movie;
     }
 

@@ -75,17 +75,19 @@ public class MovieController {
     	if (dto.movieId() == null || dto.userId() == null || dto.rate() < 1 || dto.rate() > 10) {
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide the movieId, the userId and your rate of the movie, the rate cannot be less than 1 or bigger than 10."));
     	}
-    	if (movieService.findById(dto.movieId()) == null) {
-    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie not found."));
-    	}
     	if (userService.findById(dto.userId()) == null) {
     		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
     	}
     	if (!userService.isCurrentUser(userService.findById(dto.userId()).getUsername())) {
     		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
     	}
+    	Object[] response = movieService.rateMovie(dto);
+    	int statusCode = (int) response[0];
+    	if (statusCode != 201) {
+    		return ResponseEntity.status(HttpStatus.valueOf(statusCode)).body(new RequestResponseDTO(statusCode, response[1].toString()));
+    	}
     	
-    	
+    	return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/directors/id/{directorId}")

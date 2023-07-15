@@ -13,8 +13,12 @@ public class Movie {
 	private String title;
 	private String overview;
 	private String releaseYear;
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-	private List<Rate> rate;
+	private double rate;
+	@ElementCollection
+	@CollectionTable(name = "movies_ratings", joinColumns = @JoinColumn(name = "movie_id"))
+	@MapKeyColumn(name = "userId")
+	@Column(name = "rating")
+	private Map<UUID, Double> ratings = new HashMap<UUID, Double>();
 	@ManyToMany
 	@JoinTable(name = "tb_director_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
 	private Set<Director> directors = new HashSet<>();
@@ -24,7 +28,6 @@ public class Movie {
 	@ManyToMany
 	@JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
 	private Set<Genres> genre = new HashSet<>();
-	// users that
 	@ManyToMany(mappedBy = "watchedMovies")
 	@JsonIgnore
 	private Set<User> users = new HashSet<>();
@@ -40,15 +43,6 @@ public class Movie {
 		this.overview = overview;
 		this.releaseYear = releaseYear;
 	}
-
-//	public Movie(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Set<Genres> genre) {
-//		this.id = id;
-//		this.title = title;
-//		this.overview = overview;
-//		this.releaseYear = releaseYear;
-//		this.directors = directors;
-//		this.genre = genre;
-//	}
 
 	public Movie(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Set<Genres> genre) {
 		this.id = id;
@@ -88,10 +82,6 @@ public class Movie {
 	public void setOverview(String overview) {
 		this.overview = overview;
 	}
-	
-	public List<Rate> getRate() {
-		return rate;
-	}
  
 	public Set<Director> getDirectors() {
 		return directors;
@@ -119,6 +109,28 @@ public class Movie {
 
 	public Set<User> getUsers() {
 		return users;
+	}
+	
+	public double getRate() {
+		return rate;
+	}
+	
+	public void setRate() {
+		Map<UUID, Double> ratings = this.ratings;
+		if (ratings.isEmpty()) {
+			this.rate = 0.0;
+		}
+		
+		double totalRating = 0.0;
+		for (Double rating : ratings.values()) {
+			totalRating += rating;
+		}
+		
+		this.rate = totalRating / ratings.size();
+	}
+	
+	public Map<UUID, Double> getRatings() {
+		return ratings;
 	}
 
 	@Override

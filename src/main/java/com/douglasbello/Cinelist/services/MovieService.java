@@ -3,15 +3,18 @@ package com.douglasbello.Cinelist.services;
 import com.douglasbello.Cinelist.dtos.ActorDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.RateDTO;
 import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Movie;
+import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.MovieRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,12 +26,14 @@ public class MovieService {
     private final DirectorService directorService;
     private final GenresService genresService;
     private final ActorService actorService;
+    private final UserService userService;
 
-    public MovieService(MovieRepository repository, DirectorService directorService, GenresService genresService, ActorService actorService) {
+    public MovieService(MovieRepository repository, DirectorService directorService, GenresService genresService, ActorService actorService, UserService userService) {
         this.repository = repository;
         this.directorService = directorService;
         this.genresService = genresService;
         this.actorService = actorService;
+        this.userService = userService;
     }
 
     public Set<MovieDTOResponse> findAll() {
@@ -123,5 +128,22 @@ public class MovieService {
         return movieDTO;
     }
     
-    public 
+    public Object[] rateMovie(RateDTO dto) {
+    	Object[] response = new Object[2];
+    	if (userService.findById(dto.userId()) != null && this.findById(dto.movieId()) != null) {
+    		Movie movie = this.findById(dto.movieId());
+    		Map<UUID, Double> ratings = movie.getRatings();
+    		if (ratings.containsKey(dto.userId())) {
+    			ratings.remove(dto.userId());
+    		}
+    		ratings.put(dto.userId(), dto.rate());
+    		movie.setRate();
+    		this.update(movie.getId(), movie);
+    		response[0] = HttpStatus.OK.value();
+    		return response;
+    	}
+    	response[0] = HttpStatus.NOT_FOUND.value();
+    	response[1] = "User or movie not found.";
+    	return response;
+    }
 }

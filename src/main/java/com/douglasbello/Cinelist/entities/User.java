@@ -22,9 +22,6 @@ public class User implements UserDetails {
 	private String username;
 	private String password;
 	private int gender;
-	@JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Rate> rate;
 	private UserRole role;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
@@ -131,6 +128,7 @@ public class User implements UserDetails {
 	public UserRole getRole() {
 		return role;
 	}
+
 
 	public Set<Movie> getWatchedMovies() {
 		return watchedMovies;

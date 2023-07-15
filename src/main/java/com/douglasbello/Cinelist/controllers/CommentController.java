@@ -37,7 +37,7 @@ public class CommentController {
     @GetMapping(value = "/movie/{movieId}")
     public ResponseEntity<?> findAllCommentsOfMovie(@PathVariable UUID movieId) {
         if (movieService.findById(movieId) == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(400, "The movie doesn't exists."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The movie doesn't exists."));
         }
 
         List<CommentDTO> comments = movieService.findById(movieId).getComments().stream().map(CommentDTO::new).collect(Collectors.toList());

@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.entities.enums.Gender;
+import com.douglasbello.Cinelist.entities.enums.UserRole;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -18,6 +19,7 @@ public class UserDTO {
     private String email;
     private String username;
     private String password;
+    private UserRole role;
     private int gender;
 
     public UserDTO() {
@@ -35,6 +37,7 @@ public class UserDTO {
         this.email = entity.getEmail();
         this.username = entity.getUsername();
         this.password = entity.getPassword();
+        this.role = entity.getRole();
         this.gender = entity.getGender().getCode();
     }
 
@@ -70,15 +73,20 @@ public class UserDTO {
         this.password = password;
     }
 
-    public Gender getGender() {
-    	if (gender < 1 || gender > 3) {
-    		return Gender.OTHER;
-    	}
-        return Gender.valueOf(gender);
+    public int getGender() {
+    	return gender;
     }
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+    
+    public UserRole getRole() {
+    	return role;
+    }
+    
+    public void setRole(UserRole role) {
+    	this.role = role;
     }
 
     @Override

@@ -14,6 +14,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository repository;
     private final MovieService movieService;
     private final TVShowService tvShowService;
@@ -168,11 +172,11 @@ public class UserService {
     
     public Object[] validateUserDto(UserDTO obj) {
     	Object[] errors = new Object[2];
-        if (obj.getUsername().contains(" ")) {
-        	errors[0] = HttpStatus.BAD_REQUEST.value();
-        	errors[1] = "The username cannot contain spaces.";
-        	return errors;
-        }
+    	if (obj.getEmail() == null || obj.getUsername() == null) {
+    		errors[0] = HttpStatus.BAD_REQUEST.value();
+    		errors[1] = "The email and username cannot be null.";
+    		return errors;
+    	}
         if (obj.getEmail().length() < 15) {
         	errors[0] = HttpStatus.BAD_REQUEST.value();
         	errors[1] = "Email cannot be shorter than 15 characters.";
@@ -193,12 +197,22 @@ public class UserService {
         	errors[1] = "Username is already in use.";
         	return errors;
         }
+    	if (obj.getPassword() == null) {
+    		errors[0] = HttpStatus.BAD_REQUEST.value();
+    		errors[1] = "The password cannot be null.";
+    		return errors;
+    	}
+        if (obj.getUsername().contains(" ")) {
+        	errors[0] = HttpStatus.BAD_REQUEST.value();
+        	errors[1] = "The username cannot contain spaces.";
+        	return errors;
+        }
         if (obj.getPassword().length() < 8 || obj.getPassword().length() > 100) {
         	errors[0] = HttpStatus.BAD_REQUEST.value();
         	errors[1] = "Password cannot be less than 8 or bigger than 100.";
         	return errors;
         }
-        if (obj.getGender().getCode() < 1 || obj.getGender().getCode() > 3) {
+        if (obj.getGender() < 1 || obj.getGender() > 3) {
         	errors[0] = HttpStatus.BAD_REQUEST.value();
         	errors[1] = "Gender code cannot be bigger than 3 or less than 1.";
         	return errors;
@@ -206,4 +220,14 @@ public class UserService {
         errors[0] = HttpStatus.OK.value();
         return errors;
     }
+    
+    public boolean isCurrentUser(String username) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return currentUser.getUsername().equals(username);
+    }
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return repository.findByUsername(username);
+	}
 }

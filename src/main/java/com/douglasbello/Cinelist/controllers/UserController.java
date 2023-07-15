@@ -1,12 +1,17 @@
 package com.douglasbello.Cinelist.controllers;
 
+import com.douglasbello.Cinelist.config.TokenService;
+import com.douglasbello.Cinelist.dtos.LoginDTO;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.dtos.TokenDTO;
 import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.services.UserService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +22,13 @@ import java.util.UUID;
 @RequestMapping(value = "/users")
 public class UserController {
 	private final UserService userService;
+	private final AuthenticationManager authenticationManager;
+	private final TokenService tokenService;
 
-	public UserController(UserService userService) {
+	public UserController(UserService userService, AuthenticationManager authenticationManager, TokenService tokenService) {
 		this.userService = userService;
+		this.authenticationManager = authenticationManager;
+		this.tokenService = tokenService;
 	}
 
     @GetMapping
@@ -37,20 +46,19 @@ public class UserController {
         userService.signIn(obj);
         return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResponseDTO(HttpStatus.CREATED.value(), "Account created successfully!"));
 	}
-
-    @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO obj) {
-        if (obj.getEmail() == null && obj.getUsername() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You have to pass the email or the username."));
-        }
-        if (obj.getEmail() != null && obj.getUsername() != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(),"You can only pass the email or username for login, not both."));
-        }
-        if (userService.login(obj) == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "Username or password incorrect"));
-        }
-        return ResponseEntity.ok().body(userService.login(obj));
-    }
+	
+	@PostMapping(value = "/login")
+	public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+		if (dto.username() == null || dto.password() == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The username and password cannot be null."));
+		}
+		var usernamePassword = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
+		var auth = authenticationManager.authenticate(usernamePassword);
+		
+		var token = tokenService.generateToken((User) auth.getPrincipal());
+		
+		return ResponseEntity.ok().body(new TokenDTO(token));
+	}
 
     @GetMapping(value = "/{userId}/movies")
     public ResponseEntity<?> getUserWatchedMovies(@PathVariable UUID userId) {
@@ -65,6 +73,10 @@ public class UserController {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
         }
+        User user = userService.findById(userId);
+        if (!userService.isCurrentUser(user.getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "You don't have access to this url."));
+        }
         if (moviesId.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one movie id."));
         }
@@ -72,7 +84,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movies not found."));
         }
 
-        User user = userService.findById(userId);
         user = userService.addWatchedMovies(user, moviesId);
         user = userService.update(user.getId(), user);
         return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(user));

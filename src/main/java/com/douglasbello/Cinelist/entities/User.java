@@ -1,13 +1,19 @@
 package com.douglasbello.Cinelist.entities;
 
 import com.douglasbello.Cinelist.entities.enums.Gender;
+import com.douglasbello.Cinelist.entities.enums.UserRole;
+
 import jakarta.persistence.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name = "tb_users")
-public class User {
+public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
@@ -15,6 +21,7 @@ public class User {
 	private String username;
 	private String password;
 	private int gender;
+	private UserRole role;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 	@ManyToMany
@@ -40,6 +47,22 @@ public class User {
 		this.password = password;
 		this.gender = gender;
 	}
+	
+	public User(String email, String username, String password, Gender gender, UserRole role) {
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		setGender(gender.getCode());
+		this.role = role;
+	}
+
+	public User(String email, String username, String password, int gender, UserRole role) {
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.gender = gender;
+		this.role = role;
+	}
 
 	@PrePersist
 	public void generateUuid() {
@@ -63,6 +86,7 @@ public class User {
 		this.email = email;
 	}
 
+	@Override
 	public String getUsername() {
 		return username;
 	}
@@ -94,6 +118,14 @@ public class User {
 
 	public void setGender(int gender) {
 		this.gender = gender;
+	}
+	
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+	
+	public UserRole getRole() {
+		return role;
 	}
 
 	public Set<Movie> getWatchedMovies() {
@@ -128,5 +160,37 @@ public class User {
 				", password='" + password + '\'' +
 				", comments=" + comments +
 				'}';
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if (this.role == UserRole.ADMIN) {
+			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+		}
+		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

@@ -32,7 +32,7 @@ public class Mapper {
     }
 
     public static User dtoToUser(UserDTO dto) {
-        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getGender().getCode());
+        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getGender(), dto.getRole());
         return user;
     }
 

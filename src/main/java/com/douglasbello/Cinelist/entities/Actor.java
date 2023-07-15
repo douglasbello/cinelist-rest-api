@@ -80,7 +80,7 @@ public class Actor {
         return birthDate;
     }
 
-    /* this set returns a boolean because is used in the controller to verify if the birthDate provided is in the correct format. */
+    /* this setter returns a boolean because is used in the controller to verify if the birthDate provided is in the correct format. */
     public boolean setBirthDate(String birthDate) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

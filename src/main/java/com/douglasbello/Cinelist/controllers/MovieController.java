@@ -81,9 +81,9 @@ public class MovieController {
     	if (!userService.isCurrentUser(userService.findById(dto.userId()).getUsername())) {
     		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
     	}
-    	Object[] response = movieService.rateMovie(dto);
+    	Object[] response = movieService.rateMovie(dto, userService.findById(dto.userId()));
     	int statusCode = (int) response[0];
-    	if (statusCode != 201) {
+    	if (statusCode != 200) {
     		return ResponseEntity.status(HttpStatus.valueOf(statusCode)).body(new RequestResponseDTO(statusCode, response[1].toString()));
     	}
     	

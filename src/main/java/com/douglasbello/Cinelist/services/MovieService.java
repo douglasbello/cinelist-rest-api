@@ -26,14 +26,12 @@ public class MovieService {
     private final DirectorService directorService;
     private final GenresService genresService;
     private final ActorService actorService;
-    private final UserService userService;
 
-    public MovieService(MovieRepository repository, DirectorService directorService, GenresService genresService, ActorService actorService, UserService userService) {
+    public MovieService(MovieRepository repository, DirectorService directorService, GenresService genresService, ActorService actorService) {
         this.repository = repository;
         this.directorService = directorService;
         this.genresService = genresService;
         this.actorService = actorService;
-        this.userService = userService;
     }
 
     public Set<MovieDTOResponse> findAll() {
@@ -128,9 +126,9 @@ public class MovieService {
         return movieDTO;
     }
     
-    public Object[] rateMovie(RateDTO dto) {
+    public Object[] rateMovie(RateDTO dto, User user) {
     	Object[] response = new Object[2];
-    	if (userService.findById(dto.userId()) != null && this.findById(dto.movieId()) != null) {
+    	if (this.findById(dto.movieId()) != null) {
     		Movie movie = this.findById(dto.movieId());
     		Map<UUID, Double> ratings = movie.getRatings();
     		if (ratings.containsKey(dto.userId())) {
@@ -143,7 +141,7 @@ public class MovieService {
     		return response;
     	}
     	response[0] = HttpStatus.NOT_FOUND.value();
-    	response[1] = "User or movie not found.";
+    	response[1] = "Movie not found.";
     	return response;
     }
 }

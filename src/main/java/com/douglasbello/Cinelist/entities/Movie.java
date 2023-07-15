@@ -14,6 +14,7 @@ public class Movie {
 	private String overview;
 	private String releaseYear;
 	private double rate;
+	@JsonIgnore
 	@ElementCollection
 	@CollectionTable(name = "movies_ratings", joinColumns = @JoinColumn(name = "movie_id"))
 	@MapKeyColumn(name = "userId")

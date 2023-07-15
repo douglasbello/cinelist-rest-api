@@ -2,6 +2,7 @@ package com.douglasbello.Cinelist.entities;
 
 import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.douglasbello.Cinelist.entities.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 
@@ -21,6 +22,9 @@ public class User implements UserDetails {
 	private String username;
 	private String password;
 	private int gender;
+	@JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Rate> rate;
 	private UserRole role;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();

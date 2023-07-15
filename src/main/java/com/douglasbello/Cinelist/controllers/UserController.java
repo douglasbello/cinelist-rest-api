@@ -65,6 +65,9 @@ public class UserController {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
         }
+        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+        }
         return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(userService.findById(userId)));
     }
 
@@ -75,7 +78,7 @@ public class UserController {
         }
         User user = userService.findById(userId);
         if (!userService.isCurrentUser(user.getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "You don't have access to this url."));
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
         }
         if (moviesId.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one movie id."));
@@ -94,6 +97,9 @@ public class UserController {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
         }
+        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+        }
         return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(userService.findById(userId)));
     }
 
@@ -101,6 +107,9 @@ public class UserController {
     public ResponseEntity<?> addTvShowsToWatchedList(@PathVariable UUID userId, @RequestBody Set<UUID> tvShowsIds) {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
+        }
+        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
         }
         if (tvShowsIds.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one show id."));

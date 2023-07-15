@@ -7,6 +7,8 @@ import com.douglasbello.Cinelist.services.ActorService;
 import com.douglasbello.Cinelist.services.DirectorService;
 import com.douglasbello.Cinelist.services.GenresService;
 import com.douglasbello.Cinelist.services.MovieService;
+import com.douglasbello.Cinelist.services.UserService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +23,14 @@ public class MovieController {
     private final ActorService actorService;
     private final DirectorService directorService;
     private final GenresService genresService;
+    private final UserService userService;
 
-    public MovieController(MovieService movieService, ActorService actorService, DirectorService directorService, GenresService genresService) {
+    public MovieController(MovieService movieService, ActorService actorService, DirectorService directorService, GenresService genresService, UserService userService) {
         this.movieService = movieService;
         this.actorService = actorService;
         this.directorService = directorService;
         this.genresService = genresService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -64,6 +68,24 @@ public class MovieController {
         }
         MovieDTOResponse response = new MovieDTOResponse(movieService.insert(Mapper.dtoToMovie(dto)));
         return ResponseEntity.ok().body(response);
+    }
+    
+    @PostMapping(value = "/rate")
+    public ResponseEntity<?> rateMovie(@RequestBody RateDTO dto) {
+    	if (dto.movieId() == null || dto.userId() == null || dto.rate() < 1 || dto.rate() > 10) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide the movieId, the userId and your rate of the movie, the rate cannot be less than 1 or bigger than 10."));
+    	}
+    	if (movieService.findById(dto.movieId()) == null) {
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie not found."));
+    	}
+    	if (userService.findById(dto.userId()) == null) {
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
+    	}
+    	if (!userService.isCurrentUser(userService.findById(dto.userId()).getUsername())) {
+    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+    	}
+    	
+    	
     }
 
     @GetMapping(value = "/directors/id/{directorId}")

@@ -13,6 +13,8 @@ public class Movie {
 	private String title;
 	private String overview;
 	private String releaseYear;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+	private List<Rate> rate;
 	@ManyToMany
 	@JoinTable(name = "tb_director_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
 	private Set<Director> directors = new HashSet<>();
@@ -86,7 +88,11 @@ public class Movie {
 	public void setOverview(String overview) {
 		this.overview = overview;
 	}
-
+	
+	public List<Rate> getRate() {
+		return rate;
+	}
+ 
 	public Set<Director> getDirectors() {
 		return directors;
 	}

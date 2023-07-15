@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.config;
+package com.douglasbello.Cinelist.security;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

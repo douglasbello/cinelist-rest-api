@@ -1,11 +1,11 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.config.TokenService;
 import com.douglasbello.Cinelist.dtos.LoginDTO;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.dtos.TokenDTO;
 import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.entities.User;
+import com.douglasbello.Cinelist.security.TokenService;
 import com.douglasbello.Cinelist.services.UserService;
 
 import org.springframework.http.HttpStatus;

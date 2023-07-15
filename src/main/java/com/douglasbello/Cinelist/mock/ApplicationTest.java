@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.config;
+package com.douglasbello.Cinelist.mock;
 
 import com.douglasbello.Cinelist.dtos.ActorDTO;
 import com.douglasbello.Cinelist.dtos.UserDTO;

@@ -35,6 +35,9 @@ public class TVShow {
 	@ManyToMany(mappedBy = "watchedTvShows")
 	@JsonIgnore
 	private Set<User> users = new HashSet<>();
+	@ManyToMany(mappedBy = "favoriteTvShows")
+	@JsonIgnore
+	private Set<User> favoriteUsers = new HashSet<>();
 
 	public TVShow() {
 		setSeasons();
@@ -164,6 +167,10 @@ public class TVShow {
 
 	public List<Genres> getGenres() {
 		return genres;
+	}
+
+	public Set<User> getFavoriteUsers() {
+		return favoriteUsers;
 	}
 
 	@Override

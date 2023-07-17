@@ -31,7 +31,10 @@ public class Movie {
 	private Set<Genres> genre = new HashSet<>();
 	@ManyToMany(mappedBy = "watchedMovies")
 	@JsonIgnore
-	private Set<User> users = new HashSet<>();
+	private Set<User> watchedUsers = new HashSet<>();
+	@ManyToMany(mappedBy = "favoriteMovies")
+	@JsonIgnore
+	private Set<User> favoriteUsers = new HashSet<>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "movie")
 	private Set<Comment> comments = new HashSet<>();
@@ -118,14 +121,18 @@ public class Movie {
 		return actors;
 	}
 
-	public Set<User> getUsers() {
-		return users;
+	public Set<User> getWatchedUsers() {
+		return watchedUsers;
 	}
 	
 	public double getRate() {
 		return rate;
 	}
 	
+	public Set<User> getFavoriteUsers() {
+		return favoriteUsers;
+	}
+
 	public void setRate() {
 		Map<UUID, Double> ratings = this.ratings;
 		if (ratings.isEmpty()) {

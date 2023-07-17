@@ -60,7 +60,7 @@ public class UserController {
 		return ResponseEntity.ok().body(new TokenDTO(token));
 	}
 
-    @GetMapping(value = "/{userId}/movies")
+    @GetMapping(value = "/{userId}/watched-movies")
     public ResponseEntity<?> getUserWatchedMovies(@PathVariable UUID userId) {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
@@ -70,8 +70,19 @@ public class UserController {
         }
         return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(userService.findById(userId)));
     }
+    
+    @GetMapping(value = "/{userId}/favorite-movies")
+    public ResponseEntity<?> getUserFavoriteMovies(@PathVariable UUID userId) {
+        if (userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
+        }
+        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+        }
+        return ResponseEntity.ok().body(userService.getUserFavoriteMoviesList(userService.findById(userId)));
+    }
 
-    @PostMapping(value = "/{userId}/movies")
+    @PostMapping(value = "/{userId}/watched-movies")
     public ResponseEntity<?> addMoviesToWatchedList(@PathVariable UUID userId ,@RequestBody Set<UUID> moviesId) {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
@@ -91,8 +102,29 @@ public class UserController {
         user = userService.update(user.getId(), user);
         return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(user));
     }
+    
+    @PostMapping(value = "/{userId}/favorite-movies")
+    public ResponseEntity<?> addMoviesToFavoriteList(@PathVariable UUID userId, @RequestBody Set<UUID> moviesId) {
+        if (userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
+        }
+        User user = userService.findById(userId);
+        if (!userService.isCurrentUser(user.getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+        }
+        if (moviesId.size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one movie id."));
+        }
+        if (userService.addFavoriteMovies(userService.findById(userId), moviesId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movies not found."));
+        }
+        
+        user = userService.addFavoriteMovies(user, moviesId);
+        user = userService.update(user.getId(), user);
+        return ResponseEntity.ok().body(userService.getUserFavoriteMoviesList(user));
+    }
 
-    @GetMapping(value = "/{userId}/shows")
+    @GetMapping(value = "/{userId}/watched-shows")
     public ResponseEntity<?> getUserWatchedShows(@PathVariable UUID userId) {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
@@ -102,8 +134,19 @@ public class UserController {
         }
         return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(userService.findById(userId)));
     }
+    
+    @GetMapping(value = "/{userId}/favorite-shows")
+    public ResponseEntity<?> getUserFavoriteShows(@PathVariable UUID userId) {
+    	if (userService.findById(userId) == null) {
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists"));
+    	}
+        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+        }
+        return ResponseEntity.ok().body(userService.getUserFavoriteTvShowsList(userService.findById(userId)));
+    }
 
-    @PostMapping(value = "/{userId}/shows")
+    @PostMapping(value = "/{userId}/watched-shows")
     public ResponseEntity<?> addTvShowsToWatchedList(@PathVariable UUID userId, @RequestBody Set<UUID> tvShowsIds) {
         if (userService.findById(userId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
@@ -121,5 +164,26 @@ public class UserController {
         user = userService.addWatchedTvShows(user,tvShowsIds);
         user = userService.update(user.getId(),user);
         return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(user));
+    }
+    
+    @PostMapping(value = "/{userId}/favorite-shows")
+    public ResponseEntity<?> addTvShowsToFavoriteList(@PathVariable UUID userId, @RequestBody Set<UUID> tvShowsIds) {
+        if (userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
+        }
+        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
+        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+        }
+        if (tvShowsIds.size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one show id."));
+        }
+        if (userService.addFavoriteTvShows(userService.findById(userId), tvShowsIds) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Shows not found."));
+        }
+        
+        User user = userService.findById(userId);
+        user = userService.addFavoriteTvShows(user, tvShowsIds);
+        user = userService.update(user.getId(), user);
+        return ResponseEntity.ok().body(userService.getUserFavoriteTvShowsList(user));
     }
 }

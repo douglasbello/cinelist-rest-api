@@ -142,11 +142,11 @@ public class User implements UserDetails {
 	public Set<TVShow> getWatchedTvShows() {
 		return watchedTvShows;
 	}
-	
+
 	public Set<Movie> getFavoriteMovies() {
 		return favoriteMovies;
 	}
-	
+
 	public Set<TVShow> getFavoriteTvShows() {
 		return favoriteTvShows;
 	}

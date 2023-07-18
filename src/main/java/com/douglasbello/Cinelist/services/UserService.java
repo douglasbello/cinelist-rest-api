@@ -127,7 +127,8 @@ public class UserService implements UserDetailsService {
                 user.getFavoriteMovies().add(movieService.findById(movieId));
             }
         }
-        return user;    }
+        return user;    
+    }
 
     public Set<MovieDTOResponse> getUserWatchedMoviesList(User user) {
         Set<MovieDTOResponse> response = new HashSet<>();
@@ -145,7 +146,7 @@ public class UserService implements UserDetailsService {
         if (user.getFavoriteMovies().size() == 0) {
             return Collections.emptySet();
         }
-        for (Movie movie : user.getWatchedMovies()) {
+        for (Movie movie : user.getFavoriteMovies()) {
             response.add(new MovieDTOResponse(movie));
         }
         return response;
@@ -187,7 +188,7 @@ public class UserService implements UserDetailsService {
         if (user.getFavoriteTvShows().size() == 0) {
             return Collections.emptySet();
         }
-        for (TVShow tvShow : user.getWatchedTvShows()) {
+        for (TVShow tvShow : user.getFavoriteTvShows()) {
             response.add(new TVShowDTOResponse(tvShow));
         }
         return response;

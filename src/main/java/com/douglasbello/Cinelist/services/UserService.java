@@ -117,6 +117,18 @@ public class UserService implements UserDetailsService {
         }
         return user;
     }
+    
+    public User addFavoriteMovies(User user, Set<UUID> moviesId) {
+        if (moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0) {
+            return null;
+        }
+        for (UUID movieId : moviesId) {
+            if (movieService.findById(movieId) != null) {
+                user.getFavoriteMovies().add(movieService.findById(movieId));
+            }
+        }
+        return user;    
+    }
 
     public Set<MovieDTOResponse> getUserWatchedMoviesList(User user) {
         Set<MovieDTOResponse> response = new HashSet<>();
@@ -124,6 +136,17 @@ public class UserService implements UserDetailsService {
             return Collections.emptySet();
         }
         for (Movie movie : user.getWatchedMovies()) {
+            response.add(new MovieDTOResponse(movie));
+        }
+        return response;
+    }
+    
+    public Set<MovieDTOResponse> getUserFavoriteMoviesList(User user) {
+        Set<MovieDTOResponse> response = new HashSet<>();
+        if (user.getFavoriteMovies().size() == 0) {
+            return Collections.emptySet();
+        }
+        for (Movie movie : user.getFavoriteMovies()) {
             response.add(new MovieDTOResponse(movie));
         }
         return response;
@@ -138,6 +161,16 @@ public class UserService implements UserDetailsService {
         }
         return user;
     }
+    
+    public User addFavoriteTvShows(User user, Set<UUID> tvShowsIds) {
+        if (tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0) {
+            return null;
+        }
+        for (UUID showId : tvShowsIds) {
+            user.getFavoriteTvShows().add(tvShowService.findById(showId));
+        }
+        return user;
+    }
 
     public Set<TVShowDTOResponse> getUserWatchedTvShowsList(User user) {
         Set<TVShowDTOResponse> response = new HashSet<>();
@@ -145,6 +178,17 @@ public class UserService implements UserDetailsService {
             return Collections.emptySet();
         }
         for (TVShow tvShow : user.getWatchedTvShows()) {
+            response.add(new TVShowDTOResponse(tvShow));
+        }
+        return response;
+    }
+    
+    public Set<TVShowDTOResponse> getUserFavoriteTvShowsList(User user) {
+        Set<TVShowDTOResponse> response = new HashSet<>();
+        if (user.getFavoriteTvShows().size() == 0) {
+            return Collections.emptySet();
+        }
+        for (TVShow tvShow : user.getFavoriteTvShows()) {
             response.add(new TVShowDTOResponse(tvShow));
         }
         return response;

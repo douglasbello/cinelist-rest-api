@@ -58,32 +58,6 @@ public class UserService implements UserDetailsService {
         return repository.save(user);
     }
 
-    public UserDTO login(UserDTO obj) {
-        try {
-            User entity;
-            if (obj.getEmail() == null) {
-                entity = repository.findUserByUsername(obj.getUsername());
-            }
-            else {
-                entity = repository.findUserByEmail(obj.getEmail());
-            }
-
-            if (entity == null) {
-                return null;
-            }
-
-            if (passwordEncoder.matches(obj.getPassword(), entity.getPassword())) {
-                return new UserDTO(entity);
-            }
-
-        } catch (NoSuchElementException exception) {
-            exception.printStackTrace();
-            return null;
-        }
-
-        return null;
-    }
-
     public void delete(UUID id) {
         try {
             repository.deleteById(id);

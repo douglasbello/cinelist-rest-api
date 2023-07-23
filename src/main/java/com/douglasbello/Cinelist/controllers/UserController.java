@@ -5,6 +5,7 @@ import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.dtos.TokenDTO;
 import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.entities.User;
+import com.douglasbello.Cinelist.entities.enums.UserRole;
 import com.douglasbello.Cinelist.security.TokenService;
 import com.douglasbello.Cinelist.services.UserService;
 
@@ -33,8 +34,10 @@ public class UserController {
 	}
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
-        return ResponseEntity.ok().body(userService.findAll());
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDTO userDTO = new UserDTO(userService.findByUsername(currentUser.getUsername()));
+        return ResponseEntity.ok().body(userDTO);
     }
 
 	@PostMapping(value = "/sign-in")
@@ -44,6 +47,7 @@ public class UserController {
 		if (errorCode != HttpStatus.OK.value()) {
 			return ResponseEntity.status(HttpStatus.valueOf(errorCode)).body(new RequestResponseDTO(errorCode, errors[1].toString()));
 		}
+        obj.setRole(UserRole.USER);
         userService.signIn(obj);
         return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResponseDTO(HttpStatus.CREATED.value(), "Account created successfully!"));
 	}

@@ -4,6 +4,7 @@ import com.douglasbello.Cinelist.dtos.ActorDTO;
 import com.douglasbello.Cinelist.dtos.UserDTO;
 import com.douglasbello.Cinelist.entities.*;
 import com.douglasbello.Cinelist.entities.enums.Gender;
+import com.douglasbello.Cinelist.entities.enums.UserRole;
 import com.douglasbello.Cinelist.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -48,6 +49,7 @@ public class ApplicationTest implements CommandLineRunner {
     @Override
     public void run(String... args) {
         User user = new User("user01@outlook.com","user01","user01", Gender.MALE);
+        user.setRole(UserRole.ADMIN);
         userService.insert(user);
 
         Genres scienceFiction = new Genres(null,"Science fiction");

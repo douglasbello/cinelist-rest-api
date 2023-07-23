@@ -79,7 +79,7 @@ public class MovieController {
     		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
     	}
     	if (!userService.isCurrentUser(userService.findById(dto.userId()).getUsername())) {
-    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
+    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unauthorized."));
     	}
     	Object[] response = movieService.rateMovie(dto, userService.findById(dto.userId()));
     	int statusCode = (int) response[0];

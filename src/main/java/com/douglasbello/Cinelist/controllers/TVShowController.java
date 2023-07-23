@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/tvshows")
+@RequestMapping(value = "/shows")
 public class TVShowController {
     private final TVShowService tvShowService;
     private final ActorService actorService;

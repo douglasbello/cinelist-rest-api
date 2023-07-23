@@ -47,7 +47,10 @@ public class UserService implements UserDetailsService {
         Optional<User> user = repository.findById(id);
         return user.orElse(null);
     }
-    
+
+    public User findByUsername(String username) {
+        return repository.findUserByUsername(username);
+    }
 
     public User signIn(UserDTO dto) {
         User user = Mapper.dtoToUser(dto);

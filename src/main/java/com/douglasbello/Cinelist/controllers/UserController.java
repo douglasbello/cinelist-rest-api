@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,41 +61,32 @@ public class UserController {
 		return ResponseEntity.ok().body(new TokenDTO(token));
 	}
 
-    @GetMapping(value = "/{userId}/watched-movies")
-    public ResponseEntity<?> getUserWatchedMovies(@PathVariable UUID userId) {
-        if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
+    @GetMapping(value = "/watched-movies")
+    public ResponseEntity<?> getUserWatchedMovies() {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user;
+        if (userService.findByUsername(currentUser.getUsername()) == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unauthorized."));
         }
-        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
-        return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(userService.findById(userId)));
+        user = userService.findByUsername(currentUser.getUsername());
+        return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(user));
     }
     
-    @GetMapping(value = "/{userId}/favorite-movies")
-    public ResponseEntity<?> getUserFavoriteMovies(@PathVariable UUID userId) {
-        if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
-        }
-        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
-        return ResponseEntity.ok().body(userService.getUserFavoriteMoviesList(userService.findById(userId)));
+    @GetMapping(value = "/favorite-movies")
+    public ResponseEntity<?> getUserFavoriteMovies() {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(currentUser.getUsername());
+        return ResponseEntity.ok().body(userService.getUserFavoriteMoviesList(user));
     }
 
-    @PostMapping(value = "/{userId}/watched-movies")
-    public ResponseEntity<?> addMoviesToWatchedList(@PathVariable UUID userId ,@RequestBody Set<UUID> moviesId) {
-        if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
-        }
-        User user = userService.findById(userId);
-        if (!userService.isCurrentUser(user.getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
+    @PostMapping(value = "/watched-movies")
+    public ResponseEntity<?> addMoviesToWatchedList(@RequestBody Set<UUID> moviesId) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(currentUser.getUsername());
         if (moviesId.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one movie id."));
         }
-        if (userService.addWatchedMovies(userService.findById(userId), moviesId) == null) {
+        if (userService.addWatchedMovies(user, moviesId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movies not found."));
         }
 
@@ -103,19 +95,14 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(user));
     }
     
-    @PostMapping(value = "/{userId}/favorite-movies")
-    public ResponseEntity<?> addMoviesToFavoriteList(@PathVariable UUID userId, @RequestBody Set<UUID> moviesId) {
-        if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
-        }
-        User user = userService.findById(userId);
-        if (!userService.isCurrentUser(user.getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
+    @PostMapping(value = "/favorite-movies")
+    public ResponseEntity<?> addMoviesToFavoriteList(@RequestBody Set<UUID> moviesId) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(currentUser.getUsername());
         if (moviesId.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one movie id."));
         }
-        if (userService.addFavoriteMovies(userService.findById(userId), moviesId) == null) {
+        if (userService.addFavoriteMovies(user, moviesId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movies not found."));
         }
         
@@ -124,64 +111,47 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserFavoriteMoviesList(user));
     }
 
-    @GetMapping(value = "/{userId}/watched-shows")
-    public ResponseEntity<?> getUserWatchedShows(@PathVariable UUID userId) {
-        if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists."));
-        }
-        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
-        return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(userService.findById(userId)));
+    @GetMapping(value = "/watched-shows")
+    public ResponseEntity<?> getUserWatchedShows() {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(currentUser.getUsername());
+        return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(user));
     }
     
-    @GetMapping(value = "/{userId}/favorite-shows")
-    public ResponseEntity<?> getUserFavoriteShows(@PathVariable UUID userId) {
-    	if (userService.findById(userId) == null) {
-    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User doesn't exists"));
-    	}
-        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
-        return ResponseEntity.ok().body(userService.getUserFavoriteTvShowsList(userService.findById(userId)));
+    @GetMapping(value = "/favorite-shows")
+    public ResponseEntity<?> getUserFavoriteShows() {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(currentUser.getUsername());
+        return ResponseEntity.ok().body(userService.getUserFavoriteTvShowsList(user));
     }
 
-    @PostMapping(value = "/{userId}/watched-shows")
-    public ResponseEntity<?> addTvShowsToWatchedList(@PathVariable UUID userId, @RequestBody Set<UUID> tvShowsIds) {
-        if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
-        }
-        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
+    @PostMapping(value = "/watched-shows")
+    public ResponseEntity<?> addTvShowsToWatchedList(@RequestBody Set<UUID> tvShowsIds) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(currentUser.getUsername());
         if (tvShowsIds.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one show id."));
         }
-        if (userService.addWatchedTvShows(userService.findById(userId), tvShowsIds) == null) {
+        if (userService.addWatchedTvShows(user, tvShowsIds) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Shows not found."));
         }
-        User user = userService.findById(userId);
+
         user = userService.addWatchedTvShows(user,tvShowsIds);
         user = userService.update(user.getId(),user);
         return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(user));
     }
     
-    @PostMapping(value = "/{userId}/favorite-shows")
-    public ResponseEntity<?> addTvShowsToFavoriteList(@PathVariable UUID userId, @RequestBody Set<UUID> tvShowsIds) {
-        if (userService.findById(userId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "User not found."));
-        }
-        if (!userService.isCurrentUser(userService.findById(userId).getUsername())) {
-        	return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unathourized."));
-        }
+    @PostMapping(value = "/favorite-shows")
+    public ResponseEntity<?> addTvShowsToFavoriteList(@RequestBody Set<UUID> tvShowsIds) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(currentUser.getUsername());
         if (tvShowsIds.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one show id."));
         }
-        if (userService.addFavoriteTvShows(userService.findById(userId), tvShowsIds) == null) {
+        if (userService.addFavoriteTvShows(user, tvShowsIds) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Shows not found."));
         }
         
-        User user = userService.findById(userId);
         user = userService.addFavoriteTvShows(user, tvShowsIds);
         user = userService.update(user.getId(), user);
         return ResponseEntity.ok().body(userService.getUserFavoriteTvShowsList(user));

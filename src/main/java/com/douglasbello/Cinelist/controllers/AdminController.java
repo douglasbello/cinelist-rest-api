@@ -23,7 +23,7 @@ public class AdminController {
 
     @PostMapping
     public ResponseEntity<RequestResponseDTO> insert(@RequestBody LoginDTO dto) {
-        if (userService.checkIfTheUsernameIsAlreadyInUse(dto.username())) {
+        if (userService.findByUsername(dto.username()) != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Username already in use."));
         }
         if (dto.username() == null || dto.password() == null) {

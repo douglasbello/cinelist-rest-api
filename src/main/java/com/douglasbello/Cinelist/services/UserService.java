@@ -176,20 +176,6 @@ public class UserService implements UserDetailsService {
         user.setPassword(password);
         return repository.save(user);
     }
-
-    public boolean checkIfTheUsernameIsAlreadyInUse(String username) {
-        if (repository.findUserByUsername(username) == null) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean checkIfTheEmailIsAlreadyInUse(String email) {
-        if (repository.findUserByEmail(email) == null) {
-            return false;
-        }
-        return true;
-    }
     
     public Object[] validateUserDto(UserDTO obj) {
     	Object[] errors = new Object[2];
@@ -203,7 +189,7 @@ public class UserService implements UserDetailsService {
         	errors[1] = "Email cannot be shorter than 15 characters.";
         	return errors;
         }
-        if (checkIfTheEmailIsAlreadyInUse(obj.getEmail())) {
+        if (repository.findUserByEmail(obj.getEmail()) != null) {
         	errors[0] = HttpStatus.BAD_REQUEST.value();
         	errors[1] = "Email is already in use.";
         	return errors;
@@ -213,7 +199,7 @@ public class UserService implements UserDetailsService {
         	errors[1] = "Username cannot be shorter than 4 characters or bigger than 16.";
         	return errors;
         }
-        if (checkIfTheUsernameIsAlreadyInUse(obj.getUsername())) {
+        if (findByUsername(obj.getUsername()) != null) {
         	errors[0] = HttpStatus.CONFLICT.value();
         	errors[1] = "Username is already in use.";
         	return errors;

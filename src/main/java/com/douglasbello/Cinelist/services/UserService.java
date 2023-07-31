@@ -68,10 +68,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User update(UUID id,User obj) {
+    public User update(UUID id, User obj) {
         try {
             User entity = repository.getReferenceById(id);
-            updateData(entity,obj);
+            updateData(entity, obj);
             return repository.save(entity);
         } catch (EntityNotFoundException exception) {
             throw new ResourceNotFoundException(id);
@@ -84,66 +84,66 @@ public class UserService implements UserDetailsService {
     }
 
     public User addWatchedMovies(User user, Set<UUID> moviesId) {
-        if (moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0) {
+        if ( moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0 ) {
             return null;
         }
-        for (UUID movieId : moviesId) {
-            if (movieService.findById(movieId) != null) {
+        for ( UUID movieId : moviesId ) {
+            if ( movieService.findById(movieId) != null ) {
                 user.getWatchedMovies().add(movieService.findById(movieId));
             }
         }
         return user;
     }
-    
+
     public User addFavoriteMovies(User user, Set<UUID> moviesId) {
-        if (moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0) {
+        if ( moviesId.stream().map(movieService::findById).collect(Collectors.toSet()).size() == 0 ) {
             return null;
         }
-        for (UUID movieId : moviesId) {
-            if (movieService.findById(movieId) != null) {
+        for ( UUID movieId : moviesId ) {
+            if ( movieService.findById(movieId) != null ) {
                 user.getFavoriteMovies().add(movieService.findById(movieId));
             }
         }
-        return user;    
+        return user;
     }
 
     public Set<MovieDTOResponse> getUserWatchedMoviesList(User user) {
         Set<MovieDTOResponse> response = new HashSet<>();
-        if (user.getWatchedMovies().size() == 0) {
+        if ( user.getWatchedMovies().size() == 0 ) {
             return Collections.emptySet();
         }
-        for (Movie movie : user.getWatchedMovies()) {
+        for ( Movie movie : user.getWatchedMovies() ) {
             response.add(new MovieDTOResponse(movie));
         }
         return response;
     }
-    
+
     public Set<MovieDTOResponse> getUserFavoriteMoviesList(User user) {
         Set<MovieDTOResponse> response = new HashSet<>();
-        if (user.getFavoriteMovies().size() == 0) {
+        if ( user.getFavoriteMovies().size() == 0 ) {
             return Collections.emptySet();
         }
-        for (Movie movie : user.getFavoriteMovies()) {
+        for ( Movie movie : user.getFavoriteMovies() ) {
             response.add(new MovieDTOResponse(movie));
         }
         return response;
     }
 
     public User addWatchedTvShows(User user, Set<UUID> tvShowsIds) {
-        if (tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0) {
+        if ( tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0 ) {
             return null;
         }
-        for (UUID showId : tvShowsIds) {
+        for ( UUID showId : tvShowsIds ) {
             user.getWatchedTvShows().add(tvShowService.findById(showId));
         }
         return user;
     }
-    
+
     public User addFavoriteTvShows(User user, Set<UUID> tvShowsIds) {
-        if (tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0) {
+        if ( tvShowsIds.stream().map(tvShowService::findById).collect(Collectors.toSet()).size() == 0 ) {
             return null;
         }
-        for (UUID showId : tvShowsIds) {
+        for ( UUID showId : tvShowsIds ) {
             user.getFavoriteTvShows().add(tvShowService.findById(showId));
         }
         return user;
@@ -151,21 +151,21 @@ public class UserService implements UserDetailsService {
 
     public Set<TVShowDTOResponse> getUserWatchedTvShowsList(User user) {
         Set<TVShowDTOResponse> response = new HashSet<>();
-        if (user.getWatchedTvShows().size() == 0) {
+        if ( user.getWatchedTvShows().size() == 0 ) {
             return Collections.emptySet();
         }
-        for (TVShow tvShow : user.getWatchedTvShows()) {
+        for ( TVShow tvShow : user.getWatchedTvShows() ) {
             response.add(new TVShowDTOResponse(tvShow));
         }
         return response;
     }
-    
+
     public Set<TVShowDTOResponse> getUserFavoriteTvShowsList(User user) {
         Set<TVShowDTOResponse> response = new HashSet<>();
-        if (user.getFavoriteTvShows().size() == 0) {
+        if ( user.getFavoriteTvShows().size() == 0 ) {
             return Collections.emptySet();
         }
-        for (TVShow tvShow : user.getFavoriteTvShows()) {
+        for ( TVShow tvShow : user.getFavoriteTvShows() ) {
             response.add(new TVShowDTOResponse(tvShow));
         }
         return response;
@@ -176,65 +176,65 @@ public class UserService implements UserDetailsService {
         user.setPassword(password);
         return repository.save(user);
     }
-    
+
     public Object[] validateUserDto(UserDTO obj) {
-    	Object[] errors = new Object[2];
-    	if (obj.getEmail() == null || obj.getUsername() == null) {
-    		errors[0] = HttpStatus.BAD_REQUEST.value();
-    		errors[1] = "The email and username cannot be null.";
-    		return errors;
-    	}
-        if (obj.getEmail().length() < 15) {
-        	errors[0] = HttpStatus.BAD_REQUEST.value();
-        	errors[1] = "Email cannot be shorter than 15 characters.";
-        	return errors;
+        Object[] errors = new Object[2];
+        if ( obj.getEmail() == null || obj.getUsername() == null ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "The email and username cannot be null.";
+            return errors;
         }
-        if (repository.findUserByEmail(obj.getEmail()) != null) {
-        	errors[0] = HttpStatus.BAD_REQUEST.value();
-        	errors[1] = "Email is already in use.";
-        	return errors;
+        if ( obj.getEmail().length() < 15 ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "Email cannot be shorter than 15 characters.";
+            return errors;
         }
-        if (obj.getUsername().length() < 4 || obj.getUsername().length() > 16) {
-        	errors[0] = HttpStatus.BAD_REQUEST.value();
-        	errors[1] = "Username cannot be shorter than 4 characters or bigger than 16.";
-        	return errors;
+        if ( repository.findUserByEmail(obj.getEmail()) != null ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "Email is already in use.";
+            return errors;
         }
-        if (findByUsername(obj.getUsername()) != null) {
-        	errors[0] = HttpStatus.CONFLICT.value();
-        	errors[1] = "Username is already in use.";
-        	return errors;
+        if ( obj.getUsername().length() < 4 || obj.getUsername().length() > 16 ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "Username cannot be shorter than 4 characters or bigger than 16.";
+            return errors;
         }
-    	if (obj.getPassword() == null) {
-    		errors[0] = HttpStatus.BAD_REQUEST.value();
-    		errors[1] = "The password cannot be null.";
-    		return errors;
-    	}
-        if (obj.getUsername().contains(" ")) {
-        	errors[0] = HttpStatus.BAD_REQUEST.value();
-        	errors[1] = "The username cannot contain spaces.";
-        	return errors;
+        if ( findByUsername(obj.getUsername()) != null ) {
+            errors[0] = HttpStatus.CONFLICT.value();
+            errors[1] = "Username is already in use.";
+            return errors;
         }
-        if (obj.getPassword().length() < 8 || obj.getPassword().length() > 100) {
-        	errors[0] = HttpStatus.BAD_REQUEST.value();
-        	errors[1] = "Password cannot be less than 8 or bigger than 100.";
-        	return errors;
+        if ( obj.getPassword() == null ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "The password cannot be null.";
+            return errors;
         }
-        if (obj.getGender() < 1 || obj.getGender() > 3) {
-        	errors[0] = HttpStatus.BAD_REQUEST.value();
-        	errors[1] = "Gender code cannot be bigger than 3 or less than 1.";
-        	return errors;
+        if ( obj.getUsername().contains(" ") ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "The username cannot contain spaces.";
+            return errors;
+        }
+        if ( obj.getPassword().length() < 8 || obj.getPassword().length() > 100 ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "Password cannot be less than 8 or bigger than 100.";
+            return errors;
+        }
+        if ( obj.getGender() < 1 || obj.getGender() > 3 ) {
+            errors[0] = HttpStatus.BAD_REQUEST.value();
+            errors[1] = "Gender code cannot be bigger than 3 or less than 1.";
+            return errors;
         }
         errors[0] = HttpStatus.OK.value();
         return errors;
     }
-    
+
     public boolean isCurrentUser(String username) {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return currentUser.getUsername().equals(username);
     }
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return repository.findByUsername(username);
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByUsername(username);
+    }
 }

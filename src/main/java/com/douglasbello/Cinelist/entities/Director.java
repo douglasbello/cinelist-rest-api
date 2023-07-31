@@ -14,23 +14,24 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_directors")
+@Table( name = "tb_directors" )
 public class Director {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue( strategy = GenerationType.AUTO )
     private UUID id;
     private String name;
     private LocalDate birthDate;
     private int age;
     private int gender;
-    @ManyToMany(mappedBy = "directors")
+    @ManyToMany( mappedBy = "directors" )
     @JsonIgnore
     private Set<Movie> movies = new HashSet<>();
-    @ManyToMany(mappedBy = "directors")
+    @ManyToMany( mappedBy = "directors" )
     @JsonIgnore
     private Set<TVShow> tvShows = new HashSet<>();
 
-    public Director() {}
+    public Director() {
+    }
 
     public Director(UUID id, String name, LocalDate birthDate) {
         this.id = id;
@@ -52,9 +53,10 @@ public class Director {
         this.gender = gender.getCode();
         setAge(this.birthDate);
     }
+
     @PrePersist
     public void generateUuid() {
-        if (this.id == null)
+        if ( this.id == null )
             this.id = UUID.randomUUID();
     }
 
@@ -121,8 +123,8 @@ public class Director {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         Director director = (Director) o;
         return Objects.equals(id, director.id);
     }

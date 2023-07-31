@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admins")
+@RequestMapping( "/admins" )
 public class AdminController {
     private final UserService userService;
 
@@ -23,10 +23,10 @@ public class AdminController {
 
     @PostMapping
     public ResponseEntity<RequestResponseDTO> insert(@RequestBody LoginDTO dto) {
-        if (userService.findByUsername(dto.username()) != null) {
+        if ( userService.findByUsername(dto.username()) != null ) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Username already in use."));
         }
-        if (dto.username() == null || dto.password() == null) {
+        if ( dto.username() == null || dto.password() == null ) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Username and password cannot be null."));
         }
         UserDTO user = new UserDTO();

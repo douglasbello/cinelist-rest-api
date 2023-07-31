@@ -16,8 +16,8 @@ public enum Gender {
     }
 
     public static Gender valueOf(int code) {
-        for (Gender value : Gender.values()) {
-            if (value.getCode() == code) {
+        for ( Gender value : Gender.values() ) {
+            if ( value.getCode() == code ) {
                 return value;
             }
         }

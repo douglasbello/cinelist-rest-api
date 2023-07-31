@@ -14,7 +14,8 @@ public class ActorDTO {
     private int age;
     private int gender;
 
-    public ActorDTO() {}
+    public ActorDTO() {
+    }
 
     public ActorDTO(UUID id, String name, String birthDate, int gender) {
         this.id = id;
@@ -57,9 +58,9 @@ public class ActorDTO {
     }
 
     public Gender getGender() {
-    	if (gender < 1 || gender > 3) {
-    		return Gender.MALE;
-    	}
+        if ( gender < 1 || gender > 3 ) {
+            return Gender.MALE;
+        }
         return Gender.valueOf(gender);
     }
 
@@ -77,8 +78,8 @@ public class ActorDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         ActorDTO actorDTO = (ActorDTO) o;
         return Objects.equals(id, actorDTO.id);
     }

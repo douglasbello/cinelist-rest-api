@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@Profile("test")
+@Profile( "test" )
 public class ApplicationTest implements CommandLineRunner {
 
     private final UserService userService;
@@ -48,26 +48,26 @@ public class ApplicationTest implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        User user = new User("user01@outlook.com","user01","user01", Gender.MALE);
+        User user = new User("user01@outlook.com", "user01", "user01", Gender.MALE);
         user.setRole(UserRole.ADMIN);
         userService.insert(user);
 
-        Genres scienceFiction = new Genres(null,"Science fiction");
-        Genres adventure = new Genres(null,"Adventure");
-        Genres crime = new Genres(null,"Crime");
-        genresService.insertAll(Arrays.asList(scienceFiction,adventure,crime));
+        Genres scienceFiction = new Genres(null, "Science fiction");
+        Genres adventure = new Genres(null, "Adventure");
+        Genres crime = new Genres(null, "Crime");
+        genresService.insertAll(Arrays.asList(scienceFiction, adventure, crime));
 
-        LocalDate christopherBirthDate = LocalDate.of(1970,07,30);
-        Director christopherNolan = new Director(null,"Christopher Nolan",christopherBirthDate,Gender.MALE);
+        LocalDate christopherBirthDate = LocalDate.of(1970, 07, 30);
+        Director christopherNolan = new Director(null, "Christopher Nolan", christopherBirthDate, Gender.MALE);
         christopherNolan = directorService.insert(christopherNolan);
 
-        LocalDate matthewBirthDate = LocalDate.of(1969,11,4);
-        Actor matthew = new Actor(null,"Matthew McConaughey",matthewBirthDate,Gender.MALE);
+        LocalDate matthewBirthDate = LocalDate.of(1969, 11, 4);
+        Actor matthew = new Actor(null, "Matthew McConaughey", matthewBirthDate, Gender.MALE);
         matthew = actorService.insert(new ActorDTO(matthew));
-        LocalDate jessicaBirthDate = LocalDate.of(1977,3,24);
+        LocalDate jessicaBirthDate = LocalDate.of(1977, 3, 24);
         Actor jessica = new Actor(null, "Jessica Chastain", jessicaBirthDate, Gender.FEMALE);
         jessica = actorService.insert(new ActorDTO(jessica));
-        LocalDate anneBirthDate = LocalDate.of(1982,11,12);
+        LocalDate anneBirthDate = LocalDate.of(1982, 11, 12);
         Actor anne = new Actor(null, "Anne Hathaway", anneBirthDate, Gender.FEMALE);
         anne = actorService.insert(new ActorDTO(anne));
 
@@ -76,15 +76,15 @@ public class ApplicationTest implements CommandLineRunner {
         movie.getGenre().add(scienceFiction);
         movie.getGenre().add(adventure);
         movie.getDirectors().add(christopherNolan);
-        movie.getActors().addAll(Arrays.asList(matthew,jessica,anne));
+        movie.getActors().addAll(Arrays.asList(matthew, jessica, anne));
         movie = movieService.insert(movie);
 
         Genres horror = new Genres(null, "Horror");
         genresService.insert(horror);
-        
+
         Map<Integer, Integer> maps = new HashMap<>();
         TVShow tv = new TVShow("The Office", "bla bla bla", "2003", maps);
-        tv.putSeasonAndEpisodeAndUpdate(1,24);
+        tv.putSeasonAndEpisodeAndUpdate(1, 24);
         tvShowService.insert(tv);
         tv.getDirectors().add(christopherNolan);
         tv.getGenre().add(horror);
@@ -94,8 +94,8 @@ public class ApplicationTest implements CommandLineRunner {
         User user2 = new User("user02", "user02", "user02", Gender.FEMALE);
         UserDTO dto = new UserDTO(user2);
         User obj = userService.signIn(dto);
-        
-        Comment comment = new Comment(obj,movie, "didn't understand shit.");
+
+        Comment comment = new Comment(obj, movie, "didn't understand shit.");
         commentService.insert(comment);
     }
 }

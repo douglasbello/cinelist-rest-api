@@ -7,6 +7,7 @@ import java.util.UUID;
 public class GenresDTO {
     private UUID id;
     private String genre;
+
     public GenresDTO() {
     }
 

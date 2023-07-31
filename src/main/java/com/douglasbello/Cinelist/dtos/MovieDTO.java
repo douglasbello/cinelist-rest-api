@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class MovieDTO {
     private UUID id;
@@ -23,7 +22,8 @@ public class MovieDTO {
     private Set<UUID> actorsIds = new HashSet<>();
     private Set<Actor> actors = new HashSet<>();
 
-    public MovieDTO() {}
+    public MovieDTO() {
+    }
 
     public MovieDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> genresIds, Set<UUID> directorsIds, Set<UUID> actorsIds) {
         this.id = id;
@@ -103,8 +103,8 @@ public class MovieDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         MovieDTO movieDTO = (MovieDTO) o;
         return Objects.equals(id, movieDTO.id);
     }

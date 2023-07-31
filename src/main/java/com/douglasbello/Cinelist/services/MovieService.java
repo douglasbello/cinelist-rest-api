@@ -57,10 +57,10 @@ public class MovieService {
         }
     }
 
-    public Movie update(UUID id,Movie obj) {
+    public Movie update(UUID id, Movie obj) {
         try {
             Movie entity = repository.getReferenceById(id);
-            updateData(entity,obj);
+            updateData(entity, obj);
             return repository.save(entity);
         } catch (EntityNotFoundException exception) {
             throw new ResourceNotFoundException(id);
@@ -74,7 +74,7 @@ public class MovieService {
 
     public Set<MovieDTOResponse> findMovieByTitle(String title) {
         title = title.replace("-", " ");
-        if (!repository.findMovieByTitleContainingIgnoreCase(title).isEmpty()) {
+        if ( !repository.findMovieByTitleContainingIgnoreCase(title).isEmpty() ) {
             return repository.findMovieByTitleContainingIgnoreCase(title).stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
         }
         return null;
@@ -82,20 +82,20 @@ public class MovieService {
 
     public Set<ActorDTO> getMovieActors(Movie movie) {
         Set<ActorDTO> response = new HashSet<>();
-        if (movie.getActors().isEmpty()) {
+        if ( movie.getActors().isEmpty() ) {
             return Collections.emptySet();
         }
-        for (Actor actor : movie.getActors()) {
+        for ( Actor actor : movie.getActors() ) {
             response.add(new ActorDTO(actor));
         }
         return response;
     }
 
     public Movie addActorsToMovie(Movie movie, Set<UUID> actorsIds) {
-        if (actorsIds.stream().map(actorService::findById).collect(Collectors.toSet()).isEmpty()) {
+        if ( actorsIds.stream().map(actorService::findById).collect(Collectors.toSet()).isEmpty() ) {
             return null;
         }
-        for (UUID showId : actorsIds) {
+        for ( UUID showId : actorsIds ) {
             movie.getActors().add(actorService.findById(showId));
         }
         return movie;
@@ -103,45 +103,45 @@ public class MovieService {
 
     public MovieDTO getRelatedEntities(MovieDTO movieDTO) {
         // this if is verifying if the directorIds, genresIds and actorsIds will return empty collections, if all three return empty collections the method just return the dto
-        if (movieDTO.getDirectorsIds().stream().map(directorService::findById).collect(Collectors.toSet()).size() == 0 &&
-            movieDTO.getGenresIds().stream().map(genresService::findById).toList().size() == 0 &&
-            movieDTO.getActors().stream().map(a -> actorService.findById(a.getId())).collect(Collectors.toSet()).size() == 0) {
+        if ( movieDTO.getDirectorsIds().stream().map(directorService::findById).collect(Collectors.toSet()).size() == 0 &&
+                movieDTO.getGenresIds().stream().map(genresService::findById).toList().size() == 0 &&
+                movieDTO.getActors().stream().map(a -> actorService.findById(a.getId())).collect(Collectors.toSet()).size() == 0 ) {
             return movieDTO;
         }
-        for (UUID directorId : movieDTO.getDirectorsIds()) {
-            if (directorService.findById(directorId) != null) {
+        for ( UUID directorId : movieDTO.getDirectorsIds() ) {
+            if ( directorService.findById(directorId) != null ) {
                 movieDTO.getDirectors().add(directorService.findById(directorId));
             }
         }
-        for (UUID genresId : movieDTO.getGenresIds()) {
-            if (genresService.findById(genresId) != null) {
+        for ( UUID genresId : movieDTO.getGenresIds() ) {
+            if ( genresService.findById(genresId) != null ) {
                 movieDTO.getGenres().add(genresService.findById(genresId));
             }
         }
-        for (UUID actorId : movieDTO.getActorsIds()) {
-            if (actorService.findById(actorId) != null) {
+        for ( UUID actorId : movieDTO.getActorsIds() ) {
+            if ( actorService.findById(actorId) != null ) {
                 movieDTO.getActors().add(actorService.findById(actorId));
             }
         }
         return movieDTO;
     }
-    
+
     public Object[] rateMovie(RateDTO dto, User user) {
-    	Object[] response = new Object[2];
-    	if (this.findById(dto.movieId()) != null) {
-    		Movie movie = this.findById(dto.movieId());
-    		Map<UUID, Double> ratings = movie.getRatings();
-    		if (ratings.containsKey(dto.userId())) {
-    			ratings.remove(dto.userId());
-    		}
-    		ratings.put(dto.userId(), dto.rate());
-    		movie.setRate();
-    		this.update(movie.getId(), movie);
-    		response[0] = HttpStatus.OK.value();
-    		return response;
-    	}
-    	response[0] = HttpStatus.NOT_FOUND.value();
-    	response[1] = "Movie not found.";
-    	return response;
+        Object[] response = new Object[2];
+        if ( this.findById(dto.movieId()) != null ) {
+            Movie movie = this.findById(dto.movieId());
+            Map<UUID, Double> ratings = movie.getRatings();
+            if ( ratings.containsKey(dto.userId()) ) {
+                ratings.remove(dto.userId());
+            }
+            ratings.put(dto.userId(), dto.rate());
+            movie.setRate();
+            this.update(movie.getId(), movie);
+            response[0] = HttpStatus.OK.value();
+            return response;
+        }
+        response[0] = HttpStatus.NOT_FOUND.value();
+        response[1] = "Movie not found.";
+        return response;
     }
 }

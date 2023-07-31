@@ -9,16 +9,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_genres")
+@Table( name = "tb_genres" )
 public class Genres {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue( strategy = GenerationType.AUTO )
     private UUID id;
     private String genre;
-    @ManyToMany(mappedBy = "genre")
+    @ManyToMany( mappedBy = "genre" )
     @JsonIgnore
     private List<Movie> movie = new ArrayList<>();
-    @ManyToMany(mappedBy = "genres")
+    @ManyToMany( mappedBy = "genres" )
     @JsonIgnore
     private List<TVShow> tvShow = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class Genres {
 
     @PrePersist
     public void generateUuid() {
-        if (this.id == null)
+        if ( this.id == null )
             this.id = UUID.randomUUID();
     }
 
@@ -62,8 +62,8 @@ public class Genres {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         Genres genres = (Genres) o;
         return id.equals(genres.id);
     }

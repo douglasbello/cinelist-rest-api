@@ -6,7 +6,6 @@ import com.douglasbello.Cinelist.dtos.TVShowDTO;
 import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Actor;
-import com.douglasbello.Cinelist.entities.TVShow;
 import com.douglasbello.Cinelist.repositories.ActorRepository;
 import org.springframework.stereotype.Service;
 
@@ -40,14 +39,14 @@ public class ActorService {
 
     public Actor findByName(String name) {
         name = name.replace("-", " ");
-        if (actorRepository.findByNameContainingIgnoreCase(name) != null) {
+        if ( actorRepository.findByNameContainingIgnoreCase(name) != null ) {
             return actorRepository.findByNameContainingIgnoreCase(name);
         }
         return null;
     }
 
     public Set<MovieDTOResponse> findMoviesByActorId(UUID id) {
-        if (findById(id) == null) {
+        if ( findById(id) == null ) {
             return Collections.emptySet();
         }
         Actor actor = findById(id);
@@ -55,7 +54,7 @@ public class ActorService {
     }
 
     public Set<MovieDTOResponse> findMoviesByActorName(String name) {
-        if (findByName(name) == null) {
+        if ( findByName(name) == null ) {
             return Collections.emptySet();
         }
         Actor actor = findByName(name);
@@ -63,7 +62,7 @@ public class ActorService {
     }
 
     public Set<TVShowDTOResponse> findShowsByActorId(UUID id) {
-        if (findById(id) == null) {
+        if ( findById(id) == null ) {
             return Collections.emptySet();
         }
         Actor actor = findById(id);
@@ -71,7 +70,7 @@ public class ActorService {
     }
 
     public Set<TVShowDTOResponse> findShowsByActorName(String name) {
-        if (findByName(name) == null) {
+        if ( findByName(name) == null ) {
             return Collections.emptySet();
         }
         Actor actor = findByName(name);

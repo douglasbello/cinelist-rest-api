@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/genres")
+@RequestMapping( value = "/genres" )
 public class GenresController {
 
     private final GenresService service;
@@ -25,17 +25,17 @@ public class GenresController {
         return ResponseEntity.ok().body(service.findAll());
     }
 
-    @GetMapping(value = "/id/{id}")
+    @GetMapping( value = "/id/{id}" )
     public ResponseEntity<?> findById(@PathVariable UUID id) {
-        if (service.findById(id) == null) {
+        if ( service.findById(id) == null ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Genre not found."));
         }
         return ResponseEntity.ok().body(service.findById(id));
     }
 
-    @GetMapping(value = "/name/{name}")
+    @GetMapping( value = "/name/{name}" )
     public ResponseEntity<?> findByName(@PathVariable String name) {
-        if (service.findByGenre(name) == null) {
+        if ( service.findByGenre(name) == null ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Genre not found."));
         }
         return ResponseEntity.ok().body(service.findByGenre(name));
@@ -43,7 +43,7 @@ public class GenresController {
 
     @PostMapping
     public ResponseEntity<?> insert(@RequestBody GenresDTO dto) {
-        if (dto.getGenre().length() < 1) {
+        if ( dto.getGenre().length() < 1 ) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Genre name cannot be empty."));
         }
         return ResponseEntity.ok().body(service.insert(Mapper.dtoToGenres(dto)));

@@ -17,7 +17,8 @@ public class TVShowDTOResponse {
     private Set<Director> directors = new HashSet<>();
     private Map<Integer, Integer> seasonsAndEpisodes = new HashMap<>();
 
-    public TVShowDTOResponse() {}
+    public TVShowDTOResponse() {
+    }
 
     public TVShowDTOResponse(TVShow tvShow) {
         this.id = tvShow.getId();
@@ -91,8 +92,8 @@ public class TVShowDTOResponse {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         TVShowDTOResponse tvShowDTOResponse = (TVShowDTOResponse) o;
         return Objects.equals(id, tvShowDTOResponse.id);
     }

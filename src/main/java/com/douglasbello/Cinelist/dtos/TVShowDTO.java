@@ -4,10 +4,8 @@ import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Genres;
 import com.douglasbello.Cinelist.entities.TVShow;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TVShowDTO {
     private UUID id;
@@ -22,7 +20,8 @@ public class TVShowDTO {
     private Set<UUID> directorsIds = new HashSet<>();
     private Map<Integer, Integer> seasonsAndEpisodes = new HashMap<>();
 
-    public TVShowDTO() {}
+    public TVShowDTO() {
+    }
 
     public TVShowDTO(UUID id, String title, String overview, String releaseYear, Map<Integer, Integer> seasonsAndEpisodes) {
         this.id = id;
@@ -43,7 +42,7 @@ public class TVShowDTO {
         this.seasonsAndEpisodes = seasonsAndEpisodes;
     }
 
-    public TVShowDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> actorsIds, Set<UUID> genresIds,Map<Integer, Integer> seasonsAndEpisodes, Set<UUID> directorsIds) {
+    public TVShowDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> actorsIds, Set<UUID> genresIds, Map<Integer, Integer> seasonsAndEpisodes, Set<UUID> directorsIds) {
         this.id = id;
         this.title = title;
         this.overview = overview;
@@ -127,8 +126,8 @@ public class TVShowDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         TVShowDTO tvShowDTO = (TVShowDTO) o;
         return Objects.equals(id, tvShowDTO.id);
     }

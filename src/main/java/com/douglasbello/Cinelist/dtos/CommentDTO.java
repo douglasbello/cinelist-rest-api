@@ -38,10 +38,10 @@ public class CommentDTO {
     }
 
     public void setShowOrMovieIdFromObj(Comment comment) {
-        if (comment.getTvShow() == null) {
+        if ( comment.getTvShow() == null ) {
             showOrMovieId = comment.getMovie().getId();
         }
-        if (comment.getMovie() == null) {
+        if ( comment.getMovie() == null ) {
             showOrMovieId = comment.getTvShow().getId();
         }
     }
@@ -60,8 +60,8 @@ public class CommentDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         CommentDTO that = (CommentDTO) o;
         return Objects.equals(userId, that.userId);
     }

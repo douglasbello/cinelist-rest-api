@@ -4,11 +4,8 @@ import com.douglasbello.Cinelist.dtos.GenresDTO;
 import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
 import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.entities.Genres;
-import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.GenresRepository;
-import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,14 +40,14 @@ public class GenresService {
 
     public GenresDTO findByGenre(String name) {
         name = name.replace("-", " ");
-        if (repository.findByGenreContainingIgnoreCase(name) == null) {
+        if ( repository.findByGenreContainingIgnoreCase(name) == null ) {
             return null;
         }
         return new GenresDTO(repository.findByGenreContainingIgnoreCase(name));
     }
 
     public Set<MovieDTOResponse> findMoviesByGenreId(UUID id) {
-        if (findById(id) == null) {
+        if ( findById(id) == null ) {
             return Collections.emptySet();
         }
         Genres genre = findById(id);
@@ -58,7 +55,7 @@ public class GenresService {
     }
 
     public Set<MovieDTOResponse> findMoviesByGenreName(String name) {
-        if (findByGenre(name) == null) {
+        if ( findByGenre(name) == null ) {
             return Collections.emptySet();
         }
         name = name.replace("-", " ");
@@ -67,7 +64,7 @@ public class GenresService {
     }
 
     public Set<TVShowDTOResponse> findShowsByGenreId(UUID id) {
-        if (findById(id) == null) {
+        if ( findById(id) == null ) {
             return Collections.emptySet();
         }
         Genres genres = findById(id);
@@ -75,7 +72,7 @@ public class GenresService {
     }
 
     public Set<TVShowDTOResponse> findShowsByGenreName(String name) {
-        if (findByGenre(name) == null) {
+        if ( findByGenre(name) == null ) {
             return Collections.emptySet();
         }
         name = name.replace("-", " ");

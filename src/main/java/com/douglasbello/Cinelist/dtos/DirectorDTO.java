@@ -14,7 +14,8 @@ public class DirectorDTO {
     private int age;
     private int gender;
 
-    public DirectorDTO() {}
+    public DirectorDTO() {
+    }
 
     public DirectorDTO(UUID id) {
         this.id = id;
@@ -85,8 +86,8 @@ public class DirectorDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         DirectorDTO that = (DirectorDTO) o;
         return Objects.equals(id, that.id);
     }

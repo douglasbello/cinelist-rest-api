@@ -17,7 +17,8 @@ public class MovieDTOResponse {
     private Set<Actor> actors = new HashSet<>();
     private Set<Director> directors = new HashSet<>();
 
-    public MovieDTOResponse() {}
+    public MovieDTOResponse() {
+    }
 
     public MovieDTOResponse(Movie movie) {
         this.id = movie.getId();
@@ -85,8 +86,8 @@ public class MovieDTOResponse {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         MovieDTOResponse movieDTO = (MovieDTOResponse) o;
         return Objects.equals(id, movieDTO.id);
     }

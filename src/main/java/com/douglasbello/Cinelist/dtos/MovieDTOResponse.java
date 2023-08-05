@@ -31,7 +31,6 @@ public class MovieDTOResponse {
     }
 
     public MovieDTOResponse(MovieDTO dto) {
-        this.id = dto.getId();
         this.title = dto.getTitle();
         this.overview = dto.getOverview();
         this.releaseYear = dto.getReleaseYear();

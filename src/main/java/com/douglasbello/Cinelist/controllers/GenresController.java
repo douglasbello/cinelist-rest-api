@@ -43,9 +43,6 @@ public class GenresController {
 
     @PostMapping
     public ResponseEntity<?> insert(@RequestBody GenresDTO dto) {
-        if ( dto.getGenre().length() < 1 ) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Genre name cannot be empty."));
-        }
         return ResponseEntity.ok().body(service.insert(Mapper.dtoToGenres(dto)));
     }
 }

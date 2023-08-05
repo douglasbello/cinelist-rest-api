@@ -40,8 +40,7 @@ public class Director {
         setAge(this.birthDate);
     }
 
-    public Director(UUID id, String name, int gender) {
-        this.id = id;
+    public Director(String name, int gender) {
         this.name = name;
         this.gender = gender;
     }

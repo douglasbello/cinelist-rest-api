@@ -33,7 +33,7 @@ public class AdminController {
         user.setUsername(dto.username());
         user.setPassword(dto.password());
         user.setRole(UserRole.ADMIN);
-        userService.signIn(user);
+//        userService.signIn(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResponseDTO(HttpStatus.CREATED.value(), "Admin created successfully!"));
     }
 }

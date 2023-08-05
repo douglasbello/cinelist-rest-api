@@ -93,9 +93,9 @@ public class ApplicationTest implements CommandLineRunner {
 
         User user2 = new User("user02", "user02", "user02", Gender.FEMALE);
         UserDTO dto = new UserDTO(user2);
-        User obj = userService.signIn(dto);
+        user2 = userService.signIn(user2);
 
-        Comment comment = new Comment(obj, movie, "didn't understand shit.");
+        Comment comment = new Comment(user2, movie, "didn't understand shit.");
         commentService.insert(comment);
     }
 }

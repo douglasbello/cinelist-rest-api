@@ -1,9 +1,7 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.LoginDTO;
-import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
-import com.douglasbello.Cinelist.dtos.TokenDTO;
-import com.douglasbello.Cinelist.dtos.UserDTO;
+import com.douglasbello.Cinelist.dtos.*;
+import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.entities.enums.UserRole;
 import com.douglasbello.Cinelist.security.TokenService;
@@ -40,15 +38,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/sign-in")
-    public ResponseEntity<?> signIn(@RequestBody UserDTO obj) {
-        Object[] errors = userService.validateUserDto(obj);
-        int errorCode = (int) errors[0];
-        if (errorCode != HttpStatus.OK.value()) {
-            return ResponseEntity.status(HttpStatus.valueOf(errorCode)).body(new RequestResponseDTO(errorCode, errors[1].toString()));
+    public ResponseEntity<?> signIn(@RequestBody UserSignInDTO dto) {
+        if (userService.findByEmail(dto.getEmail()) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(HttpStatus.CONFLICT.value(), "Email already in use."));
         }
-        obj.setRole(UserRole.USER);
-        userService.signIn(obj);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResponseDTO(HttpStatus.CREATED.value(), "Account created successfully!"));
+        if (userService.findByUsername(dto.getUsername()) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(HttpStatus.CONFLICT.value(), "Username already in use."));
+        }
+        UserDTO response = new UserDTO(userService.signIn(Mapper.dtoToUser(dto)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping(value = "/login")

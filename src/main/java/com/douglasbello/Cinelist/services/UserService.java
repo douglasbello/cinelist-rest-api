@@ -51,9 +51,18 @@ public class UserService implements UserDetailsService {
         return repository.findUserByUsername(username);
     }
 
-    public User signIn(UserDTO dto) {
-        User user = Mapper.dtoToUser(dto);
+    public User findByEmail(String email) {
+        return repository.findUserByEmail(email);
+    }
+
+    public User signIn(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.save(user);
+    }
+
+    public User insert(User user) {
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
         return repository.save(user);
     }
 
@@ -170,66 +179,10 @@ public class UserService implements UserDetailsService {
         return response;
     }
 
-    public User insert(User user) {
-        String password = passwordEncoder.encode(user.getPassword());
-        user.setPassword(password);
-        return repository.save(user);
-    }
-
-    public Object[] validateUserDto(UserDTO obj) {
-        Object[] errors = new Object[2];
-        if (obj.getEmail() == null || obj.getUsername() == null) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "The email and username cannot be null.";
-            return errors;
-        }
-        if (obj.getEmail().length() < 15) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "Email cannot be shorter than 15 characters.";
-            return errors;
-        }
-        if (repository.findUserByEmail(obj.getEmail()) != null) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "Email is already in use.";
-            return errors;
-        }
-        if (obj.getUsername().length() < 4 || obj.getUsername().length() > 16) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "Username cannot be shorter than 4 characters or bigger than 16.";
-            return errors;
-        }
-        if (findByUsername(obj.getUsername()) != null) {
-            errors[0] = HttpStatus.CONFLICT.value();
-            errors[1] = "Username is already in use.";
-            return errors;
-        }
-        if (obj.getPassword() == null) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "The password cannot be null.";
-            return errors;
-        }
-        if (obj.getUsername().contains(" ")) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "The username cannot contain spaces.";
-            return errors;
-        }
-        if (obj.getPassword().length() < 8 || obj.getPassword().length() > 100) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "Password cannot be less than 8 or bigger than 100.";
-            return errors;
-        }
-        if (obj.getGender() < 1 || obj.getGender() > 3) {
-            errors[0] = HttpStatus.BAD_REQUEST.value();
-            errors[1] = "Gender code cannot be bigger than 3 or less than 1.";
-            return errors;
-        }
-        errors[0] = HttpStatus.OK.value();
-        return errors;
-    }
-
-    public boolean isCurrentUser(String username) {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return currentUser.getUsername().equals(username);
+    public User getCurrentUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = repository.findUserByUsername(user.getUsername());
+        return currentUser;
     }
 
     @Override

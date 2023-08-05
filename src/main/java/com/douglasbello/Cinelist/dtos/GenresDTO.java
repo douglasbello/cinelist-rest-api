@@ -1,11 +1,13 @@
 package com.douglasbello.Cinelist.dtos;
 
 import com.douglasbello.Cinelist.entities.Genres;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
 public class GenresDTO {
     private UUID id;
+    @NotBlank(message = "The genre name cannot be null.")
     private String genre;
 
     public GenresDTO() {

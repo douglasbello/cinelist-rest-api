@@ -2,6 +2,7 @@ package com.douglasbello.Cinelist.dtos.mapper;
 
 import com.douglasbello.Cinelist.dtos.*;
 import com.douglasbello.Cinelist.entities.*;
+import com.douglasbello.Cinelist.entities.enums.UserRole;
 import com.douglasbello.Cinelist.services.MovieService;
 import com.douglasbello.Cinelist.services.TVShowService;
 import com.douglasbello.Cinelist.services.UserService;
@@ -27,12 +28,12 @@ public class Mapper {
     }
 
     public static Movie dtoToMovie(MovieDTO dto) {
-        Movie movie = new Movie(dto.getId(), dto.getTitle(), dto.getOverview(), dto.getReleaseYear(), dto.getDirectors(), dto.getGenres(), dto.getActors());
+        Movie movie = new Movie(dto.getTitle(), dto.getOverview(), dto.getReleaseYear(), dto.getDirectors(), dto.getGenres(), dto.getActors());
         return movie;
     }
 
-    public static User dtoToUser(UserDTO dto) {
-        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getGender(), dto.getRole());
+    public static User dtoToUser(UserSignInDTO dto) {
+        User user = new User(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getGender(), UserRole.USER);
         return user;
     }
 
@@ -42,14 +43,14 @@ public class Mapper {
         return actor;
     }
 
-    public static Director dtoToDirector(DirectorDTO dto) {
-        Director director = new Director(dto.getId(), dto.getName(), dto.getGender().getCode());
+    public static Director dtoToDirector(DirectorInputDTO dto) {
+        Director director = new Director(dto.getName(), dto.getGender());
         director.setBirthDate(dto.getBirthDate());
         return director;
     }
 
     public static Genres dtoToGenres(GenresDTO dto) {
-        Genres genres = new Genres(dto.getId(), dto.getGenre());
+        Genres genres = new Genres(dto.getGenre());
         return genres;
     }
 

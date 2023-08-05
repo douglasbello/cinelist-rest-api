@@ -30,6 +30,10 @@ public class Genres {
         this.genre = genre;
     }
 
+    public Genres(String genre) {
+        this.genre = genre;
+    }
+
     @PrePersist
     public void generateUuid() {
         if ( this.id == null )

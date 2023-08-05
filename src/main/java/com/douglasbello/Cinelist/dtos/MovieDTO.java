@@ -4,6 +4,9 @@ import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Genres;
 import com.douglasbello.Cinelist.entities.Movie;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,22 +14,29 @@ import java.util.Set;
 import java.util.UUID;
 
 public class MovieDTO {
-    private UUID id;
+    @NotBlank(message = "The movie title cannot be blank.")
     private String title;
+    @NotBlank(message = "The movie overview cannot be blank.")
     private String overview;
+    @NotBlank(message = "You must provide the release year.")
     private String releaseYear;
+    @NotEmpty(message = "You must provide at least one genre id.")
     private Set<UUID> genresIds = new HashSet<>();
+    @NotEmpty(message = "You must provide at least one director id.")
     private Set<UUID> directorsIds = new HashSet<>();
+    @JsonIgnore
     private Set<Genres> genres = new HashSet<>();
+    @JsonIgnore
     private Set<Director> directors = new HashSet<>();
+    @NotEmpty(message = "You must provide at least one actor id.")
     private Set<UUID> actorsIds = new HashSet<>();
+    @JsonIgnore
     private Set<Actor> actors = new HashSet<>();
 
     public MovieDTO() {
     }
 
-    public MovieDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> genresIds, Set<UUID> directorsIds, Set<UUID> actorsIds) {
-        this.id = id;
+    public MovieDTO(String title, String overview, String releaseYear, Set<UUID> genresIds, Set<UUID> directorsIds, Set<UUID> actorsIds) {
         this.title = title;
         this.overview = overview;
         this.releaseYear = releaseYear;
@@ -36,21 +46,12 @@ public class MovieDTO {
     }
 
     public MovieDTO(Movie movie) {
-        this.id = movie.getId();
         this.title = movie.getTitle();
         this.overview = movie.getOverview();
         this.releaseYear = movie.getReleaseYear();
         this.directors = movie.getDirectors();
         this.genres = movie.getGenre();
         this.actors = movie.getActors();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -99,18 +100,5 @@ public class MovieDTO {
 
     public Set<Actor> getActors() {
         return actors;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-        MovieDTO movieDTO = (MovieDTO) o;
-        return Objects.equals(id, movieDTO.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

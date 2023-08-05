@@ -21,7 +21,7 @@ public class Mapper {
     private static UserService userService;
 
     public static TVShow dtoToTVShow(TVShowDTO dto) {
-        TVShow tvShow = new TVShow(dto.getId(), dto.getTitle(), dto.getOverview(), dto.getReleaseYear(), dto.getDirectors(),
+        TVShow tvShow = new TVShow(dto.getTitle(), dto.getOverview(), dto.getReleaseYear(), dto.getDirectors(),
                 dto.getSeasonsAndEpisodes(), dto.getGenres(), dto.getActors());
         return tvShow;
     }

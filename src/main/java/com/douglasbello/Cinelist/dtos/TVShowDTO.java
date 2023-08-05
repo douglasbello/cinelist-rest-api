@@ -8,7 +8,6 @@ import com.douglasbello.Cinelist.entities.TVShow;
 import java.util.*;
 
 public class TVShowDTO {
-    private UUID id;
     private String title;
     private String overview;
     private String releaseYear;
@@ -23,16 +22,14 @@ public class TVShowDTO {
     public TVShowDTO() {
     }
 
-    public TVShowDTO(UUID id, String title, String overview, String releaseYear, Map<Integer, Integer> seasonsAndEpisodes) {
-        this.id = id;
+    public TVShowDTO(String title, String overview, String releaseYear, Map<Integer, Integer> seasonsAndEpisodes) {
         this.title = title;
         this.overview = overview;
         this.releaseYear = releaseYear;
         this.seasonsAndEpisodes = seasonsAndEpisodes;
     }
 
-    public TVShowDTO(UUID id, String title, String overview, String releaseYear, Set<Actor> actors, List<Genres> genres, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes) {
-        this.id = id;
+    public TVShowDTO(String title, String overview, String releaseYear, Set<Actor> actors, List<Genres> genres, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes) {
         this.title = title;
         this.overview = overview;
         this.releaseYear = releaseYear;
@@ -42,8 +39,7 @@ public class TVShowDTO {
         this.seasonsAndEpisodes = seasonsAndEpisodes;
     }
 
-    public TVShowDTO(UUID id, String title, String overview, String releaseYear, Set<UUID> actorsIds, Set<UUID> genresIds, Map<Integer, Integer> seasonsAndEpisodes, Set<UUID> directorsIds) {
-        this.id = id;
+    public TVShowDTO(String title, String overview, String releaseYear, Set<UUID> actorsIds, Set<UUID> genresIds, Map<Integer, Integer> seasonsAndEpisodes, Set<UUID> directorsIds) {
         this.title = title;
         this.overview = overview;
         this.releaseYear = releaseYear;
@@ -54,7 +50,6 @@ public class TVShowDTO {
     }
 
     public TVShowDTO(TVShow obj) {
-        this.id = obj.getId();
         this.title = obj.getTitle();
         this.overview = obj.getOverview();
         this.releaseYear = obj.getReleaseYear();
@@ -62,14 +57,6 @@ public class TVShowDTO {
         this.genres = obj.getGenre();
         this.directors = obj.getDirectors();
         this.seasonsAndEpisodes = obj.getSeasonsAndEpisodes();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -122,18 +109,5 @@ public class TVShowDTO {
 
     public Set<UUID> getActorsIds() {
         return actorsIds;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-        TVShowDTO tvShowDTO = (TVShowDTO) o;
-        return Objects.equals(id, tvShowDTO.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

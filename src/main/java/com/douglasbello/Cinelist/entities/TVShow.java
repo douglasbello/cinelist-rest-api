@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
-@Table( name = "tb_tvshows" )
+@Table(name = "tb_tvshows")
 public class TVShow {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String title;
     private String overview;
@@ -17,25 +17,25 @@ public class TVShow {
     private Integer episodes;
     private String releaseYear;
     @ManyToMany
-    @JoinTable( name = "tb_director_tvshow", joinColumns = @JoinColumn( name = "tvshow_id" ), inverseJoinColumns = @JoinColumn( name = "director_id" ) )
+    @JoinTable(name = "tb_director_tvshow", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
     private Set<Director> directors = new HashSet<>();
     @ManyToMany
-    @JoinTable( name = "tb_actor_tvshow", joinColumns = @JoinColumn( name = "tvshow_id" ), inverseJoinColumns = @JoinColumn( name = "actor_id" ) )
+    @JoinTable(name = "tb_actor_tvshow", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Actor> actors = new HashSet<>();
-    @OneToMany( mappedBy = "tvShow", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
     @ElementCollection
-    @CollectionTable( name = "seasons_episodes", joinColumns = @JoinColumn( name = "tv_show_id" ) )
-    @MapKeyColumn( name = "season" )
-    @Column( name = "episodes" )
+    @CollectionTable(name = "seasons_episodes", joinColumns = @JoinColumn(name = "tv_show_id"))
+    @MapKeyColumn(name = "season")
+    @Column(name = "episodes")
     private Map<Integer, Integer> seasonsAndEpisodes = new HashMap<>();
     @ManyToMany
-    @JoinTable( name = "tb_tvshow_genre", joinColumns = @JoinColumn( name = "tvshow_id" ), inverseJoinColumns = @JoinColumn( name = "genres_id" ) )
+    @JoinTable(name = "tb_tvshow_genre", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
     private List<Genres> genres = new ArrayList<>();
-    @ManyToMany( mappedBy = "watchedTvShows" )
+    @ManyToMany(mappedBy = "watchedTvShows")
     @JsonIgnore
     private Set<User> users = new HashSet<>();
-    @ManyToMany( mappedBy = "favoriteTvShows" )
+    @ManyToMany(mappedBy = "favoriteTvShows")
     @JsonIgnore
     private Set<User> favoriteUsers = new HashSet<>();
 
@@ -63,8 +63,7 @@ public class TVShow {
         setEpisodes();
     }
 
-    public TVShow(UUID id, String title, String overview, String releaseYear, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes, List<Genres> genres, Set<Actor> actors) {
-        this.id = id;
+    public TVShow(String title, String overview, String releaseYear, Set<Director> directors, Map<Integer, Integer> seasonsAndEpisodes, List<Genres> genres, Set<Actor> actors) {
         this.title = title;
         this.overview = overview;
         this.releaseYear = releaseYear;
@@ -76,10 +75,9 @@ public class TVShow {
         setEpisodes();
     }
 
-
     @PrePersist
     public void generateUuid() {
-        if ( this.id == null )
+        if (this.id == null)
             this.id = UUID.randomUUID();
     }
 
@@ -145,7 +143,7 @@ public class TVShow {
 
     public void setEpisodes() {
         Integer sum = 0;
-        for ( Integer value : seasonsAndEpisodes.values() ) {
+        for (Integer value : seasonsAndEpisodes.values()) {
             sum += value;
         }
         episodes = sum;
@@ -175,9 +173,9 @@ public class TVShow {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o )
+        if (this == o)
             return true;
-        if ( o == null || getClass() != o.getClass() )
+        if (o == null || getClass() != o.getClass())
             return false;
         TVShow tvShow = (TVShow) o;
         return id == tvShow.id;

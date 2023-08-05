@@ -31,17 +31,6 @@ public class TVShowDTOResponse {
         this.seasonsAndEpisodes = tvShow.getSeasonsAndEpisodes();
     }
 
-    public TVShowDTOResponse(TVShowDTO tvShowDTO) {
-        this.id = tvShowDTO.getId();
-        this.title = tvShowDTO.getTitle();
-        this.overview = tvShowDTO.getOverview();
-        this.releaseYear = tvShowDTO.getReleaseYear();
-        this.actors = tvShowDTO.getActors();
-        this.genres = tvShowDTO.getGenres();
-        this.directors = tvShowDTO.getDirectors();
-        this.seasonsAndEpisodes = tvShowDTO.getSeasonsAndEpisodes();
-    }
-
     public UUID getId() {
         return id;
     }

@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.director;
 
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.enums.Gender;

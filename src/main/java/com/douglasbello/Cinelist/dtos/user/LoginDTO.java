@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.user;
 
 import jakarta.validation.constraints.NotBlank;
 

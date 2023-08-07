@@ -1,9 +1,9 @@
 package com.douglasbello.Cinelist.controllers;
 
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
-import com.douglasbello.Cinelist.dtos.TVShowDTO;
-import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
-import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.dtos.show.TVShowDTO;
+import com.douglasbello.Cinelist.dtos.show.TVShowDTOResponse;
+import com.douglasbello.Cinelist.dtos.Mapper;
 import com.douglasbello.Cinelist.services.ActorService;
 import com.douglasbello.Cinelist.services.DirectorService;
 import com.douglasbello.Cinelist.services.GenresService;

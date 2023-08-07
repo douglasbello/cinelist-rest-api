@@ -1,9 +1,9 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.ActorDTO;
-import com.douglasbello.Cinelist.dtos.ActorInputDTO;
+import com.douglasbello.Cinelist.dtos.actor.ActorDTO;
+import com.douglasbello.Cinelist.dtos.actor.ActorInputDTO;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
-import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.dtos.Mapper;
 import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.services.ActorService;
 import jakarta.validation.Valid;
@@ -40,7 +40,7 @@ public class ActorController {
     @PostMapping
     public ResponseEntity<?> insert(@Valid @RequestBody ActorInputDTO dto) {
         if (dto.getGender() < 1 || dto.getGender() > 3) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Actor gender cannot be bigger than 1 or less than 3. The gender codes are: MALE(1), FEMALE(2), OTHER(3)"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Gender code cannot be less than 1 or bigger than 3. The gender codes are: MALE(1), FEMALE(2), PREFER NOT SAY(3)"));
         }
         Actor actor = new Actor();
         if (!actor.setBirthDate(dto.getBirthDate())) {

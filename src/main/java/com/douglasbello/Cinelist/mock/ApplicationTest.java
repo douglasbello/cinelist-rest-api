@@ -1,7 +1,6 @@
 package com.douglasbello.Cinelist.mock;
 
-import com.douglasbello.Cinelist.dtos.ActorDTO;
-import com.douglasbello.Cinelist.dtos.UserDTO;
+import com.douglasbello.Cinelist.dtos.user.UserDTO;
 import com.douglasbello.Cinelist.entities.*;
 import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.douglasbello.Cinelist.entities.enums.UserRole;

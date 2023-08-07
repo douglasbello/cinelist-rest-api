@@ -1,7 +1,9 @@
 package com.douglasbello.Cinelist.controllers;
 
 import com.douglasbello.Cinelist.dtos.*;
-import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.dtos.Mapper;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTO;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTOResponse;
 import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.services.ActorService;
@@ -11,9 +13,6 @@ import com.douglasbello.Cinelist.services.MovieService;
 import com.douglasbello.Cinelist.services.UserService;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -3,7 +3,7 @@ package com.douglasbello.Cinelist.entities.enums;
 public enum Gender {
     MALE(1),
     FEMALE(2),
-    OTHER(3);
+    PREFER_NOT_SAY(3);
 
     private int code;
 
@@ -16,8 +16,8 @@ public enum Gender {
     }
 
     public static Gender valueOf(int code) {
-        for ( Gender value : Gender.values() ) {
-            if ( value.getCode() == code ) {
+        for (Gender value : Gender.values()) {
+            if (value.getCode() == code) {
                 return value;
             }
         }

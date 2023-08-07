@@ -17,10 +17,10 @@ public class TVShow {
     private Integer episodes;
     private String releaseYear;
     @ManyToMany
-    @JoinTable(name = "director_show", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
+    @JoinTable(name = "director_show", joinColumns = @JoinColumn(name = "show_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
     private Set<Director> directors = new HashSet<>();
     @ManyToMany
-    @JoinTable(name = "actor_show", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
+    @JoinTable(name = "actor_show", joinColumns = @JoinColumn(name = "show_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Actor> actors = new HashSet<>();
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
@@ -30,7 +30,7 @@ public class TVShow {
     @Column(name = "episodes")
     private Map<Integer, Integer> seasonsAndEpisodes = new HashMap<>();
     @ManyToMany
-    @JoinTable(name = "show_genre", joinColumns = @JoinColumn(name = "tvshow_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
+    @JoinTable(name = "show_genre", joinColumns = @JoinColumn(name = "show_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
     private List<Genres> genres = new ArrayList<>();
     @ManyToMany(mappedBy = "watchedTvShows")
     @JsonIgnore

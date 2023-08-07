@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.user;
 
 import com.douglasbello.Cinelist.entities.enums.Gender;
 import jakarta.validation.constraints.Email;

@@ -1,8 +1,8 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.DirectorDTO;
-import com.douglasbello.Cinelist.dtos.DirectorInputDTO;
-import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.dtos.director.DirectorDTO;
+import com.douglasbello.Cinelist.dtos.director.DirectorInputDTO;
+import com.douglasbello.Cinelist.dtos.Mapper;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.services.DirectorService;
@@ -39,7 +39,7 @@ public class DirectorController {
     @PostMapping
     public ResponseEntity<?> insert(@Valid @RequestBody DirectorInputDTO dto) {
         if (dto.getGender() < 1 || dto.getGender() > 3) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Actor gender cannot be bigger than 1 or less than 3. The gender codes are: MALE(1), FEMALE(2), OTHER(3)"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Gender code cannot be less than 1 or bigger than 3. The gender codes are: MALE(1), FEMALE(2), PREFER NOT SAY(3)"));
         }
 
         Director director = new Director();

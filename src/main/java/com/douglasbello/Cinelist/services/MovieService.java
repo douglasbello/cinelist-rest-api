@@ -1,11 +1,10 @@
 package com.douglasbello.Cinelist.services;
 
-import com.douglasbello.Cinelist.dtos.ActorDTO;
-import com.douglasbello.Cinelist.dtos.MovieDTO;
-import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.actor.ActorDTO;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTO;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTOResponse;
 import com.douglasbello.Cinelist.dtos.RateDTO;
 import com.douglasbello.Cinelist.entities.Actor;
-import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.entities.Movie;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.MovieRepository;
@@ -14,7 +13,6 @@ import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,10 +1,9 @@
 package com.douglasbello.Cinelist.services;
 
-import com.douglasbello.Cinelist.dtos.DirectorDTO;
-import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
-import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
+import com.douglasbello.Cinelist.dtos.director.DirectorDTO;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.show.TVShowDTOResponse;
 import com.douglasbello.Cinelist.entities.Director;
-import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.DirectorRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;

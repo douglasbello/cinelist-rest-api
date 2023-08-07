@@ -1,6 +1,12 @@
-package com.douglasbello.Cinelist.dtos.mapper;
+package com.douglasbello.Cinelist.dtos;
 
-import com.douglasbello.Cinelist.dtos.*;
+import com.douglasbello.Cinelist.dtos.actor.ActorInputDTO;
+import com.douglasbello.Cinelist.dtos.comment.CommentDTO;
+import com.douglasbello.Cinelist.dtos.director.DirectorInputDTO;
+import com.douglasbello.Cinelist.dtos.genres.GenresDTO;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTO;
+import com.douglasbello.Cinelist.dtos.show.TVShowDTO;
+import com.douglasbello.Cinelist.dtos.user.UserSignInDTO;
 import com.douglasbello.Cinelist.entities.*;
 import com.douglasbello.Cinelist.entities.enums.UserRole;
 import com.douglasbello.Cinelist.services.MovieService;

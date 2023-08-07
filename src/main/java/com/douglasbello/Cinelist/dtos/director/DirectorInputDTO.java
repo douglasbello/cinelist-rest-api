@@ -1,17 +1,17 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.director;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class ActorInputDTO {
-    @NotBlank(message = "Actor name cannot be blank.")
+public class DirectorInputDTO {
+    @NotBlank(message = "Director name cannot be blank.")
     private String name;
     @NotBlank(message = "Birth date cannot be blank.")
     private String birthDate;
     private int gender;
 
-    public ActorInputDTO(){}
+    public DirectorInputDTO(){}
 
-    public ActorInputDTO(String name, String birthDate, int gender) {
+    public DirectorInputDTO(String name, String birthDate, int gender) {
         this.name = name;
         this.birthDate = birthDate;
         this.gender = gender;

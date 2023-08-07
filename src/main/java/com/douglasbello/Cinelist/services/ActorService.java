@@ -1,10 +1,8 @@
 package com.douglasbello.Cinelist.services;
 
-import com.douglasbello.Cinelist.dtos.ActorDTO;
-import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
-import com.douglasbello.Cinelist.dtos.TVShowDTO;
-import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
-import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.dtos.actor.ActorDTO;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.show.TVShowDTOResponse;
 import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.repositories.ActorRepository;
 import org.springframework.stereotype.Service;

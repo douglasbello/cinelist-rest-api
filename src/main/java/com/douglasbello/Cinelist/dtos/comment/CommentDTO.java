@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.comment;
 
 import com.douglasbello.Cinelist.entities.Comment;
 import jakarta.validation.constraints.NotBlank;

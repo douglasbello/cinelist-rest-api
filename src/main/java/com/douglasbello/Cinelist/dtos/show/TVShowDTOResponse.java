@@ -1,42 +1,34 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.show;
 
-import com.douglasbello.Cinelist.entities.*;
+import com.douglasbello.Cinelist.entities.Actor;
+import com.douglasbello.Cinelist.entities.Director;
+import com.douglasbello.Cinelist.entities.Genres;
+import com.douglasbello.Cinelist.entities.TVShow;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-public class MovieDTOResponse {
+public class TVShowDTOResponse {
     private UUID id;
     private String title;
     private String overview;
     private String releaseYear;
-    private Set<Genres> genres = new HashSet<>();
-
     private Set<Actor> actors = new HashSet<>();
+    private List<Genres> genres = new ArrayList<>();
     private Set<Director> directors = new HashSet<>();
+    private Map<Integer, Integer> seasonsAndEpisodes = new HashMap<>();
 
-    public MovieDTOResponse() {
+    public TVShowDTOResponse() {
     }
 
-    public MovieDTOResponse(Movie movie) {
-        this.id = movie.getId();
-        this.title = movie.getTitle();
-        this.overview = movie.getOverview();
-        this.releaseYear = movie.getReleaseYear();
-        this.genres = movie.getGenre();
-        this.actors = movie.getActors();
-        this.directors = movie.getDirectors();
-    }
-
-    public MovieDTOResponse(MovieDTO dto) {
-        this.title = dto.getTitle();
-        this.overview = dto.getOverview();
-        this.releaseYear = dto.getReleaseYear();
-        this.genres = dto.getGenres();
-        this.actors = dto.getActors();
-        this.directors = dto.getDirectors();
+    public TVShowDTOResponse(TVShow tvShow) {
+        this.id = tvShow.getId();
+        this.title = tvShow.getTitle();
+        this.overview = tvShow.getOverview();
+        this.releaseYear = tvShow.getReleaseYear();
+        this.actors = tvShow.getActors();
+        this.genres = tvShow.getGenre();
+        this.directors = tvShow.getDirectors();
+        this.seasonsAndEpisodes = tvShow.getSeasonsAndEpisodes();
     }
 
     public UUID getId() {
@@ -71,12 +63,16 @@ public class MovieDTOResponse {
         this.releaseYear = releaseYear;
     }
 
-    public Set<Genres> getGenres() {
-        return genres;
+    public Map<Integer, Integer> getSeasonsAndEpisodes() {
+        return seasonsAndEpisodes;
     }
 
     public Set<Director> getDirectors() {
         return directors;
+    }
+
+    public List<Genres> getGenres() {
+        return genres;
     }
 
     public Set<Actor> getActors() {
@@ -87,8 +83,8 @@ public class MovieDTOResponse {
     public boolean equals(Object o) {
         if ( this == o ) return true;
         if ( o == null || getClass() != o.getClass() ) return false;
-        MovieDTOResponse movieDTO = (MovieDTOResponse) o;
-        return Objects.equals(id, movieDTO.id);
+        TVShowDTOResponse tvShowDTOResponse = (TVShowDTOResponse) o;
+        return Objects.equals(id, tvShowDTOResponse.id);
     }
 
     @Override

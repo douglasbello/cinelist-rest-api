@@ -1,11 +1,8 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.CommentDTO;
+import com.douglasbello.Cinelist.dtos.comment.CommentDTO;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.entities.Comment;
-import com.douglasbello.Cinelist.entities.Movie;
-import com.douglasbello.Cinelist.entities.TVShow;
-import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.services.CommentService;
 import com.douglasbello.Cinelist.services.MovieService;
 import com.douglasbello.Cinelist.services.TVShowService;

@@ -1,7 +1,10 @@
 package com.douglasbello.Cinelist.controllers;
 
 import com.douglasbello.Cinelist.dtos.*;
-import com.douglasbello.Cinelist.dtos.mapper.Mapper;
+import com.douglasbello.Cinelist.dtos.Mapper;
+import com.douglasbello.Cinelist.dtos.user.LoginDTO;
+import com.douglasbello.Cinelist.dtos.user.UserDTO;
+import com.douglasbello.Cinelist.dtos.user.UserSignInDTO;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.security.TokenService;
 import com.douglasbello.Cinelist.services.UserService;
@@ -42,6 +45,9 @@ public class UserController {
         }
         if (userService.findByUsername(dto.getUsername()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(HttpStatus.CONFLICT.value(), "Username already in use."));
+        }
+        if (dto.getGender().getCode() < 1 || dto.getGender().getCode() > 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Gender code cannot be less than 1 or bigger than 3. The gender codes are: MALE(1), FEMALE(2), PREFER NOT SAY(3)"));
         }
         UserDTO response = new UserDTO(userService.signIn(Mapper.dtoToUser(dto)));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

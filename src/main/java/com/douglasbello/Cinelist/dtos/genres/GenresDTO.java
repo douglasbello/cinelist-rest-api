@@ -1,4 +1,4 @@
-package com.douglasbello.Cinelist.dtos;
+package com.douglasbello.Cinelist.dtos.genres;
 
 import com.douglasbello.Cinelist.entities.Genres;
 import jakarta.validation.constraints.NotBlank;

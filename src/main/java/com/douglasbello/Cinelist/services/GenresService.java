@@ -1,8 +1,8 @@
 package com.douglasbello.Cinelist.services;
 
-import com.douglasbello.Cinelist.dtos.GenresDTO;
-import com.douglasbello.Cinelist.dtos.MovieDTOResponse;
-import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
+import com.douglasbello.Cinelist.dtos.genres.GenresDTO;
+import com.douglasbello.Cinelist.dtos.movie.MovieDTOResponse;
+import com.douglasbello.Cinelist.dtos.show.TVShowDTOResponse;
 import com.douglasbello.Cinelist.entities.Genres;
 import com.douglasbello.Cinelist.repositories.GenresRepository;
 import org.springframework.stereotype.Service;

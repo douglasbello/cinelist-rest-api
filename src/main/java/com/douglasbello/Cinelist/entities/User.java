@@ -24,16 +24,16 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
     @ManyToMany
-    @JoinTable(name = "tb_user_watched_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
+    @JoinTable(name = "user_watched_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private Set<Movie> watchedMovies = new HashSet<>();
     @ManyToMany
-    @JoinTable(name = "tb_user_watched_shows", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
+    @JoinTable(name = "user_watched_shows", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
     private Set<TVShow> watchedTvShows = new HashSet<>();
     @ManyToMany
-    @JoinTable(name = "tb_user_favorite_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
+    @JoinTable(name = "user_favorite_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private Set<Movie> favoriteMovies = new HashSet<>();
     @ManyToMany
-    @JoinTable(name = "tb_user_favorite_shows", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
+    @JoinTable(name = "user_favorite_shows", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
     private Set<TVShow> favoriteTvShows = new HashSet<>();
 
     public User() {

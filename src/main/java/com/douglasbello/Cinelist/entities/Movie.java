@@ -22,13 +22,13 @@ public class Movie {
     @Column(name = "rating")
     private Map<UUID, Double> ratings = new HashMap<UUID, Double>();
     @ManyToMany
-    @JoinTable(name = "tb_director_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
+    @JoinTable(name = "director_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
     private Set<Director> directors = new HashSet<>();
     @ManyToMany
-    @JoinTable(name = "tb_actor_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
+    @JoinTable(name = "actor_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Actor> actors = new HashSet<>();
     @ManyToMany
-    @JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
+    @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
     private Set<Genres> genre = new HashSet<>();
     @ManyToMany(mappedBy = "watchedMovies")
     @JsonIgnore

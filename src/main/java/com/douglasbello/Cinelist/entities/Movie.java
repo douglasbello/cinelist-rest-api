@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
-@Table( name = "tb_movies" )
+@Table(name = "movies")
 public class Movie {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String title;
     private String overview;
@@ -17,27 +17,27 @@ public class Movie {
     private double rate;
     @JsonIgnore
     @ElementCollection
-    @CollectionTable( name = "movies_ratings", joinColumns = @JoinColumn( name = "movie_id" ) )
-    @MapKeyColumn( name = "userId" )
-    @Column( name = "rating" )
+    @CollectionTable(name = "movies_ratings", joinColumns = @JoinColumn(name = "movie_id"))
+    @MapKeyColumn(name = "userId")
+    @Column(name = "rating")
     private Map<UUID, Double> ratings = new HashMap<UUID, Double>();
     @ManyToMany
-    @JoinTable( name = "tb_director_movie", joinColumns = @JoinColumn( name = "movie_id" ), inverseJoinColumns = @JoinColumn( name = "director_id" ) )
+    @JoinTable(name = "tb_director_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
     private Set<Director> directors = new HashSet<>();
     @ManyToMany
-    @JoinTable( name = "tb_actor_movie", joinColumns = @JoinColumn( name = "movie_id" ), inverseJoinColumns = @JoinColumn( name = "actor_id" ) )
+    @JoinTable(name = "tb_actor_movie", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Actor> actors = new HashSet<>();
     @ManyToMany
-    @JoinTable( name = "tb_movie_genre", joinColumns = @JoinColumn( name = "movie_id" ), inverseJoinColumns = @JoinColumn( name = "genres_id" ) )
+    @JoinTable(name = "tb_movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genres_id"))
     private Set<Genres> genre = new HashSet<>();
-    @ManyToMany( mappedBy = "watchedMovies" )
+    @ManyToMany(mappedBy = "watchedMovies")
     @JsonIgnore
     private Set<User> watchedUsers = new HashSet<>();
-    @ManyToMany( mappedBy = "favoriteMovies" )
+    @ManyToMany(mappedBy = "favoriteMovies")
     @JsonIgnore
     private Set<User> favoriteUsers = new HashSet<>();
     @JsonIgnore
-    @OneToMany( mappedBy = "movie" )
+    @OneToMany(mappedBy = "movie")
     private Set<Comment> comments = new HashSet<>();
 
     public Movie() {
@@ -69,7 +69,7 @@ public class Movie {
 
     @PrePersist
     public void generateUuid() {
-        if ( this.id == null )
+        if (this.id == null)
             this.id = UUID.randomUUID();
     }
 
@@ -135,12 +135,12 @@ public class Movie {
 
     public void setRate() {
         Map<UUID, Double> ratings = this.ratings;
-        if ( ratings.isEmpty() ) {
+        if (ratings.isEmpty()) {
             this.rate = 0.0;
         }
 
         double totalRating = 0.0;
-        for ( Double rating : ratings.values() ) {
+        for (Double rating : ratings.values()) {
             totalRating += rating;
         }
 
@@ -153,9 +153,9 @@ public class Movie {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o )
+        if (this == o)
             return true;
-        if ( o == null || getClass() != o.getClass() )
+        if (o == null || getClass() != o.getClass())
             return false;
         Movie movie = (Movie) o;
         return id == movie.id;

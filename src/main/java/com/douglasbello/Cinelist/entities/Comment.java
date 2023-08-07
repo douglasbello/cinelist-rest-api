@@ -7,20 +7,20 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table( name = "tb_comments" )
+@Table(name = "comments")
 public class Comment {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @ManyToOne
-    @JoinColumn( name = "user_id" )
+    @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
-    @JoinColumn( name = "movie_id" )
+    @JoinColumn(name = "movie_id")
     @JsonIgnore
     private Movie movie;
     @ManyToOne
-    @JoinColumn( name = "tv_show_id" )
+    @JoinColumn(name = "tv_show_id")
     @JsonIgnore
     private TVShow tvShow;
     private String comment;
@@ -49,7 +49,7 @@ public class Comment {
 
     @PrePersist
     public void generateUuid() {
-        if ( this.id == null )
+        if (this.id == null)
             this.id = UUID.randomUUID();
     }
 
@@ -95,9 +95,9 @@ public class Comment {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o )
+        if (this == o)
             return true;
-        if ( o == null || getClass() != o.getClass() )
+        if (o == null || getClass() != o.getClass())
             return false;
         Comment comment = (Comment) o;
         return id == comment.id;

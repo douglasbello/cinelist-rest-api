@@ -181,8 +181,7 @@ public class UserService implements UserDetailsService {
 
     public User getCurrentUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = repository.findUserByUsername(user.getUsername());
-        return currentUser;
+        return repository.findUserByUsername(user.getUsername());
     }
 
     @Override

@@ -37,8 +37,8 @@ public class Mapper {
         return user;
     }
 
-    public static Actor dtoToActor(ActorDTO dto) {
-        Actor actor = new Actor(dto.getId(), dto.getName(), dto.getGender());
+    public static Actor dtoToActor(ActorInputDTO dto) {
+        Actor actor = new Actor(dto.getName(), dto.getGender());
         actor.setBirthDate(dto.getBirthDate());
         return actor;
     }

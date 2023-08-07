@@ -3,15 +3,13 @@ package com.douglasbello.Cinelist.controllers;
 import com.douglasbello.Cinelist.dtos.*;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.User;
-import com.douglasbello.Cinelist.entities.enums.UserRole;
 import com.douglasbello.Cinelist.security.TokenService;
 import com.douglasbello.Cinelist.services.UserService;
-
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -32,13 +30,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserDTO> getCurrentUser() {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDTO userDTO = new UserDTO(userService.findByUsername(currentUser.getUsername()));
+        User currentUser = userService.getCurrentUser();
+        UserDTO userDTO = new UserDTO(currentUser);
         return ResponseEntity.ok().body(userDTO);
     }
 
     @PostMapping(value = "/sign-in")
-    public ResponseEntity<?> signIn(@RequestBody UserSignInDTO dto) {
+    public ResponseEntity<?> signIn(@Valid @RequestBody UserSignInDTO dto) {
         if (userService.findByEmail(dto.getEmail()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(HttpStatus.CONFLICT.value(), "Email already in use."));
         }
@@ -50,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO dto) {
         if (dto.username() == null || dto.password() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The username and password cannot be null."));
         }
@@ -64,29 +62,19 @@ public class UserController {
 
     @GetMapping(value = "/watched-movies")
     public ResponseEntity<?> getUserWatchedMovies() {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user;
-        if (userService.findByUsername(currentUser.getUsername()) == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RequestResponseDTO(HttpStatus.FORBIDDEN.value(), "User unauthorized."));
-        }
-        user = userService.findByUsername(currentUser.getUsername());
+        User user = userService.getCurrentUser();
         return ResponseEntity.ok().body(userService.getUserWatchedMoviesList(user));
     }
 
     @GetMapping(value = "/favorite-movies")
     public ResponseEntity<?> getUserFavoriteMovies() {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(currentUser.getUsername());
+        User user = userService.getCurrentUser();
         return ResponseEntity.ok().body(userService.getUserFavoriteMoviesList(user));
     }
 
     @PostMapping(value = "/watched-movies")
     public ResponseEntity<?> addMoviesToWatchedList(@RequestBody Set<UUID> moviesId) {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(currentUser.getUsername());
-        if (moviesId.size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one movie id."));
-        }
+        User user = userService.getCurrentUser();
         if (userService.addWatchedMovies(user, moviesId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movies not found."));
         }
@@ -98,11 +86,7 @@ public class UserController {
 
     @PostMapping(value = "/favorite-movies")
     public ResponseEntity<?> addMoviesToFavoriteList(@RequestBody Set<UUID> moviesId) {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(currentUser.getUsername());
-        if (moviesId.size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You need to pass at least one movie id."));
-        }
+        User user = userService.getCurrentUser();
         if (userService.addFavoriteMovies(user, moviesId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movies not found."));
         }
@@ -114,25 +98,19 @@ public class UserController {
 
     @GetMapping(value = "/watched-shows")
     public ResponseEntity<?> getUserWatchedShows() {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(currentUser.getUsername());
+        User user = userService.getCurrentUser();
         return ResponseEntity.ok().body(userService.getUserWatchedTvShowsList(user));
     }
 
     @GetMapping(value = "/favorite-shows")
     public ResponseEntity<?> getUserFavoriteShows() {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(currentUser.getUsername());
+        User user = userService.getCurrentUser();
         return ResponseEntity.ok().body(userService.getUserFavoriteTvShowsList(user));
     }
 
     @PostMapping(value = "/watched-shows")
     public ResponseEntity<?> addTvShowsToWatchedList(@RequestBody Set<UUID> tvShowsIds) {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(currentUser.getUsername());
-        if (tvShowsIds.size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one show id."));
-        }
+        User user = userService.getCurrentUser();
         if (userService.addWatchedTvShows(user, tvShowsIds) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Shows not found."));
         }
@@ -144,11 +122,7 @@ public class UserController {
 
     @PostMapping(value = "/favorite-shows")
     public ResponseEntity<?> addTvShowsToFavoriteList(@RequestBody Set<UUID> tvShowsIds) {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(currentUser.getUsername());
-        if (tvShowsIds.size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one show id."));
-        }
+        User user = userService.getCurrentUser();
         if (userService.addFavoriteTvShows(user, tvShowsIds) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Shows not found."));
         }

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "tb_tvshows")
+@Table(name = "shows")
 public class TVShow {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

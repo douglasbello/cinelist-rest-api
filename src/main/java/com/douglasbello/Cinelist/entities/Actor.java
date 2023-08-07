@@ -14,19 +14,19 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table( name = "tb_actors" )
+@Table(name = "actors")
 public class Actor {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
     private LocalDate birthDate;
     private int gender;
     private int age;
-    @ManyToMany( mappedBy = "actors" )
+    @ManyToMany(mappedBy = "actors")
     @JsonIgnore
     private Set<Movie> movies = new HashSet<>();
-    @ManyToMany( mappedBy = "actors" )
+    @ManyToMany(mappedBy = "actors")
     @JsonIgnore
     private Set<TVShow> tvShows = new HashSet<>();
 
@@ -39,6 +39,10 @@ public class Actor {
         this.birthDate = birthDate;
         this.gender = gender;
         setAge(this.birthDate);
+    }
+
+    public Actor(String name, int gender) {
+        this.name = name;
     }
 
     public Actor(UUID id, String name, LocalDate birthDate, Gender gender) {
@@ -57,7 +61,7 @@ public class Actor {
 
     @PrePersist
     public void generateUuid() {
-        if ( this.id == null )
+        if (this.id == null)
             this.id = UUID.randomUUID();
     }
 
@@ -124,8 +128,8 @@ public class Actor {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Actor actor = (Actor) o;
         return Objects.equals(id, actor.id);
     }

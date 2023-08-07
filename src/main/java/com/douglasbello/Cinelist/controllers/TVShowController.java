@@ -1,11 +1,14 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.*;
+import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.dtos.TVShowDTO;
+import com.douglasbello.Cinelist.dtos.TVShowDTOResponse;
 import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.services.ActorService;
 import com.douglasbello.Cinelist.services.DirectorService;
 import com.douglasbello.Cinelist.services.GenresService;
 import com.douglasbello.Cinelist.services.TVShowService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +49,7 @@ public class TVShowController {
 
     @GetMapping(value = "/title/{title}")
     public ResponseEntity<?> findTvShowsByTitle(@PathVariable String title) {
-        if (tvShowService.findByTitle(title).size() == 0) {
+        if (tvShowService.findByTitle(title).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show not found."));
         }
 
@@ -55,17 +58,8 @@ public class TVShowController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addTvShow(@RequestBody TVShowDTO tvShowDTO) {
-        Object[] fields = {tvShowDTO.getTitle(), tvShowDTO.getOverview(), tvShowDTO.getReleaseYear()};
-        for (Object field : fields) {
-            if (field.toString().length() == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The fields title, overview and release year cannot be blank."));
-            }
-        }
+    public ResponseEntity<?> addTvShow(@Valid @RequestBody TVShowDTO tvShowDTO) {
         tvShowDTO = tvShowService.getRelatedEntities(tvShowDTO);
-        if (tvShowDTO.getActors().isEmpty() || tvShowDTO.getGenres().isEmpty() || tvShowDTO.getDirectors().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one actor, one genre and one director that are registered."));
-        }
         TVShowDTOResponse response = tvShowService.insert(Mapper.dtoToTVShow(tvShowDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -80,20 +74,12 @@ public class TVShowController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateTvShow(@PathVariable UUID id, @RequestBody TVShowDTO dto) {
-        Object[] fields = {dto.getTitle(), dto.getOverview(), dto.getReleaseYear()};
-        for (Object field : fields) {
-            if (field.toString().length() == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The fields title, overview and release year cannot be blank."));
-            }
-        }
+    public ResponseEntity<?> updateTvShow(@PathVariable UUID id, @Valid @RequestBody TVShowDTO dto) {
         if (tvShowService.findById(id) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Show not found."));
         }
+
         dto = tvShowService.getRelatedEntities(dto);
-        if (dto.getActors().isEmpty() || dto.getGenres().isEmpty() || dto.getDirectors().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "You must provide at least one actor, one genre and one director that are registered."));
-        }
         TVShowDTOResponse response = tvShowService.update(id, Mapper.dtoToTVShow(dto));
         return ResponseEntity.ok().body(response);
     }
@@ -153,5 +139,4 @@ public class TVShowController {
         }
         return ResponseEntity.ok().body(genresService.findShowsByGenreName(genreName));
     }
-
 }

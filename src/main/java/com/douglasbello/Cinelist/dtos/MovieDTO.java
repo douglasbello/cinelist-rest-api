@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,15 +19,12 @@ public class MovieDTO {
     private String overview;
     @NotBlank(message = "You must provide the release year.")
     private String releaseYear;
-    @NotEmpty(message = "You must provide at least one genre id.")
     private Set<UUID> genresIds = new HashSet<>();
-    @NotEmpty(message = "You must provide at least one director id.")
     private Set<UUID> directorsIds = new HashSet<>();
     @JsonIgnore
     private Set<Genres> genres = new HashSet<>();
     @JsonIgnore
     private Set<Director> directors = new HashSet<>();
-    @NotEmpty(message = "You must provide at least one actor id.")
     private Set<UUID> actorsIds = new HashSet<>();
     @JsonIgnore
     private Set<Actor> actors = new HashSet<>();

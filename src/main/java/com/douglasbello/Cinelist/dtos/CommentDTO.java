@@ -1,6 +1,8 @@
 package com.douglasbello.Cinelist.dtos;
 
 import com.douglasbello.Cinelist.entities.Comment;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -8,6 +10,8 @@ import java.util.UUID;
 public class CommentDTO {
     private UUID userId;
     private UUID showOrMovieId;
+    @NotBlank(message = "Comment cannot be blank.")
+    @Size(max = 255, message = "Comment cannot be bigger than 255 characters.")
     private String comment;
 
     public CommentDTO() {

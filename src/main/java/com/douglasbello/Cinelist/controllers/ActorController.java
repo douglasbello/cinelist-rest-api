@@ -1,9 +1,12 @@
 package com.douglasbello.Cinelist.controllers;
 
 import com.douglasbello.Cinelist.dtos.ActorDTO;
+import com.douglasbello.Cinelist.dtos.ActorInputDTO;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.services.ActorService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,19 +38,18 @@ public class ActorController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insert(@RequestBody ActorDTO actorDTO) {
-        if (actorDTO.getName() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Actor name cannot be null"));
-        }
-        if (actorDTO.getGender().getCode() < 1 || actorDTO.getGender().getCode() > 3) {
+    public ResponseEntity<?> insert(@Valid @RequestBody ActorInputDTO dto) {
+        if (dto.getGender() < 1 || dto.getGender() > 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Actor gender cannot be bigger than 1 or less than 3. The gender codes are: MALE(1), FEMALE(2), OTHER(3)"));
         }
         Actor actor = new Actor();
-        if (!actor.setBirthDate(actorDTO.getBirthDate())) {
+        if (!actor.setBirthDate(dto.getBirthDate())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The provided birth date must be in the format dd/MM/yyyy."));
         }
-        ActorDTO dto = new ActorDTO(actorService.insert(actorDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+
+        actor = Mapper.dtoToActor(dto);
+        ActorDTO response = new ActorDTO(actorService.insert(actor));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping(value = "/name/{name}")

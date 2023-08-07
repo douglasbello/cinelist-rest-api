@@ -20,8 +20,8 @@ public class ActorService {
         this.actorRepository = actorRepository;
     }
 
-    public Actor insert(ActorDTO dto) {
-        return actorRepository.save(Mapper.dtoToActor(dto));
+    public Actor insert(Actor actor) {
+        return actorRepository.save(actor);
     }
 
     public List<Actor> insertAll(List<Actor> actors) {

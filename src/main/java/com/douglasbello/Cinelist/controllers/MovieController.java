@@ -98,7 +98,7 @@ public class MovieController {
     }
 
     @PostMapping(value = "/{movieId}/actors")
-    public ResponseEntity<?> addActorsToMovie(@PathVariable UUID movieId, @NotEmpty(message = "The actors ids list cannot be empty.") @RequestBody Set<UUID> actorsIds) {
+    public ResponseEntity<?> addActorsToMovie(@PathVariable UUID movieId, @RequestBody Set<UUID> actorsIds) {
         if (movieService.findById(movieId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie not found."));
         }
@@ -113,7 +113,7 @@ public class MovieController {
     }
 
     @GetMapping(value = "/{movieId}/actors")
-    public ResponseEntity<?> getMovieActors(@NotNull(message = "Movie id cannot be null.") @PathVariable UUID movieId) {
+    public ResponseEntity<?> getMovieActors(@PathVariable UUID movieId) {
         if (movieService.findById(movieId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Movie doesn't exists"));
         }
@@ -121,7 +121,7 @@ public class MovieController {
     }
 
     @GetMapping(value = "/actors/id/{actorId}")
-    public ResponseEntity<?> findMoviesByActorId(@NotNull(message = "Actor id cannot be null.") @PathVariable UUID actorId) {
+    public ResponseEntity<?> findMoviesByActorId(@PathVariable UUID actorId) {
         if (actorService.findMoviesByActorId(actorId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor doesn't exists or don't have any movie registered."));
         }
@@ -129,7 +129,7 @@ public class MovieController {
     }
 
     @GetMapping(value = "/actors/name/{actorName}")
-    public ResponseEntity<?> findMoviesByActorName(@NotBlank(message = "Actor name cannot be blank.") @PathVariable String actorName) {
+    public ResponseEntity<?> findMoviesByActorName(@PathVariable String actorName) {
         if (actorService.findMoviesByActorName(actorName).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor doesn't exists or don't have any movie registered."));
         }

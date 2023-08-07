@@ -63,13 +63,13 @@ public class ApplicationTest implements CommandLineRunner {
 
         LocalDate matthewBirthDate = LocalDate.of(1969, 11, 4);
         Actor matthew = new Actor(null, "Matthew McConaughey", matthewBirthDate, Gender.MALE);
-        matthew = actorService.insert(new ActorDTO(matthew));
+        matthew = actorService.insert(matthew);
         LocalDate jessicaBirthDate = LocalDate.of(1977, 3, 24);
         Actor jessica = new Actor(null, "Jessica Chastain", jessicaBirthDate, Gender.FEMALE);
-        jessica = actorService.insert(new ActorDTO(jessica));
+        jessica = actorService.insert(jessica);
         LocalDate anneBirthDate = LocalDate.of(1982, 11, 12);
         Actor anne = new Actor(null, "Anne Hathaway", anneBirthDate, Gender.FEMALE);
-        anne = actorService.insert(new ActorDTO(anne));
+        anne = actorService.insert(anne);
 
         Movie movie = new Movie("Interstellar", "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", "2014");
         movie = movieService.insert(movie);

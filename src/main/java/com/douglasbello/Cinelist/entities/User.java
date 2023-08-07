@@ -2,41 +2,38 @@ package com.douglasbello.Cinelist.entities;
 
 import com.douglasbello.Cinelist.entities.enums.Gender;
 import com.douglasbello.Cinelist.entities.enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Entity
-@Table( name = "tb_users" )
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String email;
     private String username;
     private String password;
     private int gender;
     private UserRole role;
-    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
     @ManyToMany
-    @JoinTable( name = "tb_user_watched_movies", joinColumns = @JoinColumn( name = "user_id" ), inverseJoinColumns = @JoinColumn( name = "movie_id" ) )
+    @JoinTable(name = "tb_user_watched_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private Set<Movie> watchedMovies = new HashSet<>();
     @ManyToMany
-    @JoinTable( name = "tb_user_watched_shows", joinColumns = @JoinColumn( name = "user_id" ), inverseJoinColumns = @JoinColumn( name = "tvshow_id" ) )
+    @JoinTable(name = "tb_user_watched_shows", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
     private Set<TVShow> watchedTvShows = new HashSet<>();
     @ManyToMany
-    @JoinTable( name = "tb_user_favorite_movies", joinColumns = @JoinColumn( name = "user_id" ), inverseJoinColumns = @JoinColumn( name = "movie_id" ) )
+    @JoinTable(name = "tb_user_favorite_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private Set<Movie> favoriteMovies = new HashSet<>();
     @ManyToMany
-    @JoinTable( name = "tb_user_favorite_shows", joinColumns = @JoinColumn( name = "user_id" ), inverseJoinColumns = @JoinColumn( name = "tvshow_id" ) )
+    @JoinTable(name = "tb_user_favorite_shows", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tvshow_id"))
     private Set<TVShow> favoriteTvShows = new HashSet<>();
 
     public User() {
@@ -72,9 +69,15 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    public User(String username, String password, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     @PrePersist
     public void generateUuid() {
-        if ( this.id == null )
+        if (this.id == null)
             this.id = UUID.randomUUID();
     }
 
@@ -154,9 +157,9 @@ public class User implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o )
+        if (this == o)
             return true;
-        if ( o == null || getClass() != o.getClass() )
+        if (o == null || getClass() != o.getClass())
             return false;
         User user = (User) o;
         return id == user.id;
@@ -180,7 +183,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if ( this.role == UserRole.ADMIN ) {
+        if (this.role == UserRole.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         }
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));

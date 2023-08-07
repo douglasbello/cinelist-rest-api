@@ -6,6 +6,7 @@ import com.douglasbello.Cinelist.dtos.mapper.Mapper;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.services.DirectorService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +37,12 @@ public class DirectorController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insert(@RequestBody DirectorInputDTO dto) {
-        Director director = new Director();
+    public ResponseEntity<?> insert(@Valid @RequestBody DirectorInputDTO dto) {
         if (dto.getGender() < 1 || dto.getGender() > 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Actor gender cannot be bigger than 1 or less than 3. The gender codes are: MALE(1), FEMALE(2), OTHER(3)"));
         }
+
+        Director director = new Director();
         if (!director.setBirthDate(dto.getBirthDate())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The provided date must be in the format dd/MM/yyyy."));
         }
@@ -50,13 +52,10 @@ public class DirectorController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable UUID id) {
-        if (id == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Id cannot be null."));
-        }
         if (directorService.findById(id) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director not found."));
         }
         directorService.delete(id);
-        return ResponseEntity.ok().body(new RequestResponseDTO(HttpStatus.OK.value(), "Director deleted."));
+        return ResponseEntity.noContent().build();
     }
 }

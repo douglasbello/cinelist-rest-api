@@ -1,9 +1,16 @@
 # Cinelist Rest API
 
 ## Description
-Cinelist is a Rest API built with [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) and [Spring Framework](https://spring.io/). With this API users can create accounts, add movies and tvshows to their favorite list or watched list, rate movies and shows and also comment into these movies and shows.<br>
-  Admins can create new admins, create new movies or shows, create new directors, actors, genres, add these directors, actors and genres to movies and shows, delete directors, delete shows, delete movies, delete genres.
+- Cinelist is a Rest API built with [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) and [Spring Framework](https://spring.io/).
+- With this API users can create accounts, add movies and tvshows to their favorite list or watched list, rate movies and shows and also comment into these movies and shows.<br>
+- Admins can create new admins, create new movies or shows, create new directors, actors, genres, add these directors, actors and genres to movies and shows, delete directors, shows, movies, genres and actors.
 
+## The security of this API
+- Built with [Spring Security](https://spring.io/projects/spring-security).
+- This API uses a stateless security authentication and authorization, that means that we don't keep data, so for each request, the user must provide his token.
+- The only paths that don't require an token in this API are the sign-up and login paths. All the other paths in this app require an token, the user can get this token by login.
+- The token of this application is a JWT Token of type Bearer Token.
+---
 ## API paths that normal users can access
 
 | METHOD | PATH | REQUEST BODY | 2xx | 4xx |
@@ -44,5 +51,5 @@ Cinelist is a Rest API built with [Java 17](https://www.oracle.com/java/technolo
 | GET   | /api/comments/movie/{movieId}   |    | 200   | 403, 404   |
 | GET   | /api/comments/show/{showId}   |    | 200   | 403, 404   |
 | GET   | /api/comments/user/{userId}   |    | 200   | 403, 404   |
-| POST   | /api/users/sign-in   | UserSignInDTO   | 201   | 400, 409   |
+| POST   | /api/users/sign-up   | UserSignInDTO   | 201   | 400, 409   |
 | POST   | /api/users/login   | LoginDTO   | 200   | 400  |

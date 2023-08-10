@@ -46,6 +46,6 @@ public class GenresController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Genre name cannot be empty."));
         }
         Genres genres = new Genres(genreName);
-        return ResponseEntity.ok().body(service.insert(genres));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.insert(genres));
     }
 }

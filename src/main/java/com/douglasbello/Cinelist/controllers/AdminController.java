@@ -23,9 +23,6 @@ public class AdminController {
 
     @PostMapping
     public ResponseEntity<RequestResponseDTO> insert(@RequestBody LoginDTO dto) {
-        if (userService.findByUsername(dto.username()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Username already in use."));
-        }
         User user = new User(dto.username(), dto.password(), UserRole.ADMIN);
         userService.signIn(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResponseDTO(HttpStatus.CREATED.value(), "Admin created successfully!"));

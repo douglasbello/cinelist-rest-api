@@ -1,18 +1,25 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.actor.ActorDTO;
-import com.douglasbello.Cinelist.dtos.actor.ActorInputDTO;
-import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
-import com.douglasbello.Cinelist.dtos.Mapper;
-import com.douglasbello.Cinelist.entities.Actor;
-import com.douglasbello.Cinelist.services.ActorService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.Set;
 import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.douglasbello.Cinelist.dtos.Mapper;
+import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.dtos.actor.ActorDTO;
+import com.douglasbello.Cinelist.dtos.actor.ActorInputDTO;
+import com.douglasbello.Cinelist.entities.Actor;
+import com.douglasbello.Cinelist.services.ActorService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/actors")

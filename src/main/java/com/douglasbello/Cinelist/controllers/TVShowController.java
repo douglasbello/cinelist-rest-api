@@ -1,21 +1,30 @@
 package com.douglasbello.Cinelist.controllers;
 
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.douglasbello.Cinelist.dtos.Mapper;
 import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
 import com.douglasbello.Cinelist.dtos.show.TVShowDTO;
 import com.douglasbello.Cinelist.dtos.show.TVShowDTOResponse;
-import com.douglasbello.Cinelist.dtos.Mapper;
 import com.douglasbello.Cinelist.services.ActorService;
 import com.douglasbello.Cinelist.services.DirectorService;
 import com.douglasbello.Cinelist.services.GenresService;
 import com.douglasbello.Cinelist.services.TVShowService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/shows")

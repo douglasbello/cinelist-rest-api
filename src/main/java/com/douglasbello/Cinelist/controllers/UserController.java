@@ -63,7 +63,7 @@ public class UserController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new TokenDTO(token));
+        return ResponseEntity.ok().body(new TokenDTO(token));
     }
 
     @GetMapping(value = "/watched-movies")

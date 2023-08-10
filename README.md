@@ -85,3 +85,8 @@
 - [H2 Database](https://www.h2database.com/html/main.html)
 - [PostgreSQL](https://www.postgresql.org/)
 - [JWT Token](https://github.com/auth0/java-jwt)
+
+---
+
+## To do
+- Add Exceptions Handler to this project.

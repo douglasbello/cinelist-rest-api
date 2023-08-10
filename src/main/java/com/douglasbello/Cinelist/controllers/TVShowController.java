@@ -100,7 +100,7 @@ public class TVShowController {
         return ResponseEntity.ok().body(tvShowService.findTvShowsByDirectorId(directorId));
     }
 
-    @GetMapping(value = "/actors/name/{directorName}")
+    @GetMapping(value = "/directors/name/{directorName}")
     public ResponseEntity<?> findTvShowsByDirectorName(@PathVariable String directorName) {
         if (directorService.findShowsByDirectorName(directorName).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director not found or has no shows registered."));

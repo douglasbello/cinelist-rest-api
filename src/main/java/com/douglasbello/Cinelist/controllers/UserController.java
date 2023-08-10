@@ -1,22 +1,29 @@
 package com.douglasbello.Cinelist.controllers;
 
-import com.douglasbello.Cinelist.dtos.*;
+import java.util.Set;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.douglasbello.Cinelist.dtos.Mapper;
+import com.douglasbello.Cinelist.dtos.RequestResponseDTO;
+import com.douglasbello.Cinelist.dtos.TokenDTO;
 import com.douglasbello.Cinelist.dtos.user.LoginDTO;
 import com.douglasbello.Cinelist.dtos.user.UserDTO;
 import com.douglasbello.Cinelist.dtos.user.UserSignInDTO;
 import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.security.TokenService;
 import com.douglasbello.Cinelist.services.UserService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-import java.util.UUID;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -55,9 +62,6 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO dto) {
-        if (dto.username() == null || dto.password() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The username and password cannot be null."));
-        }
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 

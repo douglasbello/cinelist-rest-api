@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.DELETE, "/directors/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/users/login")
                 .permitAll()
-                .requestMatchers(HttpMethod.POST, "/users/sign-in")
+                .requestMatchers(HttpMethod.POST, "/users/sign-up")
                 .permitAll()
                 .anyRequest().authenticated();
 

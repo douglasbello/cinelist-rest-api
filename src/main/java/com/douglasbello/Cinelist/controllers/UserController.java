@@ -45,7 +45,7 @@ public class UserController {
         return ResponseEntity.ok().body(userDTO);
     }
 
-    @PostMapping(value = "/sign-in")
+    @PostMapping(value = "/sign-up")
     public ResponseEntity<?> signIn(@Valid @RequestBody UserSignInDTO dto) {
         if (userService.findByEmail(dto.getEmail()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new RequestResponseDTO(HttpStatus.CONFLICT.value(), "Email already in use."));

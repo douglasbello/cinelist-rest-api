@@ -71,7 +71,7 @@
 ## How to run the project
 >*You must have Java 17 installed in your machine.*
 ```bash
-  $ git clone git@github.com:douglasbello/cinelist.git
+  $ git clone git@github.com:douglasbello/cinelist-rest-api.git
   $ cd cinelist
   $ mvn spring-boot:run
 ```

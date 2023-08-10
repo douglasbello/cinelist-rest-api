@@ -64,6 +64,6 @@
 | POST   | /api/directors   | DirectorInputDTO   | 201   | 400, 403   |
 | POST   | /api/genres   | String genreName   | 201   | 400, 403   |
 | POST   | /api/actors   | ActorInputDTO   | 201   | 400, 403   |
-| PUT   | /api/shows/{id}   |    | 200   | 403, 404   |
+| PUT   | /api/shows/{id}   |  TVShowDTO  | 200   | 403, 404   |
 | DELETE   | /api/shows/{id}   |    | 204   | 403, 404   |
 | DELETE   | /api/directors/{id}   |    | 204   | 403, 404   |

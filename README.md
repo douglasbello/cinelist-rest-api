@@ -11,11 +11,10 @@
 - The only paths that don't require an token in this API are the sign-up and login paths. All the other paths in this app require an token, the user can get this token by login.
 - The token of this application is a JWT Token of type Bearer Token.
 ---
-## API paths that normal users can access
+## Paths that normal users can access
 
 | METHOD | PATH | REQUEST BODY | 2xx | 4xx |
 |----------|----------|----------|----------|----------|
-| Dado 1   | Dado 2   | Dado 3   | Dado 4   | Dado 5   |
 | GET   | /api/users   |    | 200   | 403   |
 | GET   | /api/users/watched-movies   |    | 200   | 403   |
 | GET   | /api/users/favorite-movies   |    | 200   | 403   |
@@ -53,3 +52,19 @@
 | GET   | /api/comments/user/{userId}   |    | 200   | 403, 404   |
 | POST   | /api/users/sign-up   | UserSignInDTO   | 201   | 400, 409   |
 | POST   | /api/users/login   | LoginDTO   | 200   | 400  |
+| POST   | /api/movies/rate   | RateDTO   | 200   | 400, 403, 404  |
+
+## Paths that only admins can access
+| METHOD | PATH | REQUEST BODY | 2xx | 4xx |
+|----------|----------|----------|----------|----------|
+| POST   | /api/admins   | LoginDTO   | 201   | 400, 403   |
+| POST   | /api/movies   | MovieDTO   | 201   | 400, 403   |
+| POST   | /api/movies/{movieId}/actors   | Set<UUID> actorsIds   | 200   | 400, 404   |
+| POST   | /api/shows   | TVShowDTO   | 201   | 400, 403   |
+| POST   | /api/directors   | DirectorInputDTO   | 201   | 400, 403   |
+| POST   | /api/genres   | String genreName   | 201   | 400, 403   |
+| POST   | /api/actors   | ActorInputDTO   | 201   | 400, 403   |
+
+| PUT   | /api/shows/{id}   |    | 200   | 403, 404   |
+| DELETE   | /api/shows/{id}   |    | 204   | 403, 404   |
+| DELETE   | /api/directors/{id}   |    | 204   | 403, 404   |

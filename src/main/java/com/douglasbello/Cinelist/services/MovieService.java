@@ -10,6 +10,8 @@ import com.douglasbello.Cinelist.entities.User;
 import com.douglasbello.Cinelist.repositories.MovieRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
+import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundWithNameException;
+
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -38,7 +40,7 @@ public class MovieService {
 
     public Movie findById(UUID id) {
         Optional<Movie> obj = repository.findById(id);
-        return obj.orElse(null);
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public Movie insert(Movie movie) {
@@ -75,7 +77,7 @@ public class MovieService {
         if (!repository.findMovieByTitleContainingIgnoreCase(title).isEmpty()) {
             return repository.findMovieByTitleContainingIgnoreCase(title).stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
         }
-        return null;
+        throw new ResourceNotFoundWithNameException(title);
     }
 
     public Set<ActorDTO> getMovieActors(Movie movie) {
@@ -90,11 +92,13 @@ public class MovieService {
     }
 
     public Movie addActorsToMovie(Movie movie, Set<UUID> actorsIds) {
-        if (actorsIds.stream().map(actorService::findById).collect(Collectors.toSet()).isEmpty()) {
-            return null;
+        for (UUID id : actorsIds) {
+            if (actorService.findById(id) == null) {
+                throw new ResourceNotFoundException(id);
+            }
         }
-        for (UUID showId : actorsIds) {
-            movie.getActors().add(actorService.findById(showId));
+        for (UUID actorId : actorsIds) {
+            movie.getActors().add(actorService.findById(actorId));
         }
         return movie;
     }
@@ -134,7 +138,6 @@ public class MovieService {
 
         ratings.put(user.getId(), dto.rate());
         movie.setRate();
-
         this.update(movie.getId(), movie);
     }
 }

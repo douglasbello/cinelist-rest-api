@@ -7,6 +7,8 @@ import com.douglasbello.Cinelist.entities.Director;
 import com.douglasbello.Cinelist.repositories.DirectorRepository;
 import com.douglasbello.Cinelist.services.exceptions.DatabaseException;
 import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
+import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundWithNameException;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -34,7 +36,7 @@ public class DirectorService {
     public Director findByName(String name) {
         name = name.replace("-", " ");
         if (directorRepository.findByNameContainingIgnoreCase(name) == null) {
-            return null;
+            throw new ResourceNotFoundWithNameException(name);
         }
         return directorRepository.findByNameContainingIgnoreCase(name);
     }
@@ -56,23 +58,23 @@ public class DirectorService {
 
     public Set<MovieDTOResponse> findMoviesByDirectorId(UUID id) {
         if (findById(id) == null) {
-            return Collections.emptySet();
+            throw new ResourceNotFoundException(id);
         }
         Director director = findById(id);
         return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
     }
 
     public Set<MovieDTOResponse> findMoviesByDirectorName(String name) {
-        if (findByName(name) == null) {
-            return Collections.emptySet();
+        if (findByName(name) != null) {
+            Director director = findByName(name);
+            return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
         }
-        Director director = findByName(name);
-        return director.getMovies().stream().map(MovieDTOResponse::new).collect(Collectors.toSet());
+        throw new ResourceNotFoundWithNameException(name);
     }
 
     public Set<TVShowDTOResponse> findShowsByDirectorId(UUID id) {
         if (findById(id) == null) {
-            return Collections.emptySet();
+            throw new ResourceNotFoundException(id);
         }
         Director director = findById(id);
         return director.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());
@@ -80,7 +82,7 @@ public class DirectorService {
 
     public Set<TVShowDTOResponse> findShowsByDirectorName(String name) {
         if (findByName(name) == null) {
-            return Collections.emptySet();
+            throw new ResourceNotFoundWithNameException(name);
         }
         Director director = findByName(name);
         return director.getTvShows().stream().map(TVShowDTOResponse::new).collect(Collectors.toSet());

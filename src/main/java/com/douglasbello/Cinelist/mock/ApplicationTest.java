@@ -17,19 +17,12 @@ import java.util.Map;
 @Configuration
 @Profile( "test" )
 public class ApplicationTest implements CommandLineRunner {
-
     private final UserService userService;
-
     private final MovieService movieService;
-
     private final CommentService commentService;
-
     private final TVShowService tvShowService;
-
     private final ActorService actorService;
-
     private final GenresService genresService;
-
     private final DirectorService directorService;
 
 

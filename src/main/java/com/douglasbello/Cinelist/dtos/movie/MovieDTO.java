@@ -19,12 +19,15 @@ public class MovieDTO {
     private String overview;
     @NotBlank(message = "You must provide the release year.")
     private String releaseYear;
+    @NotEmpty(message = "The genres ids list cannot be empty.")
     private Set<UUID> genresIds = new HashSet<>();
+    @NotEmpty(message = "The directors ids list cannot be empty.")
     private Set<UUID> directorsIds = new HashSet<>();
     @JsonIgnore
     private Set<Genres> genres = new HashSet<>();
     @JsonIgnore
     private Set<Director> directors = new HashSet<>();
+    @NotEmpty(message = "The actors ids list cannot be empty.")
     private Set<UUID> actorsIds = new HashSet<>();
     @JsonIgnore
     private Set<Actor> actors = new HashSet<>();

@@ -25,10 +25,10 @@ public class GlobalAdviceController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<RequestResponseDTO> handleInvalidEnumException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The type in one of the fields was not the right type."));
-    }
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public ResponseEntity<RequestResponseDTO> handleInvalidEnumException() {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The type in one of the fields was not the right type."));
+//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RequestResponseDTO> handleValidationExceptions(MethodArgumentNotValidException ex) {

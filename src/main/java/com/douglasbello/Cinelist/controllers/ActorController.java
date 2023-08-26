@@ -37,9 +37,7 @@ public class ActorController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
-        if (actorService.findById(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor not found."));
-        }
+        
         ActorDTO dto = new ActorDTO(actorService.findById(id));
         return ResponseEntity.ok().body(dto);
     }

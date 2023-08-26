@@ -5,6 +5,8 @@ import com.douglasbello.Cinelist.dtos.movie.MovieDTOResponse;
 import com.douglasbello.Cinelist.dtos.show.TVShowDTOResponse;
 import com.douglasbello.Cinelist.entities.Actor;
 import com.douglasbello.Cinelist.repositories.ActorRepository;
+import com.douglasbello.Cinelist.services.exceptions.ResourceNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,7 +34,7 @@ public class ActorService {
 
     public Actor findById(UUID id) {
         Optional<Actor> actor = actorRepository.findById(id);
-        return actor.orElse(null);
+        return actor.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public Actor findByName(String name) {

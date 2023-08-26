@@ -29,11 +29,10 @@ public class DirectorController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable UUID id) {
-        if (directorService.findById(id) != null) {
-            return ResponseEntity.ok().body(directorService.findById(id));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(404, "TV Show not found."));
+    public ResponseEntity<DirectorDTO> findById(@PathVariable UUID id) {
+        Director director = directorService.findById(id);
+        DirectorDTO dto = new DirectorDTO(director);
+        return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping

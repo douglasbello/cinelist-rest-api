@@ -28,7 +28,7 @@ public class DirectorService {
 
     public Director findById(UUID id) {
         Optional<Director> user = directorRepository.findById(id);
-        return user.orElse(null);
+        return user.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public Director findByName(String name) {

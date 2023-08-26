@@ -37,16 +37,12 @@ public class ActorController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
-        
         ActorDTO dto = new ActorDTO(actorService.findById(id));
         return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping
     public ResponseEntity<?> insert(@Valid @RequestBody ActorInputDTO dto) {
-        if (dto.getGender() < 1 || dto.getGender() > 3) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Gender code cannot be less than 1 or bigger than 3. The gender codes are: MALE(1), FEMALE(2), PREFER NOT SAY(3)"));
-        }
         Actor actor = new Actor();
         if (!actor.setBirthDate(dto.getBirthDate())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The provided birth date must be in the format dd/MM/yyyy."));
@@ -59,9 +55,6 @@ public class ActorController {
 
     @GetMapping(value = "/name/{name}")
     public ResponseEntity<?> findByName(@PathVariable String name) {
-        if (actorService.findByName(name) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Actor not found."));
-        }
         Actor obj = actorService.findByName(name);
         ActorDTO dto = new ActorDTO(obj);
         return ResponseEntity.ok().body(dto);

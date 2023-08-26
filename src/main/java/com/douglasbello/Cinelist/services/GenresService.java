@@ -40,9 +40,6 @@ public class GenresService {
 
     public GenresDTO findByGenre(String name) {
         name = name.replace("-", " ");
-        if ( repository.findByGenreContainingIgnoreCase(name) == null ) {
-            return null;
-        }
         return new GenresDTO(repository.findByGenreContainingIgnoreCase(name));
     }
 

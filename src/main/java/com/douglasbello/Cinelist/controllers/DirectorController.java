@@ -37,10 +37,6 @@ public class DirectorController {
 
     @PostMapping
     public ResponseEntity<?> insert(@Valid @RequestBody DirectorInputDTO dto) {
-        if (dto.getGender() < 1 || dto.getGender() > 3) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "Gender code cannot be less than 1 or bigger than 3. The gender codes are: MALE(1), FEMALE(2), PREFER NOT SAY(3)"));
-        }
-
         Director director = new Director();
         if (!director.setBirthDate(dto.getBirthDate())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RequestResponseDTO(HttpStatus.BAD_REQUEST.value(), "The provided date must be in the format dd/MM/yyyy."));
@@ -51,9 +47,6 @@ public class DirectorController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable UUID id) {
-        if (directorService.findById(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResponseDTO(HttpStatus.NOT_FOUND.value(), "Director not found."));
-        }
         directorService.delete(id);
         return ResponseEntity.noContent().build();
     }

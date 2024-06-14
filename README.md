@@ -77,7 +77,7 @@
 ```
 >*<p>If you don't have maven installed in your machine, you can run the project in a IDE</p>*
 ---
-## Technology used
+## Technologies used
 - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
